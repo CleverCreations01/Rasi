@@ -154,6 +154,27 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .skin-anime-ds body:before{content:"⚔️  WISTERIA  ✿";position:fixed;top:72px;right:10px;inset:auto 10px auto auto!important;pointer-events:none;z-index:2;color:#9d7190;font-size:13px;letter-spacing:2px;opacity:.65}
 .skin-anime-op body:after{content:"☠️  GRAND LINE  ⚓";position:fixed;top:72px;right:10px;inset:auto 10px auto auto!important;pointer-events:none;z-index:2;color:#5685a2;font-size:13px;letter-spacing:2px;opacity:.65}
 .skin-sakura .task,.skin-matcha .task,.skin-lavender .task,.skin-anime-ds .task,.skin-anime-op .task{background:var(--panel)!important;color:var(--text)!important}
+</style><style id="rasi-v14-fix">
+/* V14: calm rendering + personal chat + no black skin controls */
+.chat-closed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);color:var(--text)}
+.chat-closed b{display:block;font-size:14px}.chat-closed small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.35}.chat-memory-note{opacity:.8}
+.chat-open-btn,.chat-close-btn{flex:0 0 auto;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--accent);color:var(--text);font-weight:900}
+.chat-head{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 10px}.chat-head small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.chat-thread{display:grid;gap:8px;max-height:420px;overflow:auto;padding:4px 2px 8px}
+.buddy-msg{margin:0!important;padding:11px 13px;border-radius:16px;font-size:13px;line-height:1.5;border:1px solid var(--line);color:var(--text);background:var(--panel2)}
+.buddy-msg.rasi{border-top-left-radius:6px;background:color-mix(in srgb,var(--accent) 10%,var(--panel));}
+.buddy-msg.you{margin-left:24px!important;border-top-right-radius:6px;background:color-mix(in srgb,var(--accent2) 18%,var(--panel));}
+.chat-who{display:block;font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;opacity:.68;margin-bottom:3px}
+.style-row button{background:var(--panel2)!important;color:var(--text)!important;border-color:var(--line)!important}
+.skin-sakura .style-row button,.skin-lavender .style-row button,.skin-matcha .style-row button,.skin-anime-ds .style-row button,.skin-anime-op .style-row button,.skin-minimal .style-row button{background:var(--panel2)!important;color:var(--text)!important;border-color:var(--line)!important}
+.complete-toast{transition:none!important;animation:none!important;will-change:transform,opacity}
+.complete-toast.show{animation:rasiToastIn .28s cubic-bezier(.22,.8,.25,1) both!important}
+.petals-layer{contain:layout paint;transform:translateZ(0)}
+.petal,.flower-piece,.matcha-piece{will-change:transform,opacity;backface-visibility:hidden;contain:strict}
+@keyframes rasiToastIn{from{opacity:0;transform:translate3d(-50%,-48%,0) scale(.96)}to{opacity:1;transform:translate3d(-50%,-50%,0) scale(1)}}
+@keyframes petalFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot))}}
+@keyframes flowerFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.92)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot)) scale(1.02)}}
+@media(max-width:600px){.chat-closed{padding:13px}.chat-open-btn{padding:9px 10px}.chat-thread{max-height:360px}.buddy-msg{font-size:14px;line-height:1.48}.style-row button{font-size:12px;padding:9px 11px}}
 </style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
@@ -383,7 +404,7 @@ function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),o
 function defaultState(){
  return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
- ],tasks:{},dateTasks:{},flex:{},chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
+ ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||defaultState();
 let currentDay=new Date().getDay(); // 0 Sun
@@ -426,7 +447,7 @@ function ensureState(){
  if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
  if(!state.reminders)state.reminders=[];
  if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
- if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}];
+ if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[];
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
@@ -486,12 +507,22 @@ function celebrate(){
  const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast'),skin=state.skin||'midnight';
  const lines=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was kinda iconic.','Future-you says thanks.','Certified W moment.','Mission cleared. 🎮','Lowkey ate that.','Character development detected.','One less thing haunting you. 👻','Clean work. We move.'];
  let idx=Math.floor(Math.random()*lines.length);if(idx===window.__lastWin)idx=(idx+1)%lines.length;window.__lastWin=idx;
- toast.innerHTML='<b>✓ '+lines[idx]+'</b><small>+XP • '+(skin==='sakura'?'sakura approval 🌸':skin==='matcha'?'matcha energy 🍵':skin==='anime-ds'?'wisteria arc ⚔️':skin==='anime-op'?'grand line 🏴‍☠️':skin==='lavender'?'soft productivity 🪻':'RĀSI saw that 👀')+'</small>';
- toast.classList.remove('show');layer.replaceChildren();void toast.offsetWidth;toast.classList.add('show');
- const sets={sakura:['🌸','🌺','✿','🌷'],matcha:['🍃','🌱','☘️'],lavender:['🪻','✦','✧'],'anime-ds':['🌸','✿','⚔️'],'anime-op':['☠️','⚓','🌊'],minimal:['✦','✧'],midnight:['✦','✨']};
- const items=sets[skin]||sets.midnight,count=skin==='sakura'?16:10;
- for(let i=0;i<count;i++){const p=document.createElement('span'),petal=skin==='sakura'&&i%4!==0;p.className=petal?'petal':(skin==='matcha'?'matcha-piece':'flower-piece');p.textContent=petal?'':items[i%items.length];p.style.left=(40+Math.random()*20)+'%';p.style.top=(44+Math.random()*5)+'%';p.style.setProperty('--dx',((Math.random()-.5)*260)+'px');p.style.setProperty('--dy',(90+Math.random()*220)+'px');p.style.setProperty('--rot',((Math.random()-.5)*540)+'deg');p.style.animationDelay=(Math.random()*.06)+'s';layer.appendChild(p)}
- setTimeout(()=>{toast.classList.remove('show');layer.replaceChildren()},2400);
+ const approval=skin==='sakura'?'sakura approval 🌸':skin==='matcha'?'matcha energy 🍵':skin==='anime-ds'?'wisteria arc ⚔️':skin==='anime-op'?'grand line 🏴‍☠️':skin==='lavender'?'soft productivity 🪻':'RĀSI saw that 👀';
+ toast.innerHTML='<b>✓ '+lines[idx]+'</b><small>+XP • '+approval+'</small>';
+ toast.classList.remove('show'); requestAnimationFrame(()=>toast.classList.add('show'));
+ layer.replaceChildren();
+ const sets={sakura:['🌸','🌺','🌷','✿'],matcha:['🍃','🌱','☘️','🍵'],lavender:['🪻','✦','✧'], 'anime-ds':['🌸','🦋','⚔️','✿'],'anime-op':['☠️','⚓','🌊','🍖'],minimal:['✦','✧'],midnight:['✦','✨']};
+ const items=sets[skin]||sets.midnight,count=(skin==='sakura'||skin==='matcha'||skin==='anime-ds'||skin==='anime-op')?12:8;
+ for(let i=0;i<count;i++){
+   const p=document.createElement('span'),isSakura=skin==='sakura'&&i%3!==0;
+   p.className=isSakura?'petal':(skin==='matcha'?'matcha-piece':'flower-piece');
+   p.textContent=isSakura?'':items[i%items.length];
+   p.style.left=(42+Math.random()*16)+'%';p.style.top=(44+Math.random()*4)+'%';
+   p.style.setProperty('--dx',((Math.random()-.5)*180)+'px');p.style.setProperty('--dy',(120+Math.random()*180)+'px');
+   p.style.setProperty('--rot',((Math.random()-.5)*300)+'deg');p.style.animationDelay=(i*0.035)+'s';
+   layer.appendChild(p);
+ }
+ clearTimeout(window.__celebrateTimer); window.__celebrateTimer=setTimeout(()=>{toast.classList.remove('show');layer.replaceChildren()},3000);
 }function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
 function toggleCollege(){
@@ -644,7 +675,7 @@ function rasiFriendReply(raw){
 }
 function buddyCommand(){
  const raw=document.getElementById('buddyInput').value.trim(); if(!raw)return;
- state.chat.push({who:'you',text:raw}); const x=raw.toLowerCase(); let reply='';
+ state.chat.push({who:'you',text:raw}); updateRasiMemory(raw); const x=raw.toLowerCase(); let reply='';
  if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
  else if(/cute|pastel/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cute');reply='Cute mode. 🌸 Still organised. Still dangerous.';}
  else if(/cyber|neon/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cyber');reply='Cyber mode online. ⚡';}
@@ -672,8 +703,8 @@ function buddyCommand(){
  else if(/month|january|february|march|april|may|june|july|august|september|october|november|december/.test(x) && /(change|rebuild|plan|schedule|remove|delete|drop|skip)/.test(x)){reply=applyMonthInstruction(raw)||'I saved the month-level instruction. Give me the month plus the exact change (for example, “remove Pinterest from October”) and I will apply it across that month.';}
  else if(/replan|rearrange|reorganize|fix today/.test(x)){reply=replanToday();}
  else if(/what.*today|what.*do|plan my day/.test(x)){const next=todayTasks().filter(t=>t.cat!=='college'&&!t.done)[0];reply=next?`Your next block is ${next.n} (${next.s}–${next.e}). If something changed, tell me what changed and I’ll replan around it.`:'Your planned flexible blocks are complete. Use the remaining time for college life or rest.';}
- else {reply=rasiFriendReply(raw);}
- state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';save();render();showToast('RĀSI updated your plan');
+ else {const mh=rasiMemoryHint(raw); reply=rasiFriendReply(raw); if(mh && /what do you remember|remember|you know about me|my preference|my goal/.test(x)) reply='I remember this from you: “'+mh+'” ✦ I keep a small set of useful personal context on this device so I can make future replies less generic.';}
+ state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';state.chatOpen=true;save();render();showToast('RĀSI is here ✦');
 }
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
 function replanToday(){
@@ -713,7 +744,7 @@ function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.c
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v13.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
 </body>
