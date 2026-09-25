@@ -50,50 +50,52 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:90}.piece{position:absolute;width:7px;height:13px;border-radius:2px;animation:fall 1.1s ease-out forwards}@keyframes fall{from{transform:translateY(-20px) rotate(0)}to{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.hero-row{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}.two{grid-template-columns:1fr}.greeting{font-size:27px}}
 @media(max-width:600px){
- .app{padding:10px 10px 92px}.topbar{gap:8px;margin-bottom:10px}.brand{gap:8px}.logo{width:42px;height:42px;border-radius:13px;font-size:21px}.eyebrow{font-size:9px}.title{font-size:19px}.sub{font-size:11px}.clock{font-size:17px}.date{font-size:10px}
- .hero{padding:16px;border-radius:22px}.greeting{font-size:25px}.mission{font-size:12px}.stats{margin-top:11px}.stat{padding:7px 9px;font-size:10px}.stat b{font-size:15px}.progress-wrap{min-width:0}
+ .app{padding:6px 8px 88px}.topbar{gap:6px;margin-bottom:7px}.brand{gap:7px}.logo{width:38px;height:38px;border-radius:12px;font-size:19px}.eyebrow{font-size:8px}.title{font-size:18px}.sub{font-size:10px}.clock{font-size:15px}.date{font-size:9px}
+ .hero{padding:13px;border-radius:20px}.greeting{font-size:22px}.mission{font-size:11px}.stats{margin-top:9px}.stat{padding:6px 8px;font-size:9px}.stat b{font-size:14px}.progress-wrap{min-width:0}
  .nav{gap:5px;padding:9px 0 5px}.nav button{padding:8px 11px;font-size:11px;border-radius:12px}.panel{padding:13px;border-radius:19px}.panel h2{font-size:16px}.task{padding:9px;border-radius:16px;gap:8px}.task-name{font-size:13px}.task-time{font-size:10px}.check{width:24px;height:24px}.task-meta{margin-top:5px}.pill{font-size:9px;padding:3px 6px}.college-toggle{padding:10px 11px;font-size:12px}.bottom{padding:7px 9px calc(7px + env(safe-area-inset-bottom))}.bottom button{padding:10px 8px;font-size:10px}
 }
 
-.quickbtn{padding:10px 12px;border-radius:13px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:900}.style-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.style-row button{padding:8px 10px;border-radius:12px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:850}.day-preview{margin-top:12px}.calendar-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calendar-mini button{min-height:55px;border-radius:12px;background:#11182a;border:1px solid var(--line);font-weight:850}.calendar-mini button.today{background:rgba(155,124,255,.22);border-color:#9b7cff}.preview-item{padding:10px 11px;border:1px solid #252e47;background:#11182a;border-radius:13px;margin:7px 0}.preview-item b{font-size:12px}.preview-item small{display:block;color:var(--muted);margin-top:3px}/* RĀSI skins: whole-app themes, not just icon colors */
-.skin-sakura{
- --bg:#fbf3f1;--panel:#fffaf8;--panel2:#f8eeec;--text:#5b4650;--muted:#927b83;--line:#ead5d8;
- --accent:#d88c9a;--accent2:#a9bfa9;--gold:#d8ad79;--shadow:0 16px 42px rgba(133,91,101,.13)
-}
-.skin-sakura body{background:radial-gradient(circle at 10% 0%,rgba(246,185,198,.35),transparent 28%),radial-gradient(circle at 90% 10%,rgba(203,221,203,.30),transparent 28%),var(--bg)}
-.skin-sakura body:before,.skin-sakura body:after{content:"🌸  ✿  🌸  ·  ✿";position:fixed;z-index:0;pointer-events:none;color:#e8a9b5;font-size:22px;letter-spacing:18px;opacity:.28;white-space:nowrap;animation:petalDrift 18s linear infinite}
-.skin-sakura body:before{top:12%;left:-20px;transform:rotate(10deg)}.skin-sakura body:after{top:68%;right:-70px;transform:rotate(-12deg);animation-delay:-8s}
-.skin-sakura .app,.skin-sakura .bottom{position:relative;z-index:1}
-.skin-sakura .hero{background:linear-gradient(145deg,rgba(255,229,233,.9),rgba(233,242,231,.72));border-color:#e7c3ca}
-.skin-sakura .hero:after{background:rgba(216,140,154,.10)}
-.skin-sakura .panel,.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item{background:rgba(255,250,248,.88);border-color:#ead8d9}
-.skin-sakura .nav{background:rgba(251,243,241,.90)}.skin-sakura .nav button,.skin-sakura .bottom button,.skin-sakura .quick button,.skin-sakura .quickbtn,.skin-sakura .iconbtn,.skin-sakura .modebar button,.skin-sakura .college-toggle{background:#fff7f5;border-color:#ead5d8;color:#765d66}
-.skin-sakura .task,.skin-sakura .slot-card{box-shadow:0 5px 16px rgba(133,91,101,.07)}
-.skin-sakura .check{background:#fffaf8;border-color:#d9bfc4}.skin-sakura .pill{background:#f3e4e5;color:#856b73}.skin-sakura .pill.accent{background:#f7dfe4;color:#a35d6d}.skin-sakura .pill.green{background:#e4efe5;color:#6f9273}
-.skin-sakura .logo{background:linear-gradient(135deg,#f2b8c5,#c8d9c4);color:#704c58;box-shadow:0 8px 24px rgba(216,140,154,.20)}
-.skin-sakura .primary,.skin-sakura .nav button.active,.skin-sakura .bottom button.primary,.skin-sakura .modebar button.active{background:linear-gradient(135deg,#e6a0ad,#c5d7c0);color:#5a4149}
-.skin-sakura .bar{background:linear-gradient(90deg,#d88c9a,#a9bfa9)}
-.skin-sakura .tip{background:linear-gradient(135deg,#fff0e8,#edf4e9);border-color:#ead5d8;color:#715d64}
-.skin-sakura .reminder{background:#fff4e9;border-left-color:#d8ad79}
-@keyframes petalDrift{0%{transform:translate3d(0,0,0) rotate(8deg)}50%{transform:translate3d(25px,18px,0) rotate(12deg)}100%{transform:translate3d(-5px,35px,0) rotate(6deg)}}
+.quickbtn{padding:10px 12px;border-radius:13px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:900}.style-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.style-row button{padding:8px 10px;border-radius:12px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:850}.day-preview{margin-top:12px}.calendar-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calendar-mini button{min-height:55px;border-radius:12px;background:#11182a;border:1px solid var(--line);font-weight:850}.calendar-mini button.today{background:rgba(155,124,255,.22);border-color:#9b7cff}.preview-item{padding:10px 11px;border:1px solid #252e47;background:#11182a;border-radius:13px;margin:7px 0}.preview-item b{font-size:12px}.preview-item small{display:block;color:var(--muted);margin-top:3px}/* RĀSI skins: full visual worlds */
+.skin-sakura{--bg:#fff7f5;--panel:#fffdfb;--panel2:#fff1f0;--text:#5b4650;--muted:#987f87;--line:#efd8dc;--accent:#d98c9b;--accent2:#a9c5a8;--gold:#d5ad79;--shadow:0 14px 38px rgba(150,91,104,.12)}
+.skin-sakura body{background:radial-gradient(circle at 8% 0%,#ffe1e8 0,transparent 27%),radial-gradient(circle at 92% 12%,#e5f0e2 0,transparent 25%),var(--bg)}
+.skin-sakura body:before{content:"🌸  🌸   ✿   🌸   ·   🌸";position:fixed;inset:0;pointer-events:none;z-index:40;color:#e7a2b1;font-size:18px;letter-spacing:15px;opacity:.55;animation:sakuraFloat 14s linear infinite;white-space:pre-wrap}
+.skin-sakura .hero{background:linear-gradient(145deg,#fff0f2,#edf5ea);border-color:#e8c5cc}.skin-sakura .hero:after{background:#e8a9b51a}
+.skin-sakura .panel,.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item{background:#fffaf9e8;border-color:#efdfe0}
+.skin-sakura .nav{background:#fff7f5eb}.skin-sakura .nav button,.skin-sakura .bottom button,.skin-sakura .quick button,.skin-sakura .quickbtn,.skin-sakura .iconbtn,.skin-sakura .modebar button,.skin-sakura .college-toggle{background:#fff8f6;border-color:#ead9dc;color:#765c65}
+.skin-sakura .logo{background:linear-gradient(135deg,#f4b9c7,#c7ddc4);color:#694b56}.skin-sakura .primary,.skin-sakura .nav button.active,.skin-sakura .bottom button.primary,.skin-sakura .modebar button.active{background:linear-gradient(135deg,#e8a0b0,#c3d7bf);color:#593f48}.skin-sakura .bar{background:linear-gradient(90deg,#d98c9b,#a9c5a8)}
+@keyframes sakuraFloat{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(108vh) rotate(180deg)}}
 
-.skin-lavender{
- --bg:#f6f2f8;--panel:#fcf9fd;--panel2:#f1eaf5;--text:#51485c;--muted:#877c91;--line:#ddd1e5;
- --accent:#a88bbd;--accent2:#a8bfae;--gold:#c8a56b;--shadow:0 16px 42px rgba(93,74,111,.12)
-}
-.skin-lavender body{background:radial-gradient(circle at 15% 0%,rgba(194,164,215,.30),transparent 30%),radial-gradient(circle at 90% 15%,rgba(193,220,199,.25),transparent 28%),var(--bg)}
-.skin-lavender .hero{background:linear-gradient(145deg,#eee3f4,#edf4ee);border-color:#d9c9e1}.skin-lavender .panel,.skin-lavender .task,.skin-lavender .slot-card,.skin-lavender .info-card,.skin-lavender .exercise,.skin-lavender .preview-item{background:rgba(252,249,253,.9);border-color:#e1d7e7}.skin-lavender .nav{background:rgba(246,242,248,.92)}.skin-lavender .nav button,.skin-lavender .bottom button,.skin-lavender .quick button,.skin-lavender .quickbtn,.skin-lavender .iconbtn,.skin-lavender .modebar button,.skin-lavender .college-toggle{background:#fbf7fc;border-color:#ddd1e5;color:#665b70}.skin-lavender .logo{background:linear-gradient(135deg,#cdb5df,#b9d1bd);color:#55465f}.skin-lavender .primary,.skin-lavender .nav button.active,.skin-lavender .bottom button.primary,.skin-lavender .modebar button.active{background:linear-gradient(135deg,#bda1d0,#b6cdb8);color:#514254}.skin-lavender .bar{background:linear-gradient(90deg,#a88bbd,#a8bfae)}
+.skin-lavender{--bg:#f8f4fb;--panel:#fffaff;--panel2:#f2ebf8;--text:#51485c;--muted:#887d92;--line:#e0d4e8;--accent:#a98bc0;--accent2:#a9c4ad;--gold:#c9a66d;--shadow:0 14px 38px rgba(92,74,110,.11)}
+.skin-lavender body{background:radial-gradient(circle at 10% 0%,#e8dcf3 0,transparent 28%),radial-gradient(circle at 90% 20%,#e4f0e5 0,transparent 25%),var(--bg)}
+.skin-lavender body:after{content:"✦  🪻  ✦  ·  🪻  ✦";position:fixed;inset:0;pointer-events:none;z-index:40;color:#b89acb;font-size:20px;letter-spacing:18px;opacity:.32;animation:lavenderFloat 16s linear infinite}
+.skin-lavender .hero{background:linear-gradient(145deg,#eee4f5,#edf5ee);border-color:#dccce5}.skin-lavender .panel,.skin-lavender .task,.skin-lavender .slot-card,.skin-lavender .info-card,.skin-lavender .exercise,.skin-lavender .preview-item{background:#fffaffeb;border-color:#e3d9e8}.skin-lavender .nav{background:#f8f4fbeb}.skin-lavender .nav button,.skin-lavender .bottom button,.skin-lavender .quick button,.skin-lavender .quickbtn,.skin-lavender .iconbtn,.skin-lavender .modebar button,.skin-lavender .college-toggle{background:#fffaff;border-color:#ded2e6;color:#655a6f}.skin-lavender .logo{background:linear-gradient(135deg,#ccb5dc,#bcd4bf);color:#54465e}.skin-lavender .primary,.skin-lavender .nav button.active,.skin-lavender .bottom button.primary,.skin-lavender .modebar button.active{background:linear-gradient(135deg,#bda2d1,#b9cfbc);color:#514255}.skin-lavender .bar{background:linear-gradient(90deg,#a98bc0,#a9c4ad)}
+@keyframes lavenderFloat{0%{transform:translateY(-8vh) rotate(0)}100%{transform:translateY(108vh) rotate(80deg)}}
 
-.skin-matcha{
- --bg:#f4f4e9;--panel:#fbfcf2;--panel2:#edf0df;--text:#4c5141;--muted:#7d836f;--line:#d9ddc8;
- --accent:#8da46e;--accent2:#d0b58b;--gold:#b89558;--shadow:0 16px 42px rgba(75,88,55,.11)
-}
-.skin-matcha body{background:radial-gradient(circle at 10% 0%,rgba(189,208,160,.35),transparent 30%),radial-gradient(circle at 90% 12%,rgba(231,211,176,.25),transparent 28%),var(--bg)}
-.skin-matcha .hero{background:linear-gradient(145deg,#e8efda,#f5ebdc);border-color:#d2dbbd}.skin-matcha .panel,.skin-matcha .task,.skin-matcha .slot-card,.skin-matcha .info-card,.skin-matcha .exercise,.skin-matcha .preview-item{background:rgba(251,252,242,.92);border-color:#dfe4cf}.skin-matcha .nav{background:rgba(244,244,233,.92)}.skin-matcha .nav button,.skin-matcha .bottom button,.skin-matcha .quick button,.skin-matcha .quickbtn,.skin-matcha .iconbtn,.skin-matcha .modebar button,.skin-matcha .college-toggle{background:#f9faef;border-color:#d9ddc8;color:#5d644f}.skin-matcha .logo{background:linear-gradient(135deg,#b9cc91,#e0c49a);color:#4c523e}.skin-matcha .primary,.skin-matcha .nav button.active,.skin-matcha .bottom button.primary,.skin-matcha .modebar button.active{background:linear-gradient(135deg,#a8bd82,#d8bd91);color:#4a503e}.skin-matcha .bar{background:linear-gradient(90deg,#8da46e,#d0b58b)}
+.skin-matcha{--bg:#f5f5e9;--panel:#fbfcf2;--panel2:#edf0df;--text:#4b5140;--muted:#7c826e;--line:#dbe0ca;--accent:#91a96f;--accent2:#d6bd91;--gold:#b9965d;--shadow:0 14px 38px rgba(75,88,55,.10)}
+.skin-matcha body{background:radial-gradient(circle at 10% 0%,#e0eccf 0,transparent 28%),radial-gradient(circle at 90% 10%,#f2e5c9 0,transparent 24%),var(--bg)}
+.skin-matcha body:after{content:"🍵  🍃  ✦  🍵  ·  🍃";position:fixed;inset:0;pointer-events:none;z-index:40;font-size:20px;letter-spacing:17px;opacity:.28;animation:matchaFloat 15s linear infinite}
+.skin-matcha .hero{background:linear-gradient(145deg,#e9f1dc,#f6ecdc);border-color:#d3debf}.skin-matcha .panel,.skin-matcha .task,.skin-matcha .slot-card,.skin-matcha .info-card,.skin-matcha .exercise,.skin-matcha .preview-item{background:#fbfcf2eb;border-color:#e0e5d1}.skin-matcha .nav{background:#f5f5e9eb}.skin-matcha .nav button,.skin-matcha .bottom button,.skin-matcha .quick button,.skin-matcha .quickbtn,.skin-matcha .iconbtn,.skin-matcha .modebar button,.skin-matcha .college-toggle{background:#fafff2;border-color:#dbe0ca;color:#5c634e}.skin-matcha .logo{background:linear-gradient(135deg,#b9cd91,#e3c69a);color:#4d553e}.skin-matcha .primary,.skin-matcha .nav button.active,.skin-matcha .bottom button.primary,.skin-matcha .modebar button.active{background:linear-gradient(135deg,#a9be83,#d9bf91);color:#4a513c}.skin-matcha .bar{background:linear-gradient(90deg,#91a96f,#d6bd91)}
+@keyframes matchaFloat{0%{transform:translateY(-8vh) rotate(-5deg)}100%{transform:translateY(108vh) rotate(15deg)}}
+
+.skin-anime-ds{--bg:#130f18;--panel:#201925;--panel2:#2a1f2d;--text:#fff7fb;--muted:#cbbbc8;--line:#49344a;--accent:#d77b9d;--accent2:#9bc6a4;--gold:#f1c47b;--shadow:0 16px 42px rgba(0,0,0,.30)}
+.skin-anime-ds body{background:radial-gradient(circle at 15% 0%,#4b1d38 0,transparent 30%),radial-gradient(circle at 90% 12%,#1e4a38 0,transparent 24%),var(--bg)}
+.skin-anime-ds body:before{content:"◈  🌸  ╱╲  🌸  ◈";position:fixed;top:8%;right:2%;pointer-events:none;color:#d88ca8;font-size:22px;opacity:.25;letter-spacing:12px;z-index:40}.skin-anime-ds .hero{background:linear-gradient(145deg,#3b1d32,#18342b);border-color:#71435c}.skin-anime-ds .panel,.skin-anime-ds .task,.skin-anime-ds .slot-card,.skin-anime-ds .info-card,.skin-anime-ds .exercise,.skin-anime-ds .preview-item{background:#211824e8;border-color:#4b354a}.skin-anime-ds .nav{background:#130f18e8}.skin-anime-ds .nav button,.skin-anime-ds .bottom button,.skin-anime-ds .quick button,.skin-anime-ds .quickbtn,.skin-anime-ds .iconbtn,.skin-anime-ds .modebar button,.skin-anime-ds .college-toggle{background:#201824;border-color:#4b354a}.skin-anime-ds .logo{background:linear-gradient(135deg,#b64f77,#6d9d7c);color:#fff}.skin-anime-ds .primary,.skin-anime-ds .nav button.active,.skin-anime-ds .bottom button.primary,.skin-anime-ds .modebar button.active{background:linear-gradient(135deg,#bd6689,#78a786);color:#fff}.skin-anime-ds .bar{background:linear-gradient(90deg,#d77b9d,#9bc6a4)}
+
+.skin-anime-op{--bg:#f8f1dc;--panel:#fffaf0;--panel2:#f0e5c8;--text:#493e2e;--muted:#87775e;--line:#decda9;--accent:#e25d55;--accent2:#e8bb54;--gold:#2e73a7;--shadow:0 14px 38px rgba(115,83,43,.12)}
+.skin-anime-op body{background:radial-gradient(circle at 8% 0%,#ffd68a 0,transparent 28%),radial-gradient(circle at 92% 15%,#b7d8ee 0,transparent 27%),var(--bg)}
+.skin-anime-op body:after{content:"⚓  ☀  🌊  ✦  ⚓  ☀";position:fixed;inset:0;pointer-events:none;z-index:40;font-size:20px;letter-spacing:18px;opacity:.22;animation:opFloat 17s linear infinite}.skin-anime-op .hero{background:linear-gradient(145deg,#fff0c7,#e4f2fa);border-color:#dfc989}.skin-anime-op .panel,.skin-anime-op .task,.skin-anime-op .slot-card,.skin-anime-op .info-card,.skin-anime-op .exercise,.skin-anime-op .preview-item{background:#fffaf0eb;border-color:#e1d3b5}.skin-anime-op .nav{background:#f8f1dceb}.skin-anime-op .nav button,.skin-anime-op .bottom button,.skin-anime-op .quick button,.skin-anime-op .quickbtn,.skin-anime-op .iconbtn,.skin-anime-op .modebar button,.skin-anime-op .college-toggle{background:#fffaf0;border-color:#dfcfad;color:#63543d}.skin-anime-op .logo{background:linear-gradient(135deg,#ef7063,#f0c65d);color:#49341f}.skin-anime-op .primary,.skin-anime-op .nav button.active,.skin-anime-op .bottom button.primary,.skin-anime-op .modebar button.active{background:linear-gradient(135deg,#e25d55,#e8bb54);color:#fff}.skin-anime-op .bar{background:linear-gradient(90deg,#e25d55,#2e73a7)}
+@keyframes opFloat{0%{transform:translateY(-8vh) rotate(0)}100%{transform:translateY(108vh) rotate(30deg)}}
+
+.skin-minimal{--bg:#f7f7f4;--panel:#ffffff;--panel2:#f0f0ec;--text:#252525;--muted:#747474;--line:#deded8;--accent:#222;--accent2:#777;--gold:#9a8050;--shadow:0 10px 28px rgba(0,0,0,.06)}
+.skin-minimal body{background:#f7f7f4}.skin-minimal .hero{background:#fff;border-color:#deded8}.skin-minimal .panel,.skin-minimal .task,.skin-minimal .slot-card,.skin-minimal .info-card,.skin-minimal .exercise,.skin-minimal .preview-item{background:#fff;border-color:#e2e2dd;box-shadow:none}.skin-minimal .nav{background:#f7f7f4e8}.skin-minimal .nav button,.skin-minimal .bottom button,.skin-minimal .quick button,.skin-minimal .quickbtn,.skin-minimal .iconbtn,.skin-minimal .modebar button,.skin-minimal .college-toggle{background:#fff;border-color:#ddd;color:#333}.skin-minimal .logo{background:#222;color:#fff;box-shadow:none}.skin-minimal .primary,.skin-minimal .nav button.active,.skin-minimal .bottom button.primary,.skin-minimal .modebar button.active{background:#222;color:#fff}.skin-minimal .bar{background:#222}
+
+.complete-toast{position:fixed;top:18px;left:50%;transform:translate(-50%,-170px) scale(.92);z-index:120;background:rgba(255,255,255,.96);color:#3f3440;border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:12px 18px;text-align:center;font-size:13px;font-weight:950;box-shadow:0 18px 50px rgba(0,0,0,.18);transition:transform .28s ease,opacity .28s ease;opacity:0;max-width:88%}
+.complete-toast.show{transform:translate(-50%,0) scale(1);opacity:1}.complete-toast b{display:block;font-size:15px}.complete-toast small{display:block;margin-top:3px;opacity:.72;font-weight:750}
+.petals-layer{position:fixed;inset:0;pointer-events:none;z-index:115;overflow:hidden}.petal{position:absolute;top:-30px;width:12px;height:18px;border-radius:70% 30% 70% 30%;background:#f3aabd;box-shadow:0 2px 6px #a44a6a33;animation:petalFall 2.8s ease-out forwards}.matcha-piece{position:absolute;top:-30px;font-size:24px;animation:petalFall 2.8s ease-out forwards}@keyframes petalFall{to{transform:translate3d(var(--dx),110vh,0) rotate(520deg);opacity:0}}
 </style>
 </head>
 <body>
-<div id="toast" class="toast"></div><div id="confetti" class="confetti"></div>
+<div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
 <header class="topbar">
  <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, without the boring parts. ✦</div></div></div>
@@ -195,7 +197,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 <section id="view-buddy" class="view">
  <div class="grid">
   <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Adaptive personal command center • works offline</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
-   <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('sakura')">🌸 Sakura garden</button><button onclick="setSkin('lavender')">🪻 Lavender cloud</button><button onclick="setSkin('matcha')">🍵 Matcha garden</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
+   <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('sakura')">🌸 Sakura</button><button onclick="setSkin('matcha')">🍵 Matcha</button><button onclick="setSkin('lavender')">🪻 Lavender</button><button onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button onclick="setSkin('anime-op')">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal')">◻ Minimal</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
    <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RĀSI can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
    <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RĀSI naturally. Examples:
 I missed exercise today
@@ -380,8 +382,8 @@ function ensureState(){
  });
  save();applySkin();
 }
-function applySkin(){document.documentElement.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha');if(state.skin&&state.skin!=='midnight')document.documentElement.classList.add('skin-'+state.skin);}
-function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵'}[s]||'Style changed');render();}
+function applySkin(){document.documentElement.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-minimal');if(state.skin&&state.skin!=='midnight')document.documentElement.classList.add('skin-'+state.skin);}
+function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵', 'anime-ds':'Anime mode: DS ⚔️', 'anime-op':'Anime mode: OP 🏴‍☠️',minimal:'Minimal mode ◻'}[s]||'Style changed');render();}
 
 function render(){
  const now=new Date(), hr=now.getHours();
@@ -416,7 +418,26 @@ function taskEl(t,i,arr){
  return d;
 }
 function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}celebrate();state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render()}
-function celebrate(){for(let i=0;i<20;i++){let p=document.createElement('i');p.className='piece';p.style.left=Math.random()*100+'%';p.style.top='-20px';p.style.background=['#9b7cff','#6ee7b7','#ffd166','#ff7aa2'][i%4];p.style.animationDelay=Math.random()*.25+'s';document.getElementById('confetti').appendChild(p);setTimeout(()=>p.remove(),1400)}showToast('✓ Win logged. Keep going.')}
+const WIN_LINES=[
+'Main character behavior. ✨','Okayyy, look at you actually doing it. 😭👏','Task got absolutely folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon loading…','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.'
+];
+function celebrate(){
+ const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast');
+ const skin=state.skin||'midnight', line=WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)];
+ toast.innerHTML='<b>✓ '+line+'</b><small>+XP • keep the streak alive</small>';toast.classList.add('show');
+ for(let i=0;i<28;i++){
+   const p=document.createElement(skin==='matcha'?'span':'i');
+   p.className=skin==='matcha'?'matcha-piece':'petal';
+   p.style.left=(5+Math.random()*90)+'%';
+   p.style.setProperty('--dx',((Math.random()-.5)*180)+'px');
+   p.style.animationDelay=(Math.random()*.45)+'s';
+   if(skin==='matcha')p.textContent=['🍵','🍃','✨'][i%3];
+   else if(skin!=='sakura'){p.style.background=['#f3aabd','#c7d8c3','#d8b6e6','#f6cf8c'][i%4];}
+   layer.appendChild(p);setTimeout(()=>p.remove(),3400);
+ }
+ setTimeout(()=>toast.classList.remove('show'),2800);
+ showToast('✓ Win logged. '+line);
+}
 function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
 function toggleCollege(){
