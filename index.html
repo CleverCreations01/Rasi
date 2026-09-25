@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<title>RIVA — Rasika's Personal OS</title>
-<link rel="manifest" href="manifest.json">
+<title>RĀSI — Rasika's Personal OS</title>
+<link rel="manifest" href="./manifest.json">
 <style>
 :root{
  --bg:#080b16;--panel:#101629;--panel2:#151c31;--text:#f6f7fb;--muted:#98a2bb;
@@ -57,7 +57,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 <div id="toast" class="toast"></div><div id="confetti" class="confetti"></div>
 <div class="app">
 <header class="topbar">
- <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RIVA</div><div class="sub">Your day, without the boring parts. ✦</div></div></div>
+ <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, without the boring parts. ✦</div></div></div>
  <div style="display:flex;align-items:center;gap:8px"><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
 </header>
 
@@ -66,7 +66,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
   <div>
    <div class="eyebrow" id="dayLabel">TODAY'S COMMAND CENTER</div>
    <div class="greeting" id="greeting">Good morning, Rasika.</div>
-   <p class="mission" id="mission">Protect the important stuff. Leave room for chaos. RIVA handles the rearranging. 😈</p>
+   <p class="mission" id="mission">Protect the important stuff. Leave room for chaos. RĀSI handles the rearranging. 😈</p>
    <div class="stats">
     <div class="stat"><b id="doneCount">0</b> done</div><div class="stat"><b id="xp">0</b> XP</div><div class="stat"><b id="streak">0</b> day streak</div><div class="stat"><b id="buffer">—</b> open buffer</div>
    </div>
@@ -76,7 +76,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 </section>
 
 <nav class="nav" id="nav">
- <button data-view="today" class="active">Today</button><button data-view="college">College</button><button data-view="week">Week</button><button data-view="skills">Skills</button><button data-view="body">Body</button><button data-view="important">Important</button><button data-view="buddy">RIVA</button>
+ <button data-view="today" class="active">Today</button><button data-view="college">College</button><button data-view="week">Week</button><button data-view="skills">Skills</button><button data-view="body">Body</button><button data-view="important">Important</button><button data-view="buddy">RĀSI</button>
 </nav>
 
 <main>
@@ -133,7 +133,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 <section id="view-body" class="view">
  <div class="grid">
   <div class="panel">
-   <div class="panel-head"><div><h2>Body progression</h2><div class="tiny">Adaptive progression • RIVA can rebuild this plan</div></div><span class="badge" id="dayBadge">DAY 1</span></div>
+   <div class="panel-head"><div><h2>Body progression</h2><div class="tiny">Adaptive progression • RĀSI can rebuild this plan</div></div><span class="badge" id="dayBadge">DAY 1</span></div>
    <div class="modebar" id="bodyModes"><button class="active" onclick="setBodyMode('normal')">Normal</button><button onclick="setBodyMode('period')">Period / low energy</button><button onclick="setBodyMode('unwell')">Not feeling well</button></div>
    <div style="height:10px"></div><div id="exercisePlan"></div>
   </div>
@@ -155,18 +155,18 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 
 <section id="view-buddy" class="view">
  <div class="grid">
-  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RIVA planner</h2><div class="tiny">Adaptive personal command center • works offline</div></div><span class="badge" id="coreBadge">RIVA CORE</span></div><div id="chat"></div>
+  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Adaptive personal command center • works offline</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
    <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('cute')">🌸 Cute</button><button onclick="setSkin('cyber')">⚡ Cyber</button><button onclick="setSkin('fun')">😈 Fun</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
-   <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RIVA can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
-   <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RIVA naturally. Examples:
+   <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RĀSI can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
+   <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RĀSI naturally. Examples:
 I missed exercise today
 I want to learn pushups
 I want to learn Japanese and only have 15 min
 Remove everything from Body and rebuild it
 Change my whole October schedule
-Move coding to 7 pm"></textarea><button class="primary" onclick="buddyCommand()">Send to RIVA ✦</button></div>
+Move coding to 7 pm"></textarea><button class="primary" onclick="buddyCommand()">Send to RĀSI ✦</button></div>
   </div>
-  <div class="panel"><h2>RIVA can adapt</h2><div class="tiny" style="margin:5px 0 12px">You control your plan. RIVA can edit its schedule, sections and learning plans.</div><div class="info-card"><ul><li>Tasks, times, order and whole sections can be rebuilt.</li><li>Exercise can pause, repeat, progress or reschedule.</li><li>Skills can become day-by-day learning plans after a few questions.</li><li>Week/month changes are applied around your fixed college commitments unless you explicitly change them.</li><li>Safety guardrails stay on: no medical diagnosis or risky training progression.</li></ul></div></div>
+  <div class="panel"><h2>RĀSI can adapt</h2><div class="tiny" style="margin:5px 0 12px">You control your plan. RĀSI can edit its schedule, sections and learning plans.</div><div class="info-card"><ul><li>Tasks, times, order and whole sections can be rebuilt.</li><li>Exercise can pause, repeat, progress or reschedule.</li><li>Skills can become day-by-day learning plans after a few questions.</li><li>Week/month changes are applied around your fixed college commitments unless you explicitly change them.</li><li>Safety guardrails stay on: no medical diagnosis or risky training progression.</li></ul></div></div>
  </div>
 </section>
 
@@ -179,7 +179,7 @@ Move coding to 7 pm"></textarea><button class="primary" onclick="buddyCommand()"
 
 <script>
 const STORAGE='rasika-os-v2';
-const DEFAULT_APP_NAME='RIVA';
+const DEFAULT_APP_NAME='RĀSI';
 const DAYS=['Mon','Tue','Wed','Thu','Fri'];
 const missions=[
  "Protect the essentials. One good study block beats five guilty intentions.",
@@ -257,7 +257,7 @@ const fixedTemplate=[
 ];
 
 const weekendTemplate=[
- {s:'5:30 AM',e:'5:45 AM',n:'Body progression',cat:'health',exercise:true,info:'RIVA chooses today’s progression from your current level.'},
+ {s:'5:30 AM',e:'5:45 AM',n:'Body progression',cat:'health',exercise:true,info:'RĀSI chooses today’s progression from your current level.'},
  {s:'5:45 AM',e:'6:15 AM',n:'Wash + breakfast setup',cat:'life',info:'Easy start. No college rush.'},
  {s:'6:15 AM',e:'7:00 AM',n:'Deep study / backlog',cat:'study',info:'Use the weekend to close one real college gap.'},
  {s:'7:00 AM',e:'7:40 AM',n:'C coding practice',cat:'coding',info:'Small, focused coding block.'},
@@ -270,7 +270,7 @@ const weekendTemplate=[
  {s:'1:00 PM',e:'2:00 PM',n:'Lunch + rest',cat:'life',info:'Actually take the break.'},
  {s:'2:00 PM',e:'4:00 PM',n:'Free / college life / hobbies',cat:'life',info:'Unstructured time is part of the plan.'},
  {s:'4:00 PM',e:'5:00 PM',n:'Weekly reset / planning',cat:'study',info:'Check deadlines, next week and pending work.'},
- {s:'5:00 PM',e:'8:00 PM',n:'Friends / outing / hobby',cat:'life',info:'Go live your life. RIVA is not your warden.'},
+ {s:'5:00 PM',e:'8:00 PM',n:'Friends / outing / hobby',cat:'life',info:'Go live your life. RĀSI is not your warden.'},
  {s:'8:00 PM',e:'8:30 PM',n:'Tomorrow setup',cat:'study',info:'Bag, clothes, deadlines and top 3.'},
  {s:'8:30 PM',e:'10:00 PM',n:'Relax + shutdown',cat:'health',info:'Wind down without turning the night into another productivity contest.'}
 ];
@@ -281,7 +281,7 @@ function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),o
 function defaultState(){
  return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
- ],tasks:{},dateTasks:{},flex:{},chat:[{who:'nova',text:'I’m RIVA. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
+ ],tasks:{},dateTasks:{},flex:{},chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||defaultState();
 let currentDay=new Date().getDay(); // 0 Sun
@@ -320,7 +320,7 @@ function ensureState(){
  if(oldSchema<5){state.schema=5;state.collegeOn=true;state.skin=state.skin||'midnight';}
  if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
  if(!state.reminders)state.reminders=[];
- if(!state.chat)state.chat=[{who:'nova',text:'I’m RIVA. Tell me what changed in your life and I’ll reshape the plan around it.'}];
+ if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}];
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
@@ -363,14 +363,14 @@ function renderTasks(arr){
  const list=document.getElementById('taskList');list.innerHTML='';
  arr.forEach((t,i)=>list.appendChild(taskEl(t,i,arr)));
  const next=arr.find(t=>!t.done && t.cat!=='college');
- document.getElementById('upcomingStrip').innerHTML=next?`<div class="tip"><b>Next up:</b> ${esc(next.n)} • ${esc(next.s)}–${esc(next.e)}. ${next.cat==='health'?'RIVA says: tiny workout, big main-character energy.':''}</div>`:'<div class="tip"><b>Today is clear.</b> Go enjoy your life. RIVA is not your warden. 😈</div>';
+ document.getElementById('upcomingStrip').innerHTML=next?`<div class="tip"><b>Next up:</b> ${esc(next.n)} • ${esc(next.s)}–${esc(next.e)}. ${next.cat==='health'?'RĀSI says: tiny workout, big main-character energy.':''}</div>`:'<div class="tip"><b>Today is clear.</b> Go enjoy your life. RĀSI is not your warden. 😈</div>';
 }
 function taskEl(t,i,arr){
  const d=document.createElement('div');d.className='task '+(t.done?'done ':'')+(t.locked?' locked ':'')+(t.cat==='college'?' college-task':'');
  d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${t.locked?'🔒 ':''}${t.cat==='college'?'🏫 ':''}${esc(t.n)}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>`:''}</div></div><div class="task-actions">${t.cat!=='college'?`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>`:`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>`}</div>`;
  return d;
 }
-function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RIVA is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}celebrate();state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render()}
+function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}celebrate();state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render()}
 function celebrate(){for(let i=0;i<20;i++){let p=document.createElement('i');p.className='piece';p.style.left=Math.random()*100+'%';p.style.top='-20px';p.style.background=['#9b7cff','#6ee7b7','#ffd166','#ff7aa2'][i%4];p.style.animationDelay=Math.random()*.25+'s';document.getElementById('confetti').appendChild(p);setTimeout(()=>p.remove(),1400)}showToast('✓ Win logged. Keep going.')}
 function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
@@ -382,7 +382,7 @@ function openAddTask(editId=null){
  showModal(`<div class="modal-head"><div><div class="eyebrow">FLEXIBLE TASK</div><h2>${t?'Edit task':'Add task'}</h2></div><button class="close" onclick="closeModal()">×</button></div>
  <div class="form" style="margin-top:15px"><input id="fName" placeholder="Task name" value="${t?esc(t.n):''}"><div class="form-row"><input id="fStart" placeholder="Start e.g. 6:30 PM" value="${t?esc(t.s):''}"><input id="fEnd" placeholder="End e.g. 7:00 PM" value="${t?esc(t.e):''}"></div><select id="fCat"><option>study</option><option>coding</option><option>pinterest</option><option>english</option><option>career</option><option>health</option><option>life</option><option>buffer</option></select><textarea id="fInfo" placeholder="Why / instructions">${t?esc(t.info||''):''}</textarea><button class="primary" onclick="saveTask('${editId||''}')">Save task</button></div>`);
 }
-function saveTask(id){let n=document.getElementById('fName').value.trim(),s=document.getElementById('fStart').value.trim(),e=document.getElementById('fEnd').value.trim(),cat=document.getElementById('fCat').value,info=document.getElementById('fInfo').value.trim();if(!n||!s||!e){showToast('Add a task name and time');return}let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RIVA updated this date')}function renderBrief(){
+function saveTask(id){let n=document.getElementById('fName').value.trim(),s=document.getElementById('fStart').value.trim(),e=document.getElementById('fEnd').value.trim(),cat=document.getElementById('fCat').value,info=document.getElementById('fInfo').value.trim();if(!n||!s||!e){showToast('Add a task name and time');return}let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RĀSI updated this date')}function renderBrief(){
  const idx=Math.max(0,(state.bodyDay||1)-1);const dayNum=Math.min(10,idx+1);
  const plans=[
   ['Day 1','5–10 min gentle mobility + 2–3 beginner poses. Your only job is to show up.','C: variables + input/output.','Pinterest: one easy maintenance pin.'],
@@ -420,7 +420,7 @@ function renderReminders(){document.getElementById('reminders').innerHTML=state.
 function openImportant(){showModal(`<div class="modal-head"><div><div class="eyebrow">IMPORTANT VAULT</div><h2>Add a deadline / reminder</h2></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="rTitle" placeholder="e.g. Chemistry journal submission"><input id="rWhen" placeholder="e.g. Monday, 11:59 PM"><textarea id="rNote" placeholder="Extra details / where to submit"></textarea><button class="primary" onclick="saveReminder()">Save reminder</button></div>`)}
 function saveReminder(){let title=document.getElementById('rTitle').value.trim(),when=document.getElementById('rWhen').value.trim(),note=document.getElementById('rNote').value.trim();if(!title)return;state.reminders.unshift({id:uid(),title,when:when||'No date added',note});save();closeModal();render();showToast('Reminder saved')}
 function deleteReminder(id){state.reminders=state.reminders.filter(r=>String(r.id)!==String(id));save();render()}
-function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebrow">IDENTITY</div><h2>Rename your buddy</h2><div class="tiny">The name is cosmetic and can be changed anytime.</div></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="buddyName" maxlength="24" value="${esc(state.appName||DEFAULT_APP_NAME)}" placeholder="e.g. RIVA"><button class="primary" onclick="saveBuddyName()">Save name</button></div>`)}
+function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebrow">IDENTITY</div><h2>Rename your buddy</h2><div class="tiny">The name is cosmetic and can be changed anytime.</div></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="buddyName" maxlength="24" value="${esc(state.appName||DEFAULT_APP_NAME)}" placeholder="e.g. RĀSI"><button class="primary" onclick="saveBuddyName()">Save name</button></div>`)}
 function saveBuddyName(){const n=document.getElementById('buddyName').value.trim().replace(/\s+/g,' ');if(!n){showToast('Give me a name first 😌');return}state.appName=n;state.chat.push({who:'nova',text:`New name locked in: ${n}. Same brain, better branding. ✦`});save();closeModal();render();showToast('Name changed ✦')}
 function renderChat(){const name=state.appName||DEFAULT_APP_NAME;document.getElementById('chat').innerHTML=state.chat.map(m=>`<div class="buddy-msg ${m.who==='you'?'you':''}"><b>${m.who==='you'?'You':esc(name)}</b><br>${esc(m.text)}</div>`).join('')}
 
@@ -458,7 +458,7 @@ function moveExerciseToNextDay(){
  const today=todayTasks(),ex=today.find(t=>t.exercise===true);if(!ex)return 'I could not find today’s exercise block.';
  const base=new Date(window.__selectedDate||new Date());const next=new Date(base);next.setDate(base.getDate()+1);const nextArr=tasksForDate(next);const existing=nextArr.find(t=>t.exercise===true);
  const mins=bodyMinutes();if(existing){existing.done=false;existing.s='5:30 AM';existing.e=addMinutes(existing.s,mins);existing.info='Repeated because the previous day was missed. No catch-up workout.';}else nextArr.push({...ex,id:uid(),done:false,s:'5:30 AM',e:addMinutes('5:30 AM',mins),order:nextArr.length,info:'Repeated because the previous day was missed. No catch-up workout.'});
- ex.done=true;ex.info='Marked as rescheduled by RIVA. Progress stays at the same level.';state.exerciseMissed=true;save();
+ ex.done=true;ex.info='Marked as rescheduled by RĀSI. Progress stays at the same level.';state.exerciseMissed=true;save();
  return `Rescheduled exercise to ${next.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'})} at 5:30 AM. I did not advance the progression.`;
 }
 function bodyMinutes(){return (bodyPlans[Math.min(9,(state.bodyDay||1)-1)]||bodyPlans[0]).mins}
@@ -510,20 +510,20 @@ function buddyCommand(){
    if(t&&tm){t.s=tm[1].toUpperCase();t.e=addMinutes(t.s,Math.max(15,minutes(t.e)-minutes(t.s)));reply=`Moved ${t.n} to ${t.s}–${t.e}. I checked the surrounding blocks before applying it.`;}else reply='Give me the block and time, e.g. “move coding to 7:00 pm”.';
  } else if(/^(add|schedule|plan)\b/.test(x)){
    const m=raw.match(/^(?:add|schedule|plan)\s+(.+?)\s+(?:at|from)\s+(\d{1,2}:\d{2}\s*(?:am|pm))(?:\s*(?:for|to)\s*(\d+)\s*(?:min|minutes))?/i);
-   if(m){const start=m[2].toUpperCase(),dur=Number(m[3]||30),end=addMinutes(start,dur);todayTasks().push({id:uid(),s:start,e:end,n:m[1],cat:'flexible',info:'Added by RIVA',done:false,order:todayTasks().length});reply=`Scheduled ${m[1]} for ${start}–${end}.`;}else reply='Use: “add chemistry revision at 6:30 pm for 30 min”.';
+   if(m){const start=m[2].toUpperCase(),dur=Number(m[3]||30),end=addMinutes(start,dur);todayTasks().push({id:uid(),s:start,e:end,n:m[1],cat:'flexible',info:'Added by RĀSI',done:false,order:todayTasks().length});reply=`Scheduled ${m[1]} for ${start}–${end}.`;}else reply='Use: “add chemistry revision at 6:30 pm for 30 min”.';
  } else if(/(lighten|too much|overloaded|tired|low energy|no energy)/.test(x)){const removable=['knowledge','career','english','pinterest'];let removed=[];removable.forEach(c=>{const t=todayTasks()?.find(q=>q.cat===c);if(t){state.dateTasks[dateKey(window.__selectedDate)]=state.dateTasks[dateKey(window.__selectedDate)].filter(q=>q.id!==t.id);removed.push(t.n)}});reply=removed.length?`I lightened today by moving out ${removed.join(', ')}. Your core study, coding, health and buffer stay protected.`:'Today is already at the minimum planned load.';}
  else if(/month|january|february|march|april|may|june|july|august|september|october|november|december/.test(x) && /(change|rebuild|plan|schedule|remove|delete|drop|skip)/.test(x)){reply=applyMonthInstruction(raw)||'I saved the month-level instruction. Give me the month plus the exact change (for example, “remove Pinterest from October”) and I will apply it across that month.';}
  else if(/replan|rearrange|reorganize|fix today/.test(x)){reply=replanToday();}
  else if(/what.*today|what.*do|plan my day/.test(x)){const next=todayTasks().filter(t=>t.cat!=='college'&&!t.done)[0];reply=next?`Your next block is ${next.n} (${next.s}–${next.e}). If something changed, tell me what changed and I’ll replan around it.`:'Your planned flexible blocks are complete. Use the remaining time for college life or rest.';}
  else {reply='Tell me the outcome you want, not just a button to press. I can change tasks, times, sections, exercise progression, skill plans, week/month rules and reminders inside this app.';}
- state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';save();render();showToast('RIVA updated your plan');
+ state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';save();render();showToast('RĀSI updated your plan');
 }
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
 function replanToday(){let a=todayTasks()||[];let flex=a.filter(t=>['career','knowledge','english','pinterest','coding','study'].includes(t.cat));flex.sort((x,y)=>minutes(x.s)-minutes(y.s));return `Rebalance complete. 🎯 College stays fixed, buffers stay protected, and flexible blocks stay in sensible time order. If life throws a chair at the schedule, tell me what changed and I’ll rebuild around it.`}
 function replanWeek(){DAYS.forEach(d=>{if(!state.tasks[d])return;let a=state.tasks[d];a.forEach((t,i)=>t.order=i)});save();render();showToast('Week rebalanced around fixed blocks')}
 function renderInsights(){let all=Object.values(state.tasks).flat(),done=all.filter(t=>t.done).length;document.getElementById('insights').innerHTML=`<div class="two"><div class="info-card"><h3>XP</h3><div class="xp">${state.xp}</div><p>+10 per completed planned task.</p></div><div class="info-card"><h3>Completed</h3><div class="xp">${done}</div><p>Across saved days.</p></div></div><div class="tip" style="margin-top:10px"><b>Anti-all-or-nothing rule:</b> If you miss a day, the next day stays at its planned level. You don't “owe” punishment workouts or double study blocks.</div>`;document.getElementById('collegeTips').innerHTML=['Keep one small social plan each week.','Save assignment deadlines immediately in Important Vault.','After each practical, capture 3 steps + 1 mistake + 1 question.','Use commute/waiting time for vocabulary or audio, not deep coding.','Do not sacrifice sleep to rescue an overloaded plan.'].map((x,i)=>`<div class="info-card" style="margin-bottom:8px"><h3>${i+1}. ${x}</h3></div>`).join('')}
 function quickWin(name){state.xp+=5;save();celebrate();showToast(name+' +5 XP')}
-function backupData(){const payload={app:'RIVA',version:5,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`riva-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
+function backupData(){const payload={app:'RĀSI',version:5,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`riva-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
 function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const payload=JSON.parse(r.result);if(!payload.state)throw new Error('Invalid backup');state=payload.state;ensureState();render();showToast('Backup restored. Welcome back. ✦')}catch(err){showToast('That backup file is not valid.')}};r.readAsText(file);e.target.value=''}
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}

@@ -1,6 +1,6 @@
 {
-  "name":"RIVA — Rasika's Personal OS",
-  "short_name":"RIVA",
+  "name":"RĀSI — Rasika's Personal OS",
+  "short_name":"RĀSI",
   "start_url":"./",
   "scope":"./",
   "display":"standalone",
@@ -9,7 +9,7 @@
   "theme_color":"#0b1020",
   "description":"A private-first, adaptive college, study, skills, exercise and life planner.",
   "icons":[
-    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
