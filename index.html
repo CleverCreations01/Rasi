@@ -396,7 +396,9 @@ function render(){
  document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
  document.getElementById('scheduleTitle').textContent=isToday?"Today's plan":selected.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'})+' plan';
  document.getElementById('greeting').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', Rasika.';
- document.getElementById('mission').textContent=missions[DAYS.indexOf(day)]||missions[0];
+ const vibeDone=Object.values(state.dateTasks||{}).flat().filter(t=>t.done).length;
+const vibeLines=vibeDone>=5?'Okay academic weapon, calm down. 😭🔥':vibeDone>=2?'Two W’s already. Keep it cute, not chaotic. ✨':hr<10?'Soft launch the day. No doomscroll DLC. 🌤️':hr<17?'College survived. Now pick one useful thing. 🎒':'Night mode: tiny wins, then disappear into your blanket. 🌙';
+document.getElementById('mission').textContent=vibeLines;
  const all=todayTasks();
  const visible=todayTasks(), done=visible.filter(t=>t.done).length, total=visible.length, pct=total?Math.round(done/total*100):0;
  document.getElementById('doneCount').textContent=done; document.getElementById('xp').textContent=state.xp;
@@ -633,7 +635,7 @@ function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.c
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v8.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v9.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
 </body>
