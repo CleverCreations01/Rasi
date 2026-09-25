@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v16-ultimate">
+<link rel="manifest" href="./manifest.json">
+<style>
+:root{
+ --bg:#080b16;--panel:#101629;--panel2:#151c31;--text:#f6f7fb;--muted:#98a2bb;
+ --line:#27304a;--accent:#9b7cff;--accent2:#6ee7b7;--gold:#ffd166;--danger:#ff6b81;
+ --shadow:0 18px 50px rgba(0,0,0,.35);--r:22px;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:
+radial-gradient(circle at 10% 0%,rgba(155,124,255,.18),transparent 30%),
+radial-gradient(circle at 90% 10%,rgba(110,231,183,.10),transparent 28%),var(--bg);
+color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}button{border:0;color:inherit;cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:18px 16px 110px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#a78bfa,#6ee7b7);display:grid;place-items:center;color:#0b1020;font-size:24px;font-weight:900;box-shadow:0 10px 30px rgba(155,124,255,.25)}
+h1,h2,h3,p{margin:0}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#aab4cc;font-weight:800}.title{font-size:21px;font-weight:900}.sub{color:var(--muted);font-size:13px}
+.clock{font-size:20px;font-weight:900;text-align:right}.date{font-size:11px;color:var(--muted)}
+.hero{background:linear-gradient(145deg,rgba(155,124,255,.18),rgba(110,231,183,.07));border:1px solid rgba(155,124,255,.24);border-radius:28px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(155,124,255,.08);right:-60px;top:-70px}
+.hero-row{display:flex;justify-content:space-between;gap:20px;align-items:center;position:relative;z-index:1}
+.greeting{font-size:30px;line-height:1.1;font-weight:950;margin:5px 0 8px}.mission{font-size:14px;color:#c9d0e2;max-width:690px;line-height:1.5}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.stat{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);padding:9px 12px;border-radius:14px;font-size:12px}.stat b{font-size:17px;margin-right:3px}
+.progress-wrap{min-width:220px}.progress-label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-bottom:7px}.progress{height:10px;background:#202940;border-radius:999px;overflow:hidden}.bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:.4s}
+.nav{display:flex;gap:7px;overflow:auto;padding:13px 0 6px;position:sticky;top:0;z-index:20;background:rgba(8,11,22,.9);backdrop-filter:blur(16px)}.nav button{flex:0 0 auto;padding:10px 13px;border-radius:14px;background:#11182a;border:1px solid var(--line);color:#aeb7cb;font-size:12px;font-weight:800}.nav button.active{background:var(--accent);color:#0b1020;border-color:transparent}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-top:14px}.panel{background:rgba(16,22,41,.88);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}.panel h2{font-size:17px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.tiny{font-size:11px;color:var(--muted)}
+.view{display:none}.view.active{display:block}
+.task{display:flex;gap:11px;align-items:stretch;background:#11182a;border:1px solid #252e47;border-radius:18px;padding:11px;margin-bottom:9px;transition:.18s;position:relative;overflow:hidden}.task.done{opacity:.62}.locked{opacity:.55}.task.done .task-name{text-decoration:line-through}.check{width:27px;height:27px;border-radius:9px;border:1px solid #46516e;background:#0c1222;flex:0 0 auto;margin-top:2px;display:grid;place-items:center}.task.done .check{background:var(--accent2);color:#06110d;border-color:transparent}.task-main{min-width:0;flex:1}.task-time{font-size:11px;color:#aab4cc;font-weight:800}.task-name{font-size:14px;font-weight:850;margin-top:2px}.task-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.pill{font-size:10px;padding:4px 7px;border-radius:999px;background:#202940;color:#bfc8da}.pill.accent{background:rgba(155,124,255,.15);color:#cdbfff}.pill.green{background:rgba(110,231,183,.12);color:#9cf0cf}.pill.gold{background:rgba(255,209,102,.12);color:#ffe29a}.task-actions{display:flex;gap:4px;align-items:center}.iconbtn{width:30px;height:30px;border-radius:10px;background:#1a2238;color:#aeb8cd}.iconbtn:hover{background:#26304a}
+.college-toggle{width:100%;padding:12px 14px;border-radius:15px;background:#171f35;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:850;margin-bottom:10px}.toggle{width:42px;height:24px;border-radius:99px;background:#2b3550;padding:3px}.toggle i{display:block;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}.toggle.on{background:var(--accent)}.toggle.on i{transform:translateX(18px)}
+.reminder{border-left:4px solid var(--gold);background:#171d30;padding:11px 12px;border-radius:12px;margin:8px 0}.reminder b{font-size:13px}.reminder small{display:block;color:var(--muted);margin-top:3px}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick button,.primary{padding:11px;border-radius:14px;background:#1a2238;border:1px solid var(--line);font-weight:800;font-size:12px}.primary{background:linear-gradient(135deg,var(--accent),#7c6cff);color:#090c16;border:0}
+.section-title{margin:18px 0 9px;font-size:12px;color:#aeb8cd;text-transform:uppercase;letter-spacing:.1em;font-weight:900}
+.timeline{display:grid;gap:8px}.slot{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:start}.slot-time{font-size:11px;color:#aab4cc;font-weight:850;padding-top:10px}.slot-card{background:#11182a;border:1px solid #252e47;border-radius:15px;padding:10px}.slot-card strong{font-size:13px}.slot-card small{display:block;color:var(--muted);margin-top:4px;line-height:1.35}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.info-card{background:#11182a;border:1px solid #252e47;border-radius:17px;padding:13px}.info-card h3{font-size:13px;margin-bottom:6px}.info-card p,.info-card li{font-size:12px;color:#c3cbda;line-height:1.5}.info-card ul{padding-left:18px;margin:7px 0}
+.exercise{display:flex;gap:10px;align-items:flex-start;background:#11182a;border:1px solid #252e47;border-radius:15px;padding:11px;margin-bottom:8px}.num{width:27px;height:27px;border-radius:9px;background:rgba(155,124,255,.16);display:grid;place-items:center;color:#d5caff;font-weight:900;font-size:12px}.exercise b{font-size:13px}.exercise small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}
+.modebar{display:flex;gap:7px;flex-wrap:wrap}.modebar button{padding:9px 11px;border-radius:13px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:850}.modebar button.active{background:var(--accent);color:#0b1020}
+textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;color:#fff;border-radius:13px;padding:11px;outline:none}textarea{min-height:92px;resize:vertical}.form{display:grid;gap:9px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.install-btn{display:none;padding:8px 10px;border-radius:12px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:900}.install-btn.show{display:inline-flex}.badge{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(110,231,183,.1);color:#98efca;font-size:10px;font-weight:900}
+.tip{padding:13px;border-radius:16px;background:linear-gradient(135deg,rgba(255,209,102,.1),rgba(155,124,255,.08));border:1px solid rgba(255,209,102,.15);line-height:1.55;color:#d8dce7;font-size:12px}
+.buddy-msg{padding:10px 12px;border-radius:15px;background:#161f34;margin:7px 0;font-size:12px;line-height:1.45}.buddy-msg.you{background:rgba(155,124,255,.15);margin-left:30px}
+.xp{font-size:25px;font-weight:950}.streak{color:#ffd166;font-weight:900}
+.bottom{position:fixed;bottom:0;left:0;right:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:rgba(8,11,22,.94);backdrop-filter:blur(18px);border-top:1px solid #1d2640;z-index:30}.bottom-inner{max-width:720px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.bottom button{padding:11px;border-radius:14px;background:#131b2e;border:1px solid var(--line);font-size:11px;font-weight:900}.bottom button.primary{background:var(--accent)}
+.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:60;align-items:flex-end;justify-content:center}.modal-back.show{display:flex}.modal{width:min(680px,100%);max-height:90vh;overflow:auto;background:#101629;border:1px solid #303a56;border-radius:25px 25px 0 0;padding:18px;box-shadow:0 -30px 90px rgba(0,0,0,.55)}.modal-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.close{background:#1b243b;width:34px;height:34px;border-radius:11px}.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-140px);background:#f6f7fb;color:#0a0e19;padding:11px 15px;border-radius:999px;font-size:12px;font-weight:900;z-index:100;box-shadow:var(--shadow);transition:.35s}.toast.show{transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:90}.piece{position:absolute;width:7px;height:13px;border-radius:2px;animation:fall 1.1s ease-out forwards}@keyframes fall{from{transform:translateY(-20px) rotate(0)}to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.hero-row{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}.two{grid-template-columns:1fr}.greeting{font-size:27px}}
+@media(max-width:600px){
+ .app{padding:calc(30px + env(safe-area-inset-top)) 10px calc(96px + env(safe-area-inset-bottom));}
+ .topbar{gap:8px;margin-bottom:10px}.brand{gap:9px}.logo{width:44px;height:44px;border-radius:14px;font-size:23px}.eyebrow{font-size:10px}.title{font-size:21px}.sub{font-size:12px}.clock{font-size:19px}.date{font-size:10px}
+ .hero{padding:16px;border-radius:22px}.greeting{font-size:28px}.mission{font-size:13px}.stats{margin-top:11px}.stat{padding:8px 10px;font-size:11px}.stat b{font-size:16px}.progress-wrap{min-width:0}
+ .nav{gap:6px;padding:10px 0 7px}.nav button{padding:10px 13px;font-size:12px;border-radius:13px}.panel{padding:16px;border-radius:20px}.panel h2{font-size:18px}.task{padding:11px;border-radius:18px;gap:10px}.task-name{font-size:14px}.task-time{font-size:11px}.check{width:27px;height:27px}.task-meta{margin-top:6px}.pill{font-size:10px;padding:4px 7px}.college-toggle{padding:12px 13px;font-size:13px}.bottom{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}.bottom button{padding:11px 9px;font-size:11px}
+}
+
+.quickbtn{padding:10px 12px;border-radius:13px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:900}.style-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.style-row button{padding:8px 10px;border-radius:12px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:850}.day-preview{margin-top:12px}.calendar-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calendar-mini button{min-height:55px;border-radius:12px;background:#11182a;border:1px solid var(--line);font-weight:850}.calendar-mini button.today{background:rgba(155,124,255,.22);border-color:#9b7cff}.preview-item{padding:10px 11px;border:1px solid #252e47;background:#11182a;border-radius:13px;margin:7px 0}.preview-item b{font-size:12px}.preview-item small{display:block;color:var(--muted);margin-top:3px}/* RĀSI skins: full visual worlds */
+.skin-sakura{--bg:#fff7f5;--panel:#fffdfb;--panel2:#fff1f0;--text:#5b4650;--muted:#987f87;--line:#efd8dc;--accent:#d98c9b;--accent2:#a9c5a8;--gold:#d5ad79;--shadow:0 14px 38px rgba(150,91,104,.12)}
+.skin-sakura body{background:radial-gradient(circle at 8% 0%,#ffe1e8 0,transparent 27%),radial-gradient(circle at 92% 12%,#e5f0e2 0,transparent 25%),var(--bg)}
+.skin-sakura body:before{content:"🌸  🌸   ✿   🌸   ·   🌸";position:fixed;inset:0;pointer-events:none;z-index:40;color:#e7a2b1;font-size:18px;letter-spacing:15px;opacity:.55;animation:sakuraFloat 14s linear infinite;white-space:pre-wrap}
+.skin-sakura .hero{background:linear-gradient(145deg,#fff0f2,#edf5ea);border-color:#e8c5cc}.skin-sakura .hero:after{background:#e8a9b51a}
+.skin-sakura .panel,.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item{background:#fffaf9e8;border-color:#efdfe0}
+.skin-sakura .nav{background:#fff7f5eb}.skin-sakura .nav button,.skin-sakura .bottom button,.skin-sakura .quick button,.skin-sakura .quickbtn,.skin-sakura .iconbtn,.skin-sakura .modebar button,.skin-sakura .college-toggle{background:#fff8f6;border-color:#ead9dc;color:#765c65}
+.skin-sakura .logo{background:linear-gradient(135deg,#f4b9c7,#c7ddc4);color:#694b56}.skin-sakura .primary,.skin-sakura .nav button.active,.skin-sakura .bottom button.primary,.skin-sakura .modebar button.active{background:linear-gradient(135deg,#e8a0b0,#c3d7bf);color:#593f48}.skin-sakura .bar{background:linear-gradient(90deg,#d98c9b,#a9c5a8)}
+@keyframes sakuraFloat{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(108vh) rotate(180deg)}}
+
+.skin-lavender{--bg:#f8f4fb;--panel:#fffaff;--panel2:#f2ebf8;--text:#51485c;--muted:#887d92;--line:#e0d4e8;--accent:#a98bc0;--accent2:#a9c4ad;--gold:#c9a66d;--shadow:0 14px 38px rgba(92,74,110,.11)}
+.skin-lavender body{background:radial-gradient(circle at 10% 0%,#e8dcf3 0,transparent 28%),radial-gradient(circle at 90% 20%,#e4f0e5 0,transparent 25%),var(--bg)}
+.skin-lavender body:after{content:"✦  🪻  ✦  ·  🪻  ✦";position:fixed;inset:0;pointer-events:none;z-index:40;color:#b89acb;font-size:20px;letter-spacing:18px;opacity:.32;animation:lavenderFloat 16s linear infinite}
+.skin-lavender .hero{background:linear-gradient(145deg,#eee4f5,#edf5ee);border-color:#dccce5}.skin-lavender .panel,.skin-lavender .task,.skin-lavender .slot-card,.skin-lavender .info-card,.skin-lavender .exercise,.skin-lavender .preview-item{background:#fffaffeb;border-color:#e3d9e8}.skin-lavender .nav{background:#f8f4fbeb}.skin-lavender .nav button,.skin-lavender .bottom button,.skin-lavender .quick button,.skin-lavender .quickbtn,.skin-lavender .iconbtn,.skin-lavender .modebar button,.skin-lavender .college-toggle{background:#fffaff;border-color:#ded2e6;color:#655a6f}.skin-lavender .logo{background:linear-gradient(135deg,#ccb5dc,#bcd4bf);color:#54465e}.skin-lavender .primary,.skin-lavender .nav button.active,.skin-lavender .bottom button.primary,.skin-lavender .modebar button.active{background:linear-gradient(135deg,#bda2d1,#b9cfbc);color:#514255}.skin-lavender .bar{background:linear-gradient(90deg,#a98bc0,#a9c4ad)}
+@keyframes lavenderFloat{0%{transform:translateY(-8vh) rotate(0)}100%{transform:translateY(108vh) rotate(80deg)}}
+
+.skin-matcha{--bg:#f5f5e9;--panel:#fbfcf2;--panel2:#edf0df;--text:#4b5140;--muted:#7c826e;--line:#dbe0ca;--accent:#91a96f;--accent2:#d6bd91;--gold:#b9965d;--shadow:0 14px 38px rgba(75,88,55,.10)}
+.skin-matcha body{background:radial-gradient(circle at 10% 0%,#e0eccf 0,transparent 28%),radial-gradient(circle at 90% 10%,#f2e5c9 0,transparent 24%),var(--bg)}
+.skin-matcha body:after{content:"🍵  🍃  ✦  🍵  ·  🍃";position:fixed;inset:0;pointer-events:none;z-index:40;font-size:20px;letter-spacing:17px;opacity:.28;animation:matchaFloat 15s linear infinite}
+.skin-matcha .hero{background:linear-gradient(145deg,#e9f1dc,#f6ecdc);border-color:#d3debf}.skin-matcha .panel,.skin-matcha .task,.skin-matcha .slot-card,.skin-matcha .info-card,.skin-matcha .exercise,.skin-matcha .preview-item{background:#fbfcf2eb;border-color:#e0e5d1}.skin-matcha .nav{background:#f5f5e9eb}.skin-matcha .nav button,.skin-matcha .bottom button,.skin-matcha .quick button,.skin-matcha .quickbtn,.skin-matcha .iconbtn,.skin-matcha .modebar button,.skin-matcha .college-toggle{background:#fafff2;border-color:#dbe0ca;color:#5c634e}.skin-matcha .logo{background:linear-gradient(135deg,#b9cd91,#e3c69a);color:#4d553e}.skin-matcha .primary,.skin-matcha .nav button.active,.skin-matcha .bottom button.primary,.skin-matcha .modebar button.active{background:linear-gradient(135deg,#a9be83,#d9bf91);color:#4a513c}.skin-matcha .bar{background:linear-gradient(90deg,#91a96f,#d6bd91)}
+@keyframes matchaFloat{0%{transform:translateY(-8vh) rotate(-5deg)}100%{transform:translateY(108vh) rotate(15deg)}}
+
+.skin-anime-ds{--bg:#130f18;--panel:#201925;--panel2:#2a1f2d;--text:#fff7fb;--muted:#cbbbc8;--line:#49344a;--accent:#d77b9d;--accent2:#9bc6a4;--gold:#f1c47b;--shadow:0 16px 42px rgba(0,0,0,.30)}
+.skin-anime-ds body{background:radial-gradient(circle at 15% 0%,#4b1d38 0,transparent 30%),radial-gradient(circle at 90% 12%,#1e4a38 0,transparent 24%),var(--bg)}
+.skin-anime-ds body:before{content:"◈  🌸  ╱╲  🌸  ◈";position:fixed;top:8%;right:2%;pointer-events:none;color:#d88ca8;font-size:22px;opacity:.25;letter-spacing:12px;z-index:40}.skin-anime-ds .hero{background:linear-gradient(145deg,#3b1d32,#18342b);border-color:#71435c}.skin-anime-ds .panel,.skin-anime-ds .task,.skin-anime-ds .slot-card,.skin-anime-ds .info-card,.skin-anime-ds .exercise,.skin-anime-ds .preview-item{background:#211824e8;border-color:#4b354a}.skin-anime-ds .nav{background:#130f18e8}.skin-anime-ds .nav button,.skin-anime-ds .bottom button,.skin-anime-ds .quick button,.skin-anime-ds .quickbtn,.skin-anime-ds .iconbtn,.skin-anime-ds .modebar button,.skin-anime-ds .college-toggle{background:#201824;border-color:#4b354a}.skin-anime-ds .logo{background:linear-gradient(135deg,#b64f77,#6d9d7c);color:#fff}.skin-anime-ds .primary,.skin-anime-ds .nav button.active,.skin-anime-ds .bottom button.primary,.skin-anime-ds .modebar button.active{background:linear-gradient(135deg,#bd6689,#78a786);color:#fff}.skin-anime-ds .bar{background:linear-gradient(90deg,#d77b9d,#9bc6a4)}
+
+.skin-anime-op{--bg:#f8f1dc;--panel:#fffaf0;--panel2:#f0e5c8;--text:#493e2e;--muted:#87775e;--line:#decda9;--accent:#e25d55;--accent2:#e8bb54;--gold:#2e73a7;--shadow:0 14px 38px rgba(115,83,43,.12)}
+.skin-anime-op body{background:radial-gradient(circle at 8% 0%,#ffd68a 0,transparent 28%),radial-gradient(circle at 92% 15%,#b7d8ee 0,transparent 27%),var(--bg)}
+.skin-anime-op body:after{content:"⚓  ☀  🌊  ✦  ⚓  ☀";position:fixed;inset:0;pointer-events:none;z-index:40;font-size:20px;letter-spacing:18px;opacity:.22;animation:opFloat 17s linear infinite}.skin-anime-op .hero{background:linear-gradient(145deg,#fff0c7,#e4f2fa);border-color:#dfc989}.skin-anime-op .panel,.skin-anime-op .task,.skin-anime-op .slot-card,.skin-anime-op .info-card,.skin-anime-op .exercise,.skin-anime-op .preview-item{background:#fffaf0eb;border-color:#e1d3b5}.skin-anime-op .nav{background:#f8f1dceb}.skin-anime-op .nav button,.skin-anime-op .bottom button,.skin-anime-op .quick button,.skin-anime-op .quickbtn,.skin-anime-op .iconbtn,.skin-anime-op .modebar button,.skin-anime-op .college-toggle{background:#fffaf0;border-color:#dfcfad;color:#63543d}.skin-anime-op .logo{background:linear-gradient(135deg,#ef7063,#f0c65d);color:#49341f}.skin-anime-op .primary,.skin-anime-op .nav button.active,.skin-anime-op .bottom button.primary,.skin-anime-op .modebar button.active{background:linear-gradient(135deg,#e25d55,#e8bb54);color:#fff}.skin-anime-op .bar{background:linear-gradient(90deg,#e25d55,#2e73a7)}
+@keyframes opFloat{0%{transform:translateY(-8vh) rotate(0)}100%{transform:translateY(108vh) rotate(30deg)}}
+
+.skin-minimal{--bg:#f7f7f4;--panel:#ffffff;--panel2:#f0f0ec;--text:#252525;--muted:#747474;--line:#deded8;--accent:#222;--accent2:#777;--gold:#9a8050;--shadow:0 10px 28px rgba(0,0,0,.06)}
+.skin-minimal body{background:#f7f7f4}.skin-minimal .hero{background:#fff;border-color:#deded8}.skin-minimal .panel,.skin-minimal .task,.skin-minimal .slot-card,.skin-minimal .info-card,.skin-minimal .exercise,.skin-minimal .preview-item{background:#fff;border-color:#e2e2dd;box-shadow:none}.skin-minimal .nav{background:#f7f7f4e8}.skin-minimal .nav button,.skin-minimal .bottom button,.skin-minimal .quick button,.skin-minimal .quickbtn,.skin-minimal .iconbtn,.skin-minimal .modebar button,.skin-minimal .college-toggle{background:#fff;border-color:#ddd;color:#333}.skin-minimal .logo{background:#222;color:#fff;box-shadow:none}.skin-minimal .primary,.skin-minimal .nav button.active,.skin-minimal .bottom button.primary,.skin-minimal .modebar button.active{background:#222;color:#fff}.skin-minimal .bar{background:#222}
+
+.complete-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-42%) scale(.82);z-index:120;background:rgba(255,251,250,.97);color:#4c3a43;border:1px solid rgba(180,120,135,.20);border-radius:24px;padding:18px 24px;text-align:center;font-size:14px;font-weight:950;box-shadow:0 22px 70px rgba(80,45,60,.24);transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s ease;opacity:0;max-width:82%;min-width:210px;backdrop-filter:blur(12px)}
+.complete-toast.show{transform:translate(-50%,-50%) scale(1);opacity:1}.complete-toast b{display:block;font-size:17px;line-height:1.18}.complete-toast small{display:block;margin-top:6px;opacity:.72;font-weight:800}
+.petals-layer{position:fixed;inset:0;pointer-events:none;z-index:115;overflow:hidden}.petal{position:absolute;top:42%;left:50%;width:11px;height:17px;border-radius:70% 30% 70% 30%;background:#f3aabd;box-shadow:0 2px 6px #a44a6a22;animation:petalFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.flower-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.matcha-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}
+@keyframes petalFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
+@keyframes flowerFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
+</style>
+<style id="rasi-app-polish-v10">
+/* RĀSI mobile = app UI, not tiny website */
+@media(max-width:600px){
+  html,body{min-height:100%;overflow-x:hidden}
+  .app{padding:52px 12px 104px!important}
+  .topbar{margin-bottom:12px!important}
+  .nav{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px!important;overflow:visible!important;padding:10px 0 9px!important}
+  .nav button{width:100%;min-height:46px;padding:10px 6px!important;font-size:13px!important;border-radius:15px!important}
+  .bottom{padding:10px 12px calc(10px + env(safe-area-inset-bottom))!important}
+  .bottom-inner{gap:9px!important}
+  .bottom button{min-height:48px!important;padding:12px 8px!important;font-size:13px!important;border-radius:17px!important}
+  .stats{gap:8px!important}
+  .stat{padding:9px 10px!important;font-size:12px!important}
+  .stat b{font-size:18px!important}
+  .task-name{font-size:16px!important}
+  .task-time{font-size:12px!important}
+  .pill{font-size:11px!important}
+}
+/* Sakura is a complete soft app skin — no dark cards */
+.skin-sakura .bottom{background:rgba(255,247,247,.96)!important;border-top:1px solid #efd8dc!important;box-shadow:0 -8px 28px rgba(150,91,104,.10)}
+.skin-sakura .bottom button{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .bottom button.primary,.skin-sakura .nav button.active{background:linear-gradient(135deg,#efb1c0,#cfe2ca)!important;color:#563e47!important}
+.skin-sakura .nav{background:rgba(255,247,245,.94)!important}
+.skin-sakura .nav button{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item{background:rgba(255,252,251,.94)!important;border-color:#efdfe0!important}
+.skin-sakura .check{background:#fff7f8!important;border-color:#dfbdc5!important;color:#765c65!important}
+.skin-sakura .iconbtn{background:#fff5f6!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .pill{background:#f3e8ea!important;color:#765c65!important}
+.skin-sakura .college-toggle{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .progress{background:#eadfe2!important}
+.skin-sakura .panel{background:rgba(255,252,251,.90)!important}
+.skin-sakura .modal{background:#fffaf9!important;border-color:#ead9dc!important;color:#5b4650!important}
+.skin-sakura .close{background:#f3e5e8!important;color:#765c65!important}
+.skin-sakura .quick button,.skin-sakura .quickbtn{background:#fff7f8!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .toast{background:#fffaf9!important;color:#5b4650!important}
+</style><style id="rasi-v11a">@media(max-width:600px){.app{padding:52px 12px 104px!important}.nav{display:flex!important;overflow-x:auto!important;overflow-y:hidden!important;flex-wrap:nowrap!important;scrollbar-width:none!important}.nav::-webkit-scrollbar{display:none}.nav button{flex:0 0 auto!important;width:auto!important;min-width:92px;min-height:46px!important;padding:10px 15px!important;font-size:13px!important}.task-name{font-size:16px!important}.task-time{font-size:12px!important}.stat b{font-size:18px!important}} .skin-sakura body:before,.skin-lavender body:after,.skin-matcha body:after,.skin-anime-ds body:before,.skin-anime-op body:after{animation:none!important;opacity:.08!important}.skin-sakura .panel,.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card{background:#fffdfd!important}.skin-sakura .nav,.skin-sakura .bottom{background:rgba(255,248,249,.97)!important}.skin-sakura .nav button,.skin-sakura .bottom button,.skin-sakura .college-toggle{background:#fffafb!important;color:#735861!important}.skin-sakura .primary,.skin-sakura .nav button.active,.skin-sakura .bottom button.primary{background:linear-gradient(135deg,#efb0c0,#cfe2c9)!important;color:#583f48!important}.skin-matcha .panel,.skin-matcha .task,.skin-matcha .slot-card,.skin-matcha .info-card{background:#fffff8!important}.skin-matcha .nav,.skin-matcha .bottom{background:rgba(248,248,238,.97)!important}.skin-matcha .nav button,.skin-matcha .bottom button,.skin-matcha .college-toggle{background:#fffff7!important;color:#59624a!important}.skin-matcha .primary,.skin-matcha .nav button.active,.skin-matcha .bottom button.primary{background:linear-gradient(135deg,#b8cd91,#e1c79a)!important;color:#4d563e!important}.skin-anime-ds{--bg:#f8f4fb;--panel:#fffaff;--text:#51485c;--muted:#83798d;--line:#ded4e7;--accent:#c58bb0;--accent2:#9fc7ae}.skin-anime-ds body{background:radial-gradient(circle at 12% 0%,#e7d8ee 0,transparent 28%),radial-gradient(circle at 88% 10%,#d9eedf 0,transparent 27%),#f8f4fb}.skin-anime-ds .hero{background:linear-gradient(135deg,#f0e5f4,#e5f2e9)!important}.skin-anime-ds .nav,.skin-anime-ds .bottom{background:rgba(248,244,251,.97)!important}.skin-anime-ds .nav button,.skin-anime-ds .bottom button,.skin-anime-ds .college-toggle{background:#fffaff!important;color:#61546a!important}.skin-anime-ds .primary,.skin-anime-ds .nav button.active,.skin-anime-ds .bottom button.primary{background:linear-gradient(135deg,#d39ab9,#a9ceb5)!important;color:#514355!important}.skin-anime-ds .task,.skin-anime-ds .panel,.skin-anime-ds .slot-card,.skin-anime-ds .info-card{background:#fffaff!important}.skin-anime-op{--bg:#fff9ed;--panel:#fffdf6;--text:#504332;--muted:#88775e;--line:#e5d7b7;--accent:#e87865;--accent2:#e6bd62}.skin-anime-op body{background:radial-gradient(circle at 8% 0%,#ffe0a5 0,transparent 28%),radial-gradient(circle at 92% 12%,#cce7f4 0,transparent 28%),#fff9ed}.skin-anime-op .hero{background:linear-gradient(135deg,#fff0c9,#e3f2f8)!important}.skin-anime-op .nav,.skin-anime-op .bottom{background:rgba(255,249,237,.97)!important}.skin-anime-op .nav button,.skin-anime-op .bottom button,.skin-anime-op .college-toggle{background:#fffdf6!important;color:#5f5038!important}.skin-anime-op .primary,.skin-anime-op .nav button.active,.skin-anime-op .bottom button.primary{background:linear-gradient(135deg,#ee8572,#f0c768)!important;color:#513d29!important}.skin-anime-op .task,.skin-anime-op .panel,.skin-anime-op .slot-card,.skin-anime-op .info-card{background:#fffdf7!important}.complete-toast{top:50%!important;left:50%!important;min-width:250px!important;max-width:84%!important;padding:20px 24px!important;will-change:transform,opacity}.petal{width:15px!important;height:22px!important;box-shadow:0 3px 10px rgba(180,90,120,.22)!important;will-change:transform,opacity!important}.flower-piece,.matcha-piece{font-size:30px!important;will-change:transform,opacity!important}</style><style id="rasi-performance-v12">
+/* v12 performance pass: no blur, no animated full-screen overlays, no dark cards in light skins */
+.complete-toast{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 12px 34px rgba(80,45,60,.16)!important;transition:none!important;will-change:transform,opacity;pointer-events:none!important}
+.complete-toast.show{animation:rasiToastIn .28s ease-out forwards!important}
+@keyframes rasiToastIn{0%{opacity:0;transform:translate3d(-50%,-48%,0) scale(.94)}100%{opacity:1;transform:translate3d(-50%,-50%,0) scale(1)}}
+.petals-layer{contain:strict!important;isolation:isolate!important}
+.petal,.flower-piece,.matcha-piece{box-shadow:none!important;filter:none!important;text-shadow:none!important;will-change:transform,opacity!important}
+.petal{width:14px!important;height:20px!important}
+.flower-piece,.matcha-piece{font-size:25px!important}
+.skin-sakura .buddy-msg,.skin-sakura .form textarea,.skin-sakura .modal,.skin-sakura .close{background:#fffafb!important;color:#604852!important;border-color:#ead9dd!important}
+.skin-matcha .buddy-msg,.skin-matcha .form textarea,.skin-matcha .modal,.skin-matcha .close{background:#fffff7!important;color:#4c5541!important;border-color:#dce4ca!important}
+.skin-lavender .buddy-msg,.skin-lavender .form textarea,.skin-lavender .modal,.skin-lavender .close{background:#fffaff!important;color:#584d62!important;border-color:#e3d8eb!important}
+.skin-anime-ds .buddy-msg,.skin-anime-ds .form textarea,.skin-anime-ds .modal,.skin-anime-ds .close{background:#fffaff!important;color:#51485c!important;border-color:#ded4e7!important}
+.skin-anime-op .buddy-msg,.skin-anime-op .form textarea,.skin-anime-op .modal,.skin-anime-op .close{background:#fffdf6!important;color:#504332!important;border-color:#e5d7b7!important}
+.skin-sakura .panel,.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item,
+.skin-matcha .panel,.skin-matcha .task,.skin-matcha .slot-card,.skin-matcha .info-card,.skin-matcha .exercise,.skin-matcha .preview-item,
+.skin-lavender .panel,.skin-lavender .task,.skin-lavender .slot-card,.skin-lavender .info-card,.skin-lavender .exercise,.skin-lavender .preview-item,
+.skin-anime-ds .panel,.skin-anime-ds .task,.skin-anime-ds .slot-card,.skin-anime-ds .info-card,.skin-anime-ds .exercise,.skin-anime-ds .preview-item,
+.skin-anime-op .panel,.skin-anime-op .task,.skin-anime-op .slot-card,.skin-anime-op .info-card,.skin-anime-op .exercise,.skin-anime-op .preview-item{box-shadow:0 5px 18px rgba(80,60,90,.045)!important}
+.skin-sakura body:before,.skin-lavender body:after,.skin-matcha body:after{display:none!important}
+.skin-anime-ds body:before{content:"⚔️  WISTERIA  ✿";position:fixed;top:72px;right:10px;inset:auto 10px auto auto!important;pointer-events:none;z-index:2;color:#9d7190;font-size:13px;letter-spacing:2px;opacity:.65}
+.skin-anime-op body:after{content:"☠️  GRAND LINE  ⚓";position:fixed;top:72px;right:10px;inset:auto 10px auto auto!important;pointer-events:none;z-index:2;color:#5685a2;font-size:13px;letter-spacing:2px;opacity:.65}
+.skin-sakura .task,.skin-matcha .task,.skin-lavender .task,.skin-anime-ds .task,.skin-anime-op .task{background:var(--panel)!important;color:var(--text)!important}
+</style><style id="rasi-v14-fix">
+/* RĀSI v16 calm-performance layer */
+*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.piece,.confetti,.toast{animation:none!important;transition:none!important}
+.skin-sakura body:before,.skin-lavender body:after,.skin-matcha body:after,.skin-anime-op body:after{animation:none!important}
+/* RĀSI v16 chat + skin consistency */
+:root{--chat-rasi-bg:#eef1ff;--chat-you-bg:#e9fff5;--chat-rasi-border:#cfd6ff;--chat-you-border:#bfe9d5}
+.skin-sakura{--chat-rasi-bg:#fff0f3;--chat-you-bg:#edf7e9;--chat-rasi-border:#edcbd3;--chat-you-border:#cfe2ca}
+.skin-lavender{--chat-rasi-bg:#f2eafa;--chat-you-bg:#edf7ef;--chat-rasi-border:#ddd0e9;--chat-you-border:#cfe2d4}
+.skin-matcha{--chat-rasi-bg:#edf4df;--chat-you-bg:#f8eedf;--chat-rasi-border:#d2dfbb;--chat-you-border:#e6d5b8}
+.skin-anime-op{--chat-rasi-bg:#fff0d5;--chat-you-bg:#e7f3fb;--chat-rasi-border:#e5c88f;--chat-you-border:#c4ddeb}
+.skin-anime-ds{--chat-rasi-bg:#382232;--chat-you-bg:#1d382e;--chat-rasi-border:#71445e;--chat-you-border:#3f6953}
+.skin-minimal{--chat-rasi-bg:#f0f0f0;--chat-you-bg:#e8f2ee;--chat-rasi-border:#d2d2d2;--chat-you-border:#c5d9ce}
+.buddy-msg.rasi{background:var(--chat-rasi-bg)!important;border-color:var(--chat-rasi-border)!important}
+.buddy-msg.you{background:var(--chat-you-bg)!important;border-color:var(--chat-you-border)!important}
+.style-row button,.quickbtn,.quick button,.iconbtn,.modebar button,.college-toggle,.nav button,.bottom button{color:var(--text)!important}
+.style-row button,.iconbtn{background:var(--panel2)!important;border-color:var(--line)!important}
+/* V14: calm rendering + personal chat + no black skin controls */
+.chat-closed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);color:var(--text)}
+.chat-closed b{display:block;font-size:14px}.chat-closed small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.35}.chat-memory-note{opacity:.8}
+.chat-open-btn,.chat-close-btn{flex:0 0 auto;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--accent);color:var(--text);font-weight:900}
+.chat-head{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 10px}.chat-head small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.chat-thread{display:grid;gap:8px;max-height:420px;overflow:auto;padding:4px 2px 8px}
+.buddy-msg{margin:0!important;padding:11px 13px;border-radius:16px;font-size:13px;line-height:1.5;border:1px solid var(--line);color:var(--text);background:var(--panel2)}
+.buddy-msg.rasi{border-top-left-radius:6px;background:color-mix(in srgb,var(--accent) 10%,var(--panel));}
+.buddy-msg.you{margin-left:24px!important;border-top-right-radius:6px;background:color-mix(in srgb,var(--accent2) 18%,var(--panel));}
+.chat-who{display:block;font-size:10px;font-weight:950;letter-spacing:.06em;text-transform:uppercase;opacity:.68;margin-bottom:3px}
+.style-row button{background:var(--panel2)!important;color:var(--text)!important;border-color:var(--line)!important}
+.skin-sakura .style-row button,.skin-lavender .style-row button,.skin-matcha .style-row button,.skin-anime-ds .style-row button,.skin-anime-op .style-row button,.skin-minimal .style-row button{background:var(--panel2)!important;color:var(--text)!important;border-color:var(--line)!important}
+.complete-toast{transition:none!important;animation:none!important;will-change:transform,opacity}
+.complete-toast.show{animation:rasiToastIn .28s cubic-bezier(.22,.8,.25,1) both!important}
+.petals-layer{contain:layout paint;transform:translateZ(0)}
+.petal,.flower-piece,.matcha-piece{will-change:transform,opacity;backface-visibility:hidden;contain:strict}
+@keyframes rasiToastIn{from{opacity:0;transform:translate3d(-50%,-48%,0) scale(.96)}to{opacity:1;transform:translate3d(-50%,-50%,0) scale(1)}}
+@keyframes petalFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot))}}
+@keyframes flowerFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.92)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot)) scale(1.02)}}
+@media(max-width:600px){.chat-closed{padding:13px}.chat-open-btn{padding:9px 10px}.chat-thread{max-height:360px}.buddy-msg{font-size:14px;line-height:1.48}.style-row button{font-size:12px;padding:9px 11px}}
+</style></head>
+<body>
+<div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
+<div class="app">
+<header class="topbar">
+ <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, but make it ✨actually yours✨.</div></div></div>
+ <div style="display:flex;align-items:center;gap:8px"><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
+</header>
+
+<section class="hero">
+ <div class="hero-row">
+  <div>
+   <div class="eyebrow" id="dayLabel">TODAY'S COMMAND CENTER</div>
+   <div class="greeting" id="greeting">Good morning, Rasika.</div>
+   <p class="mission" id="mission">Protect the important stuff. Leave room for chaos. RĀSI handles the rearranging. 😈</p>
+   <div class="stats">
+    <div class="stat"><b id="doneCount">0</b> done</div><div class="stat"><b id="xp">0</b> XP</div><div class="stat"><b id="streak">0</b> day streak</div><div class="stat"><b id="buffer">—</b> open buffer</div>
+   </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-label"><span>Today's progress</span><b id="progressText">0%</b></div><div class="progress"><div class="bar" id="progressBar" style="width:0%"></div></div></div>
+ </div>
+</section>
+
+<nav class="nav" id="nav">
+ <button data-view="today" class="active">Today</button><button data-view="college">College</button><button data-view="week">Week</button><button data-view="skills">Skills</button><button data-view="body">Body</button><button data-view="important">Important</button><button data-view="buddy">RĀSI</button>
+</nav>
+
+<main>
+<section id="view-today" class="view active">
+ <div class="grid">
+  <div class="panel">
+   <div class="panel-head"><div><h2 id="scheduleTitle">Today's plan</h2><div class="tiny">Everything in time order • college included</div></div><div style="display:flex;gap:7px"><button class="quickbtn" onclick="openCalendar()">▦ Calendar</button><button class="primary" onclick="openAddTask()">＋ Task</button></div></div>
+   <button class="college-toggle" onclick="toggleCollege()"><span>🏫 Today's college timetable <small id="collegeToggleText">ON</small></span><span class="toggle on" id="collegeToggle"><i></i></span></button>
+   <div id="taskList"></div>
+   <div id="upcomingStrip"></div>
+  </div>
+  <aside>
+   <div class="panel">
+    <div class="panel-head"><div><h2>Today brief</h2><div class="tiny">Your one-screen direction</div></div><span class="badge">PERSONALIZED</span></div>
+    <div id="todayBrief"></div>
+   </div>
+   <div class="panel" style="margin-top:14px">
+    <div class="panel-head"><div><h2>Important vault</h2><div class="tiny">Deadlines ≠ tasks</div></div><button class="iconbtn" onclick="openImportant()">＋</button></div>
+    <div id="miniReminders"></div>
+   </div>
+   <div class="panel" style="margin-top:14px">
+    <div class="panel-head"><div><h2>Dopamine board</h2><div class="tiny">Visible effort, not perfection</div></div></div>
+    <div class="quick">
+      <button onclick="quickWin('10-min reset')">⚡ 10-min reset</button>
+      <button onclick="quickWin('25-min focus')">🎯 25-min focus</button>
+      <button onclick="quickWin('Hydration')">💧 Hydrate</button>
+      <button onclick="quickWin('Desk reset')">🧹 Reset space</button>
+    </div>
+   </div>
+  </aside>
+ </div>
+</section>
+
+<section id="view-college" class="view">
+ <div class="grid">
+  <div class="panel"><div class="panel-head"><div><h2>Div 12 • College Command</h2><div class="tiny">Your actual timetable, class groups and locations</div></div><span class="badge">SEM I • 2026–27</span></div><div id="collegeToday"></div></div>
+  <div class="panel"><div class="panel-head"><div><h2>Campus locations</h2><div class="tiny">Quick “where do I go?” reference</div></div></div><div id="locations"></div></div>
+ </div>
+</section>
+
+
+
+<section id="view-week" class="view">
+ <div class="panel"><div class="panel-head"><div><h2>Week map</h2><div class="tiny">College stays fixed; flexible work can move.</div></div><button class="primary" onclick="replanWeek()">↻ Smart rebalance</button></div><div id="weekMap"></div></div>
+</section>
+
+<section id="view-skills" class="view">
+ <div class="grid">
+  <div class="panel"><div class="panel-head"><div><h2>Skill stack</h2><div class="tiny">Designed around your next-year internship goal</div></div></div><div id="skillsList"></div></div>
+  <div class="panel"><h2>Today's skill drill</h2><div class="tiny" style="margin:5px 0 12px">Keep it small enough that college doesn't get displaced.</div><div id="skillDrill"></div></div>
+ </div>
+</section>
+
+<section id="view-body" class="view">
+ <div class="grid">
+  <div class="panel">
+   <div class="panel-head"><div><h2>Body progression</h2><div class="tiny">Adaptive progression • RĀSI can rebuild this plan</div></div><span class="badge" id="dayBadge">DAY 1</span></div>
+   <div class="modebar" id="bodyModes"><button class="active" onclick="setBodyMode('normal')">Normal</button><button onclick="setBodyMode('period')">Period / low energy</button><button onclick="setBodyMode('unwell')">Not feeling well</button></div>
+   <div style="height:10px"></div><div id="exercisePlan"></div>
+  </div>
+  <div class="panel">
+   <div class="panel-head"><div><h2>Breath + reset</h2><div class="tiny">Calm, non-straining practice</div></div></div>
+   <div class="info-card"><h3>Default pranayama</h3><p>Slow nasal breathing → gentle Anulom Vilom → Bhramari → 1–2 min quiet sitting. No breath-holding required.</p></div>
+   <div class="info-card" style="margin-top:9px"><h3>Comfort rule</h3><p>If you have significant pain, dizziness, fever, unusual weakness, or symptoms that concern you, switch to rest and ordinary comfortable breathing rather than pushing through.</p></div>
+   <div class="tip" style="margin-top:9px"><b>Why this progression?</b><br>Day 1 should feel almost too easy. The app increases duration gradually rather than making you “earn” rest. The yoga sequence is inspired by the beginner routine you referenced, while avoiding medical promises.</div>
+  </div>
+ </div>
+</section>
+
+<section id="view-important" class="view">
+ <div class="grid">
+  <div class="panel"><div class="panel-head"><div><h2>Important vault</h2><div class="tiny">Assignments, forms, deadlines, things you must remember.</div></div><button class="primary" onclick="openImportant()">＋ Add</button></div><div id="reminders"></div></div>
+  <div class="panel"><h2>How to use it</h2><div class="tiny" style="margin:5px 0 12px">Keep this separate from today's task list.</div><div class="info-card"><h3>Example</h3><p>“Physics assignment — submit Monday 11:59 PM.” It stays visible here without consuming one of your focus blocks until you decide when to work on it.</p></div></div>
+ </div>
+</section>
+
+<section id="view-buddy" class="view">
+ <div class="grid">
+  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Your slightly chaotic life, organised. No corporate vibes.</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
+   <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('sakura')">🌸 Sakura</button><button onclick="setSkin('matcha')">🍵 Matcha</button><button onclick="setSkin('lavender')">🪻 Lavender</button><button onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button onclick="setSkin('anime-op')">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal')">◻ Minimal</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
+   <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RĀSI can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
+   <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RĀSI naturally. Examples:
+I missed exercise today
+I want to learn pushups
+I want to learn Japanese and only have 15 min
+Remove everything from Body and rebuild it
+Change my whole October schedule
+Move coding to 7 pm"></textarea><button class="primary" onclick="buddyCommand()">Send to RĀSI ✦</button></div>
+  </div>
+  <div class="panel"><h2>RĀSI can adapt</h2><div class="tiny" style="margin:5px 0 12px">You control your plan. RĀSI can edit its schedule, sections and learning plans.</div><div class="info-card"><ul><li>Tasks, times, order and whole sections can be rebuilt.</li><li>Exercise can pause, repeat, progress or reschedule.</li><li>Skills can become day-by-day learning plans after a few questions.</li><li>Week/month changes are applied around your fixed college commitments unless you explicitly change them.</li><li>Safety guardrails stay on: no medical diagnosis or risky training progression.</li></ul></div></div>
+ </div>
+</section>
+
+</main>
+</div>
+
+<div class="bottom"><div class="bottom-inner"><button onclick="openAddTask()">＋ Add task</button><button class="primary" onclick="showView('today')">⌂ Today</button><button onclick="openImportant()">🔔 Important</button></div></div>
+
+<div class="modal-back" id="modalBack" onclick="closeModal(event)"><div class="modal" id="modal"></div></div>
+
+<script>
+const STORAGE='rasika-os-v2';
+const DEFAULT_APP_NAME='RĀSI';
+const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+const missions=[
+ "Protect the essentials. One good study block beats five guilty intentions.",
+ "Build evidence: code, revise, publish, practice — then move on.",
+ "Your buffer is not wasted time. It is where reality gets to happen. 😈",
+ "Do the smallest useful version when motivation is low. Consistency beats restarting.",
+ "Finish the week with proof of progress, not a perfect checklist."
+];
+const skills=[
+ {name:'C fundamentals',icon:'💻',desc:'Syntax → conditions → loops → functions → arrays → pointers later. College-aligned first.',mins:45},
+ {name:'Spoken English',icon:'🗣️',desc:'5–10 min speaking + one recorded answer. Focus on clarity, not accent.',mins:15},
+ {name:'Vocabulary',icon:'📚',desc:'3 useful words: meaning, your sentence, spoken use.',mins:10},
+ {name:'Marketing / cold calls',icon:'📞',desc:'One opener + objection drill + one confident close.',mins:20},
+ {name:'Content strategy',icon:'♟️',desc:'Analyse one ChessBase India video: hook, retention, packaging, gap, idea.',mins:35},
+ {name:'CreatorCollabsIndia',icon:'🤝',desc:'One concrete pipeline action: brand research, follow-up, creator matching or offer.',mins:25},
+ {name:'Pinterest',icon:'📌',desc:'Minimum viable maintenance: one quality pin or repurpose one existing concept.',mins:20},
+ {name:'Curiosity / reading',icon:'🔎',desc:'Read 10–20 pages and capture one surprising connection.',mins:20}
+];
+const timetable={
+Mon:[
+ ['8:45 AM','9:45 AM','Engineering Mechanics (EM)','DVN','Lecture • CR 51, 4th Floor'],
+ ['9:45 AM','10:45 AM','Chemistry (CHEM)','NPC','Lecture • CR 51, 4th Floor'],
+ ['11:00 AM','12:00 PM','BXE + CHEM practicals','12A: BXE • ANM  |  12B: CHEM • PKJ','12A → BXE Lab 1, 2nd Floor right • 12B → CHEM Lab 1, 3rd Floor right'],
+ ['12:00 PM','1:00 PM','CHEM + BXE practicals','12A: CHEM • PKJ  |  12B: BXE • ANM','12A → CHEM Lab 1, 3rd Floor right • 12B → BXE Lab 1, 2nd Floor right'],
+ ['2:00 PM','4:00 PM','Computer Science (CS)','12A: DVN  |  12B: PDS','CR 51, 4th Floor']
+],
+Tue:[
+ ['8:45 AM','10:45 AM','CHEM + BXE practicals','12A: CHEM • NPC  |  12B: BXE • ANM','12A → CHEM Lab 1, 3rd Floor right • 12B → BXE Lab 1, 2nd Floor right'],
+ ['11:00 AM','12:00 PM','Basic Electronics (BXE)','ANM','CR 51, 4th Floor'],
+ ['12:00 PM','1:00 PM','Mathematics I (MI)','PVR','CR 51, 4th Floor'],
+ ['2:00 PM','4:00 PM','CCC 1','12A: NPC  |  12B: PML','CC1 Lab, 3rd Floor left']
+],
+Wed:[
+ ['8:45 AM','10:45 AM','Workshop','','Near Central Library'],
+ ['11:00 AM','12:00 PM','Mathematics I (MI)','PVR','CR 51, 4th Floor'],
+ ['12:00 PM','1:00 PM','Chemistry (CHEM)','NPC','CR 51, 4th Floor'],
+ ['2:00 PM','3:00 PM','Engineering Mechanics (EM)','DVN','CR 51, 4th Floor'],
+ ['3:00 PM','4:00 PM','Teacher Guardian Meeting','12A: NPC  |  12B: DVN','CR 51, 4th Floor']
+],
+Thu:[
+ ['8:45 AM','9:45 AM','Mathematics I (MI) Tutorial','12A: PVR  |  12B: ASB','CR 51, 4th Floor'],
+ ['9:45 AM','10:45 AM','FPL','RSW','CR 51, 4th Floor'],
+ ['11:00 AM','1:00 PM','Engineering Mechanics (EM)','12A: DVN  |  12B: PDS','CR 51, 4th Floor'],
+ ['2:00 PM','3:00 PM','Chemistry (CHEM)','NPC','CR 51, 4th Floor'],
+ ['3:00 PM','4:00 PM','Mathematics I (MI)','PVR','CR 51, 4th Floor']
+],
+Fri:[
+ ['8:45 AM','10:45 AM','FPL practical','12A: RSW  |  12B: ABR','CC1 Lab, 3rd Floor left'],
+ ['11:00 AM','12:00 PM','Basic Electronics (BXE)','ANM','CR 51, 4th Floor'],
+ ['12:00 PM','1:00 PM','FPL','RSW','CR 51, 4th Floor'],
+ ['2:00 PM','4:00 PM','CCC 1','12A: NPC  |  12B: DVN','CC1 Lab, 3rd Floor left']
+]};
+
+const fixedTemplate=[
+ {s:'5:00 AM',e:'5:10 AM',n:'Wake + water + open curtains',cat:'health',info:'Start gently. No phone scrolling before the first reset.'},
+ {s:'5:10 AM',e:'5:30 AM',n:'Wash + get ready',cat:'health',info:'Fast morning setup so your first focus block starts on time.'},
+ {s:'5:30 AM',e:'6:00 AM',n:'Beginner yoga + mobility',cat:'health',exercise:true,info:'Day-based movement from the Body tab. Tap to see the exact sequence.'},
+ {s:'6:00 AM',e:'6:15 AM',n:'Pranayama + quiet sit',cat:'health',info:'Slow breathing, gentle Anulom Vilom, Bhramari and quiet sitting. No breath retention required.'},
+ {s:'6:15 AM',e:'6:45 AM',n:'Breakfast + PG setup',cat:'life',info:'Eat and prepare your college bag. Keep this unhurried.'},
+ {s:'6:45 AM',e:'7:25 AM',n:'C / college concept preview',cat:'study',info:'Recall yesterday’s concept, solve 2–3 small questions, and write one doubt.'},
+ {s:'7:25 AM',e:'8:15 AM',n:'Get ready + commute buffer',cat:'buffer',info:'Protected buffer for PG delays, packing, or college surprises.'},
+ {s:'8:45 AM',e:'4:00 PM',n:'College day',cat:'college',info:'Exact lectures appear below when College schedule is ON.'},
+ {s:'4:00 PM',e:'4:45 PM',n:'Return + snack + decompression',cat:'buffer',info:'Transition time. Do not turn the first 45 minutes after college into a guilt block.'},
+ {s:'4:45 PM',e:'5:15 PM',n:'Pinterest maintenance',cat:'pinterest',info:'Minimum viable consistency: publish one quality pin or prepare one for tomorrow.'},
+ {s:'5:15 PM',e:'5:35 PM',n:'English speaking lab',cat:'english',info:'Speak for 5–10 minutes, learn 3 words, then record a 60-second explanation.'},
+ {s:'5:35 PM',e:'6:20 PM',n:'Deep study + spaced retrieval',cat:'study',info:'Revise the day’s hardest subject using closed-book recall before checking notes.'},
+ {s:'6:20 PM',e:'6:40 PM',n:'Buffer / club / assignment switch',cat:'buffer',info:'Reserved for real college life. If unused, stop or do a tiny task — do not automatically fill it.'},
+ {s:'6:40 PM',e:'7:25 PM',n:'Coding: C fundamentals',cat:'coding',info:'College-aligned coding. 25 min learn + 20 min write code from memory.'},
+ {s:'7:25 PM',e:'7:50 PM',n:'Dinner + social time',cat:'life',info:'Eat. Talk. Enjoy college. This is part of the plan.'},
+ {s:'7:50 PM',e:'8:25 PM',n:'Rotating career block',cat:'career',info:'Rotate Content Strategy, CreatorCollabsIndia, cold calls/marketing, and portfolio work.'},
+ {s:'8:25 PM',e:'8:45 PM',n:'Curiosity reading',cat:'knowledge',info:'10–20 pages. Write one “connection I noticed” line.'},
+ {s:'8:45 PM',e:'9:15 PM',n:'Writing + tomorrow setup',cat:'study',info:'Complete notes, lab record, assignment writing, bag, and tomorrow’s top 3.'},
+ {s:'9:15 PM',e:'9:40 PM',n:'Free / friends / college life',cat:'life',info:'Enjoy the day without trying to optimize it.'},
+ {s:'9:40 PM',e:'10:00 PM',n:'Shutdown ritual',cat:'health',info:'Mark wins, check Important Vault, set tomorrow’s intention, phone away.'}
+];
+
+const weekendTemplate=[
+ {s:'5:30 AM',e:'5:45 AM',n:'Body progression',cat:'health',exercise:true,info:'RĀSI chooses today’s progression from your current level.'},
+ {s:'5:45 AM',e:'6:15 AM',n:'Wash + breakfast setup',cat:'life',info:'Easy start. No college rush.'},
+ {s:'6:15 AM',e:'7:00 AM',n:'Deep study / backlog',cat:'study',info:'Use the weekend to close one real college gap.'},
+ {s:'7:00 AM',e:'7:40 AM',n:'C coding practice',cat:'coding',info:'Small, focused coding block.'},
+ {s:'7:40 AM',e:'8:10 AM',n:'Pinterest maintenance',cat:'pinterest',info:'One quality pin or prepare the next one.'},
+ {s:'8:10 AM',e:'8:30 AM',n:'English speaking lab',cat:'english',info:'Short speaking practice.'},
+ {s:'8:30 AM',e:'9:30 AM',n:'Free / friends / breakfast',cat:'life',info:'Weekend is allowed to feel like a weekend.'},
+ {s:'9:30 AM',e:'10:15 AM',n:'CreatorCollabsIndia / career',cat:'career',info:'One concrete pipeline action.'},
+ {s:'10:15 AM',e:'11:00 AM',n:'Curiosity / reading',cat:'knowledge',info:'Read, explore, connect ideas.'},
+ {s:'11:00 AM',e:'1:00 PM',n:'Open weekend block',cat:'buffer',info:'Functions, errands, friends, college work, or rest.'},
+ {s:'1:00 PM',e:'2:00 PM',n:'Lunch + rest',cat:'life',info:'Actually take the break.'},
+ {s:'2:00 PM',e:'4:00 PM',n:'Free / college life / hobbies',cat:'life',info:'Unstructured time is part of the plan.'},
+ {s:'4:00 PM',e:'5:00 PM',n:'Weekly reset / planning',cat:'study',info:'Check deadlines, next week and pending work.'},
+ {s:'5:00 PM',e:'8:00 PM',n:'Friends / outing / hobby',cat:'life',info:'Go live your life. RĀSI is not your warden.'},
+ {s:'8:00 PM',e:'8:30 PM',n:'Tomorrow setup',cat:'study',info:'Bag, clothes, deadlines and top 3.'},
+ {s:'8:30 PM',e:'10:00 PM',n:'Relax + shutdown',cat:'health',info:'Wind down without turning the night into another productivity contest.'}
+];
+function dayTemplate(d){return ['Sat','Sun'].includes(d)?weekendTemplate:fixedTemplate}
+function collegeTasks(d){return (timetable[d]||[]).map((s,i)=>({id:uid(),s:s[0],e:s[1],n:s[2],cat:'college',info:`${s[3]?s[3]+' • ':''}${s[4]}`,college:true,collegeData:s,done:false,order:i+100}));}
+function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),order:i,done:false}));if(timetable[d]){const col=collegeTasks(d);return [...base.filter(t=>minutes(t.s)<8*60+45),...col,...base.filter(t=>minutes(t.s)>=16*60)].map((t,i)=>({...t,order:i}));}return base;}
+
+function defaultState(){
+ return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
+  {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
+ ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
+}
+let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||defaultState();
+let currentDay=new Date().getDay(); // 0 Sun
+let day=DAY_NAME(currentDay);
+if(!DAYS.includes(day)) day='Mon';
+window.__selectedDate=new Date();
+
+function DAY_NAME(n){return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][n]}
+function key(){return new Date().toISOString().slice(0,10)+'-'+day}
+function save(){localStorage.setItem(STORAGE,JSON.stringify(state))}
+function uid(){return Date.now()+Math.random().toString(16).slice(2)}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function minutes(t){let [x,ap]=t.split(' '),[h,m]=x.split(':').map(Number);if(ap==='PM'&&h!==12)h+=12;if(ap==='AM'&&h===12)h=0;return h*60+m}
+function dateKey(dt=new Date()){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
+function tasksForDate(dt=new Date()){
+ const key=dateKey(dt),wd=DAY_NAME(dt.getDay());
+ state.dateTasks=state.dateTasks||{};
+ if(!Array.isArray(state.dateTasks[key])){
+   const source=(state.tasks[wd]||buildDayTasks(wd)).map(t=>({...t,id:uid(),done:false,order:t.order}));
+   state.dateTasks[key]=source;
+   save();
+ }
+ return state.dateTasks[key];
+}
+function collegeEnabledForDate(dt=window.__selectedDate||new Date()){
+ return !state.collegeOffDates?.[dateKey(dt)];
+}
+function todayTasks(){
+ const dt=window.__selectedDate||new Date();
+ let arr=tasksForDate(dt);
+ if(!collegeEnabledForDate(dt))arr=arr.filter(t=>t.cat!=='college');
+ return arr.sort((a,b)=>a.order-b.order);
+}
+function selectedDateLabel(){const dt=window.__selectedDate||new Date();return dt.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'});}
+function selectedWeekday(){return DAY_NAME((window.__selectedDate||new Date()).getDay());}
+function ensureState(){
+ if(!state||typeof state!=='object')state=defaultState();
+ const oldSchema=Number(state.schema||0);
+ if(oldSchema<5){state.schema=5;state.collegeOn=true;state.skin=state.skin||'midnight';}
+ if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
+ if(!state.reminders)state.reminders=[];
+ if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
+ if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(state.chatUiVersion!==16){state.chatOpen=false;state.chatUiVersion=16;}
+ if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
+ if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
+ if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
+ if(typeof state.collegeOn!=='boolean')state.collegeOn=true;if(!state.skin)state.skin='midnight';
+ state.xpRules=state.xpRules||{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10};
+ DAYS.forEach(d=>{
+   if(oldSchema<5){
+     state.tasks[d]=buildDayTasks(d);
+   } else if(!Array.isArray(state.tasks[d])){
+     state.tasks[d]=buildDayTasks(d);
+   }
+   state.tasks[d].forEach((t,i)=>{if(!t.id)t.id=uid();if(typeof t.order!=='number')t.order=i;if(typeof t.done!=='boolean')t.done=false;if(t.n==='Beginner yoga + mobility'||t.n==='Body progression')t.exercise=true});
+   state.tasks[d].sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);
+ });
+ save();applySkin();
+}
+function applySkin(){document.documentElement.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-minimal');if(state.skin&&state.skin!=='midnight')document.documentElement.classList.add('skin-'+state.skin);}
+function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵', 'anime-ds':'Anime mode: DS ⚔️', 'anime-op':'Anime mode: OP 🏴‍☠️',minimal:'Minimal mode ◻'}[s]||'Style changed');render();}
+
+function render(){
+ const now=new Date(), hr=now.getHours();
+ const appName=state.appName||DEFAULT_APP_NAME;
+ document.getElementById('appNameLabel').textContent=appName;document.getElementById('buddyTitle').textContent=appName+' planner';document.getElementById('coreBadge').textContent=appName+' CORE';
+ document.getElementById('clock').textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
+ document.getElementById('date').textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
+ const selected=window.__selectedDate||new Date(), isToday=selected.toDateString()===new Date().toDateString();
+ const selectedWd=DAY_NAME(selected.getDay());
+ document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
+ document.getElementById('scheduleTitle').textContent=isToday?"Today's plan":selected.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'})+' plan';
+ document.getElementById('greeting').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', Rasika.';
+ const vibeDone=Object.values(state.dateTasks||{}).flat().filter(t=>t.done).length;
+const vibeLines=vibeDone>=5?'Okay academic weapon, calm down. 😭🔥':vibeDone>=2?'Two W’s already. Keep it cute, not chaotic. ✨':hr<10?'Soft launch the day. No doomscroll DLC. 🌤️':hr<17?'College survived. Now pick one useful thing. 🎒':'Night mode: tiny wins, then disappear into your blanket. 🌙';
+document.getElementById('mission').textContent=vibeLines;
+ const all=todayTasks();
+ const visible=todayTasks(), done=visible.filter(t=>t.done).length, total=visible.length, pct=total?Math.round(done/total*100):0;
+ document.getElementById('doneCount').textContent=done; document.getElementById('xp').textContent=state.xp;
+ document.getElementById('streak').textContent=state.streak; document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';
+ const collegeOn=collegeEnabledForDate(selected);
+ document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
+ renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();renderCollegeView();document.getElementById('buffer').textContent=calcBuffer(visible);
+}
+function calcBuffer(arr){let total=0;arr.forEach(t=>{if(t.cat==='buffer')total+=Math.max(0,minutes(t.e)-minutes(t.s));});return total>=60?`${Math.floor(total/60)}h ${total%60?total%60+'m':''}`.trim():total+'m';}
+function renderTasks(arr){
+ const list=document.getElementById('taskList');list.innerHTML='';
+ arr.forEach((t,i)=>list.appendChild(taskEl(t,i,arr)));
+ const next=arr.find(t=>!t.done && t.cat!=='college');
+ document.getElementById('upcomingStrip').innerHTML=next?`<div class="tip"><b>Next up:</b> ${esc(next.n)} • ${esc(next.s)}–${esc(next.e)}. ${next.cat==='health'?'RĀSI says: tiny workout, big main-character energy.':''}</div>`:'<div class="tip"><b>Today is clear.</b> Go enjoy your life. RĀSI is not your warden. 😈</div>';
+}
+function taskEl(t,i,arr){
+ const d=document.createElement('div');d.className='task '+(t.done?'done ':'')+(t.locked?' locked ':'')+(t.cat==='college'?' college-task':'');
+ d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${t.locked?'🔒 ':''}${t.cat==='college'?'🏫 ':''}${esc(t.n)}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>`:''}</div></div><div class="task-actions">${t.cat!=='college'?`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>`:`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>`}</div>`;
+ return d;
+}
+function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render();if(t.done)requestAnimationFrame(()=>celebrate());}const WIN_LINES=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded. Respectfully.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.','Bro actually did the task. 😭','The checklist got humbled.','We love to see it.','Okay productivity arc??','Certified W moment.','That was kinda iconic.','Future-you just said thanks.','Zero excuses, one W.','Character development detected.','That checkbox never stood a chance.','Lowkey ate that.','Mission cleared. 🎮','Main quest complete.'];
+let lastWin=-1;
+function celebrate(){
+ const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast'),skin=state.skin||'midnight';
+ const lines=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was kinda iconic.','Future-you says thanks.','Certified W moment.','Mission cleared. 🎮','Lowkey ate that.','Character development detected.','One less thing haunting you. 👻','Clean work. We move.'];
+ let idx=Math.floor(Math.random()*lines.length);if(idx===window.__lastWin)idx=(idx+1)%lines.length;window.__lastWin=idx;
+ const approval=skin==='sakura'?'sakura approval 🌸':skin==='matcha'?'matcha energy 🍵':skin==='anime-ds'?'wisteria arc ⚔️':skin==='anime-op'?'grand line 🏴‍☠️':skin==='lavender'?'soft productivity 🪻':'RĀSI saw that 👀';
+ toast.innerHTML='<b>✓ '+lines[idx]+'</b><small>+XP • '+approval+'</small>';
+ toast.classList.remove('show'); requestAnimationFrame(()=>toast.classList.add('show'));
+ layer.replaceChildren();
+ const sets={sakura:['🌸','🌺','🌷','✿'],matcha:['🍃','🌱','☘️','🍵'],lavender:['🪻','✦','✧'], 'anime-ds':['🌸','🦋','⚔️','✿'],'anime-op':['☠️','⚓','🌊','🍖'],minimal:['✦','✧'],midnight:['✦','✨']};
+ const items=sets[skin]||sets.midnight,count=(skin==='sakura'||skin==='matcha'||skin==='anime-ds'||skin==='anime-op')?12:8;
+ for(let i=0;i<count;i++){
+   const p=document.createElement('span'),isSakura=skin==='sakura'&&i%3!==0;
+   p.className=isSakura?'petal':(skin==='matcha'?'matcha-piece':'flower-piece');
+   p.textContent=isSakura?'':items[i%items.length];
+   p.style.left=(42+Math.random()*16)+'%';p.style.top=(44+Math.random()*4)+'%';
+   p.style.setProperty('--dx',((Math.random()-.5)*180)+'px');p.style.setProperty('--dy',(120+Math.random()*180)+'px');
+   p.style.setProperty('--rot',((Math.random()-.5)*300)+'deg');p.style.animationDelay=(i*0.035)+'s';
+   layer.appendChild(p);
+ }
+ clearTimeout(window.__celebrateTimer); window.__celebrateTimer=setTimeout(()=>{toast.classList.remove('show');layer.replaceChildren()},3000);
+}function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
+function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
+function toggleCollege(){
+ const k=dateKey(window.__selectedDate||new Date());
+ state.collegeOffDates=state.collegeOffDates||{};
+ if(state.collegeOffDates[k])delete state.collegeOffDates[k];else state.collegeOffDates[k]=true;
+ save();render();showToast(collegeEnabledForDate()?'College blocks restored for this date.':'College hidden for this date only.');
+}
+function openTask(id){const t=todayTasks().find(x=>x.id===id);if(!t)return;if(t.cat==='college'){return openLecture(t.collegeData||[t.s,t.e,t.n,'',t.info]);}showModal(`<div class="modal-head"><div><div class="eyebrow">${esc(t.cat)}</div><h2>${esc(t.n)}</h2><div class="tiny">${esc(t.s)} – ${esc(t.e)}</div></div><button class="close" onclick="closeModal()">×</button></div><div class="info-card" style="margin-top:15px"><h3>Why this block exists</h3><p>${esc(t.info||'Keep the task small, concrete and finishable.')}</p></div><div class="quick" style="margin-top:10px"><button onclick="completeTask('${t.id}');closeModal()">✓ Mark complete</button><button onclick="closeModal();openAddTask('${t.id}')">✎ Edit</button><button onclick="moveTask('${t.id}',-1);closeModal()">↑ Earlier</button><button onclick="moveTask('${t.id}',1);closeModal()">↓ Later</button><button onclick="deleteTask('${t.id}')">🗑 Delete</button></div>`)}
+function openLecture(s){showModal(`<div class="modal-head"><div><div class="eyebrow">${esc(s[0])} – ${esc(s[1])}</div><h2>${esc(s[2])}</h2><div class="tiny">Faculty / group: ${esc(s[3]||'Not specified')}</div></div><button class="close" onclick="closeModal()">×</button></div><div class="info-card" style="margin-top:15px"><h3>📍 Where</h3><p>${esc(s[4])}</p></div><div class="tip" style="margin-top:10px"><b>Micro-prep:</b> Before class, write one question you want answered. After class, capture 3 recall bullets instead of rewriting everything.</div>`)}
+function openAddTask(editId=null){
+ let t=editId?todayTasks().find(x=>x.id===editId):null;
+ showModal(`<div class="modal-head"><div><div class="eyebrow">FLEXIBLE TASK</div><h2>${t?'Edit task':'Add task'}</h2></div><button class="close" onclick="closeModal()">×</button></div>
+ <div class="form" style="margin-top:15px"><input id="fName" placeholder="Task name" value="${t?esc(t.n):''}"><div class="form-row"><input id="fStart" placeholder="Start e.g. 6:30 PM" value="${t?esc(t.s):''}"><input id="fEnd" placeholder="End e.g. 7:00 PM" value="${t?esc(t.e):''}"></div><select id="fCat"><option>study</option><option>coding</option><option>pinterest</option><option>english</option><option>career</option><option>health</option><option>life</option><option>buffer</option></select><textarea id="fInfo" placeholder="Why / instructions">${t?esc(t.info||''):''}</textarea><button class="primary" onclick="saveTask('${editId||''}')">Save task</button></div>`);
+}
+function saveTask(id){
+ let n=document.getElementById('fName').value.trim(),s=document.getElementById('fStart').value.trim(),e=document.getElementById('fEnd').value.trim(),cat=document.getElementById('fCat').value,info=document.getElementById('fInfo').value.trim();
+ if(!n||!s||!e){showToast('Add a task name and time');return}
+ s=s.replace(/\s+/g,' ').toUpperCase();e=e.replace(/\s+/g,' ').toUpperCase();
+ const sm=minutes(s),em=minutes(e);
+ if(!Number.isFinite(sm)||!Number.isFinite(em)||em<=sm){showToast('Use valid times, e.g. 6:30 PM → 7:00 PM');return}
+ let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RĀSI updated this date')}function renderBrief(){
+ const idx=Math.max(0,(state.bodyDay||1)-1);const dayNum=Math.min(10,idx+1);
+ const plans=[
+  ['Day 1','5–10 min gentle mobility + 2–3 beginner poses. Your only job is to show up.','C: variables + input/output.','Pinterest: one easy maintenance pin.'],
+  ['Day 2','Warm-up + 3–4 easy poses + short breathing.','C: if/else + 3 tiny problems.','English: 60-second spoken summary.'],
+  ['Day 3','Add a little walking/indoor march; keep yoga easy.','C: loops + trace code on paper.','Content strategy: analyse one CBI hook.'],
+  ['Day 4','Mobility + 4–5 comfortable poses, no forcing range.','C: nested loops + pattern problem.','Agency: one focused brand/creator pipeline action.'],
+  ['Day 5','Gentle full-body flow + longer quiet sit.','C: functions + one mini program.','Weekly proof: save your best work from the week.']
+ ];
+ const p=plans[idx]||plans[0];
+ document.getElementById('todayBrief').innerHTML=`<div class="info-card"><h3>🧘 ${p[0]} body mission</h3><p>${p[1]}</p></div><div class="info-card" style="margin-top:8px"><h3>💻 Learn</h3><p>${p[2]}</p></div><div class="info-card" style="margin-top:8px"><h3>📌 Career / audience</h3><p>${p[3]}</p></div><div class="tip" style="margin-top:8px"><b>Today's thought:</b> ${missions[idx]||missions[0]}</div>`;
+}
+function renderWeek(){
+ const box=document.getElementById('weekMap');box.innerHTML='';
+ DAYS.forEach((d,i)=>{let arr=state.tasks[d]||[];let done=arr.filter(x=>x.done).length;let pin=arr.find(x=>x.cat==='pinterest');let code=arr.find(x=>x.cat==='coding');let study=arr.find(x=>x.cat==='study');let c=timetable[d]?.length||0;let el=document.createElement('div');el.className='info-card';el.style.marginBottom='9px';el.innerHTML=`<div style="display:flex;justify-content:space-between"><h3>${d} <span class="pill">${c} college entries</span></h3><span class="badge">${done}/${arr.length||0} done</span></div><p style="margin-top:6px">Coding: ${code?.s||'flexible'} • Study: ${study?.s||'flexible'} • Pinterest: ${pin?.s||'flexible'}</p>`;box.appendChild(el)})
+}
+function renderSkills(){document.getElementById('skillsList').innerHTML=skills.map(s=>`<div class="exercise"><div class="num">${s.icon}</div><div><b>${s.name} • ${s.mins} min</b><small>${s.desc}</small></div></div>`).join('');let r=skills[DAYS.indexOf(day)%skills.length];document.getElementById('skillDrill').innerHTML=`<div class="info-card"><h3>${r.icon} ${r.name}</h3><p>${r.desc}</p><div class="badge" style="margin-top:9px">${r.mins} MIN</div></div><div class="tip" style="margin-top:10px">The app intentionally rotates the heavier career work. You don't need to become a coder, marketer, strategist, agency owner and speaker in one evening.</div>`}
+const bodyPlans=[
+ {d:1,mins:15,items:['Neck/shoulder rolls — gentle','Cat–Cow — 5 slow cycles','Child’s Pose — 30–45 sec','Pawanmuktasana — gentle, 30 sec/side','Shavasana — 2 min'],note:'Start deliberately easy. No performance target.'},
+ {d:2,mins:18,items:['Joint mobility — 3 min','Cat–Cow — 6 cycles','Pawanmuktasana — 45 sec/side','Markatasana — 3 gentle repetitions/side','Shavasana — 2 min'],note:'If anything causes pain, reduce range or stop.'},
+ {d:3,mins:20,items:['Warm-up — 4 min','Cat–Cow — 6 cycles','Pawanmuktasana — 1 min/side','Markatasana — 4/side','Bhramari — 4 rounds','Shavasana — 2 min'],note:'Add a short easy indoor walk if comfortable.'},
+ {d:4,mins:22,items:['Warm-up — 4 min','Pawanmuktasana — 1 min/side','Markatasana — 4/side','Sukhasana seated fold — 30 sec','Gentle Sphinx — 20 sec ×2','Shavasana — 2 min'],note:'Keep the spine comfortable; do not force backbends.'},
+ {d:5,mins:24,items:['Warm-up — 4 min','Pawanmuktasana — 1 min/side','Markatasana — 5/side','Gentle Surya Namaskar — 2 slow rounds if comfortable','Bhramari — 5 rounds','Shavasana — 2 min'],note:'This is the first day with optional Sun Salutations.'},
+ {d:6,mins:25,items:['Warm-up — 4 min','Pawanmuktasana — 1 min/side','Markatasana — 5/side','Gentle Surya Namaskar — 2–3 rounds','Sphinx — 20 sec ×2','Anulom Vilom — 3 min'],note:'Do not chase intensity.'},
+ {d:7,mins:27,items:['Mobility — 5 min','Pawanmuktasana — 1 min/side','Markatasana — 5/side','Gentle Surya Namaskar — 3 rounds','Sphinx — 30 sec ×2','Bhramari — 5 rounds','Shavasana — 2 min'],note:'You are building consistency, not proving fitness.'},
+ {d:8,mins:29,items:['Mobility — 5 min','Pawanmuktasana — 1 min/side','Markatasana — 6/side','Surya Namaskar — 3 slow rounds','Sphinx — 30 sec ×2','Anulom Vilom — 4 min','Shavasana — 2 min'],note:'Optional 5–8 min easy indoor walk.'},
+ {d:9,mins:30,items:['Mobility — 5 min','Pawanmuktasana — 1 min/side','Markatasana — 6/side','Surya Namaskar — 3–4 slow rounds','Sphinx — 30 sec ×2','Bhramari — 6 rounds','Shavasana — 2 min'],note:'Keep breathing smooth throughout.'},
+ {d:10,mins:32,items:['Mobility — 5 min','Pawanmuktasana — 1 min/side','Markatasana — 6/side','Surya Namaskar — 4 slow rounds if comfortable','Sphinx — 30 sec ×2','Anulom Vilom — 5 min','Bhramari — 5 rounds','Shavasana — 2 min'],note:'After day 10, repeat this level for a week before progressing further.'}
+];
+function renderBody(){let p=(state.customBodyPlan&&state.customBodyPlan[Math.min(9,state.bodyDay-1)])||bodyPlans[Math.min(9,state.bodyDay-1)];if(state.bodyMode!=='normal'){p={...p,mins:state.bodyMode==='unwell'?8:12,items:state.bodyMode==='unwell'?['2–3 min gentle joint movement','Comfortable nasal breathing — 3 min','Shavasana / rest — 3 min']:['Gentle mobility — 3 min','Cat–Cow — 4 slow cycles','Pawanmuktasana — gentle if comfortable','Bhramari — 3 rounds','Shavasana — 2 min'],note:state.bodyMode==='unwell'?'Rest is the plan. If you feel significantly unwell, skip exercise.':'Use the low-energy version. You do not need to “make up” missed days.'};}
+ document.getElementById('dayBadge').textContent='DAY '+state.bodyDay+' • '+p.mins+' MIN';document.querySelectorAll('#bodyModes button').forEach(b=>b.classList.remove('active'));document.querySelector(`#bodyModes button:nth-child(${state.bodyMode==='normal'?1:state.bodyMode==='period'?2:3})`).classList.add('active');
+ document.getElementById('exercisePlan').innerHTML=p.items.map((x,i)=>`<div class="exercise"><div class="num">${i+1}</div><div><b>${esc(x)}</b><small>Do it gently. Stop if it causes pain, dizziness or unusual symptoms.</small></div></div>`).join('')+`<div class="tip"><b>Today's body note:</b> ${esc(p.note)}</div>`;
+}
+function setBodyMode(m){state.bodyMode=m;save();renderBody()}
+function renderReminders(){document.getElementById('reminders').innerHTML=state.reminders.map(r=>`<div class="reminder"><b>${esc(r.title)}</b><small>${esc(r.when)}</small>${r.note?`<small>${esc(r.note)}</small>`:''}<div style="margin-top:7px"><button class="iconbtn" onclick="deleteReminder('${r.id}')">Delete</button></div></div>`).join('');document.getElementById('miniReminders').innerHTML=state.reminders.slice(0,3).map(r=>`<div class="reminder"><b>${esc(r.title)}</b><small>${esc(r.when)}</small></div>`).join('')}
+function openImportant(){showModal(`<div class="modal-head"><div><div class="eyebrow">IMPORTANT VAULT</div><h2>Add a deadline / reminder</h2></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="rTitle" placeholder="e.g. Chemistry journal submission"><input id="rWhen" placeholder="e.g. Monday, 11:59 PM"><textarea id="rNote" placeholder="Extra details / where to submit"></textarea><button class="primary" onclick="saveReminder()">Save reminder</button></div>`)}
+function saveReminder(){let title=document.getElementById('rTitle').value.trim(),when=document.getElementById('rWhen').value.trim(),note=document.getElementById('rNote').value.trim();if(!title)return;state.reminders.unshift({id:uid(),title,when:when||'No date added',note});save();closeModal();render();showToast('Reminder saved')}
+function deleteReminder(id){state.reminders=state.reminders.filter(r=>String(r.id)!==String(id));save();render()}
+function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebrow">IDENTITY</div><h2>Rename your buddy</h2><div class="tiny">The name is cosmetic and can be changed anytime.</div></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="buddyName" maxlength="24" value="${esc(state.appName||DEFAULT_APP_NAME)}" placeholder="e.g. RĀSI"><button class="primary" onclick="saveBuddyName()">Save name</button></div>`)}
+function saveBuddyName(){const n=document.getElementById('buddyName').value.trim().replace(/\s+/g,' ');if(!n){showToast('Give me a name first 😌');return}state.appName=n;state.chat.push({who:'nova',text:`New name locked in: ${n}. Same brain, better branding. ✦`});save();closeModal();render();showToast('Name changed ✦')}
+function renderChat(){
+ const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ if(!state.chatOpen){
+   const last=chat.length?chat[chat.length-1].text:'I’m here whenever you want to talk.';
+   document.getElementById('chat').innerHTML='<div class="chat-closed"><div><b>💬 '+esc(name)+'</b><small>'+esc(last.slice(0,110))+(last.length>110?'…':'')+'</small><small class="chat-memory-note">I remember useful context locally, so you do not have to repeat yourself.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
+   return;
+ }
+ const recent=chat.slice(-14);
+ document.getElementById('chat').innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' personal context notes saved on this phone':'I am learning from what you tell me')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
+}
+function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
+function updateRasiMemory(raw){
+ const text=String(raw||'').trim(); if(text.length<8)return;
+ const useful=/\b(i want|i like|i love|i hate|i don't like|i dont like|i prefer|my goal|my plan|i am|i'm|i need|i struggle|i usually|i can|i can't|college|pg|creator|pinterest|coding|english|study|exercise|sleep|family|friend|career)\b/i.test(text);
+ if(!useful)return;
+ state.rasiMemory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ state.rasiMemory=state.rasiMemory.filter(x=>x.toLowerCase()!==text.toLowerCase());
+ state.rasiMemory.unshift(text);
+ state.rasiMemory=state.rasiMemory.slice(0,20);
+}
+function rasiMemoryHint(raw){
+ const x=String(raw||'').toLowerCase(), words=x.split(/\W+/).filter(w=>w.length>=5);
+ return (state.rasiMemory||[]).find(m=>words.some(w=>m.toLowerCase().includes(w)))||'';
+}
+function rasiConversationReply(raw){
+ const x=String(raw||'').toLowerCase().trim(), mem=state.rasiMemory||[], recent=mem[0];
+ const pick=function(a){return a[Math.floor(Math.random()*a.length)]};
+ if(/^(good morning|good afternoon|good evening|good night|hi|hey|hii|hello|yo)\b/.test(x)) return pick(['Hiiii 😭💛 I am here. How is your day actually going?','Heyyy. RĀSI is awake. What are we dealing with today — college chaos, life chaos, or both?','Yo 😭 talk to me. What happened?']);
+ if(/\bhow are you\b|\bhow was your day\b/.test(x)) return 'Honestly, my day is basically whatever you bring me 😭. So give me the interesting part — how are YOU doing?';
+ if(/\bthank(s| you)\b/.test(x)) return pick(['Always. 🫶','Anytime. Now do not disappear on me after saying thank you 😭','Of course. That is literally what I am here for. ✨']);
+ if(/\bi (just|finally) (got|finished|did)\b|\bi did it\b|\bi finished\b/.test(x)) return pick(['AYEEE. 😭🔥 That counts. Tell me what you finished.','Okayyy, I see you. ✨ What did you manage to get done?','LET’S GO. One less thing living rent-free in your brain. 😭']);
+ if(/\bi feel |\bi'm feeling |\bi am feeling |\bi don't feel |\bi feel like/.test(x)) return pick(['Okay. You do not have to make that sound neat for me. Tell me the unfiltered version.','I am listening. No productivity lecture unless you ask for one. 🫂','Got you. Let us separate what you are feeling from what actually needs action. What happened?']);
+ if(/\bwhat do you think about me\b|\bwhat is your impression of me\b/.test(x)) return 'My current impression? You are ambitious, curious, and you care about doing things properly — but you can also pile ten things onto one day and then wonder why your brain is screaming 😭. That is an observation, not a diagnosis. And you can absolutely tell me I am wrong.';
+ if(/\bremember\b|\bdo you remember me\b/.test(x)) return recent?'Yeah. I keep a small amount of useful context on this phone. One thing I remember is: “'+recent+'” 💛':'I have not saved much useful context yet. Tell me things that matter to you and I will keep the useful bits locally.';
+ return null;
+}
+function rasiFriendReply(raw){
+ const x=raw.toLowerCase().trim(),done=(todayTasks()||[]).filter(t=>t.done).length,total=(todayTasks()||[]).length;
+ const next=(todayTasks()||[]).filter(t=>t.cat!=='college'&&!t.done)[0];
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ if(/^(hi|hey|hello|hii|yo|sup|good morning|good night|good evening)\b/.test(x))
+   return pick(["Heyyy Rasika. ✨ I'm here. What's going on?","Hii. RĀSI reporting for duty 😭 What are we dealing with today?","Yo. Give me the situation — college chaos, life chaos, or both? 😭"]);
+ if(/vent|rant|bad day|rough day|awful day|hate today|fed up|frustrated|overwhelmed|stressed|stress|anxious|anxiety|burnt out|burnout|exhausted|drained|crying|sad|lonely|guilty|guilt|demotivated|no motivation/.test(x))
+   return pick(["Okay. No fixing mode for a second. 🫂 You can just tell me what happened. I'll listen first, then we can figure out what actually needs fixing.","That sounds like a lot to carry at once. Don't turn one rough day into a verdict about yourself. Tell me the messiest part; we'll separate the real problem from the guilt.","Pause. Breathe. You do not need to solve your entire life tonight. 😭 Tell me what happened and I'll give you my honest take — you still make the final call."]);
+ if(/(should i|what do you think|your opinion|do you think|would you|is it better|which should|help me decide|can't decide|confused about|confused)/.test(x))
+   return "My take: "+pick(["I'd look at what gives you the biggest useful result without wrecking your energy.","I'd avoid making the decision from panic or guilt; compare the actual trade-offs first.","I'd choose the option that keeps future-you's choices open while still being realistic today."])+" I can give you a proper pros/cons view if you tell me the two options. I'm an AI, so treat my opinion as a second brain — not the final decision.";
+ if(/college|class|lecture|professor|assignment|exam|attendance|notes|roommate|pg|hostel|friends|club|society/.test(x))
+   return pick(["College brain unlocked 😭. What exactly happened? Give me the context and I'll help you think it through — practical answer, not textbook nonsense.","Okay, college situation. Tell me the people + deadline + what you actually want. I'll help you work out the least-chaotic move.","Ah, the college cinematic universe. 😭 What's the problem? We can break it into what matters now, what can wait, and what you're overthinking."]);
+ if(/study|studying|revision|syllabus|backlog|marks|grades|exam prep|jee|test/.test(x))
+   return "Real talk: "+pick(["you do not need a perfect study day to make progress.","a smaller focused block is usually more useful than staring at a huge backlog and panicking.","backlog feels enormous when it stays undefined, so I'd turn it into the next concrete 30–60 minutes."])+" "+(next?"Right now your next planned block is "+next.n+".":"If you tell me what is pending, I can help you choose the next move.")+" And yes, you can disagree with me. 😭";
+ if(/friend|friendship|crush|relationship|family|parents|argument|fight|someone/.test(x))
+   return "Okay, human-drama department is open. 😭 Tell me what happened and what outcome you actually want. I'll give you my honest perspective without pretending I know the other person's intentions.";
+ if(/sleep|sleeping|can't sleep|wake up|5 am|tired/.test(x))
+   return "Honestly? Your energy matters more than winning a productivity contest. If you're running on fumes, I'd rather protect sleep and make tomorrow workable than squeeze in one more fake-productive hour. Tell me what time you need to wake up and what is genuinely non-negotiable.";
+ if(/productive|productivity|procrastinat|lazy|scrolling|instagram|phone addiction/.test(x))
+   return "My take: don't label yourself lazy from one behaviour. 😭 Make the next action stupidly small: phone away, one task, 15–25 minutes, then reassess. If you tell me what you're avoiding, I'll help you make it less painful.";
+ if(/what do you know about me|know about me|describe me|my personality|who am i/.test(x))
+   return "From what you've taught me here, you're ambitious, curious, creative, a little chaotic when too many goals collide, and you care a LOT about doing things properly. 😭 My job isn't to flatter you though — if I think you're overloading yourself, I'll say so, and you can tell me I'm wrong.";
+ if(/how am i doing|am i doing enough|am i behind|behind in life|behind everyone/.test(x))
+   return "I wouldn't measure your whole life from one week. You currently have "+done+" completed task"+(done===1?"":"s")+" out of "+total+" shown today, but that number is not a score for your worth. If you want an honest assessment, tell me what you're comparing yourself against and I'll separate facts from the pressure you're putting on yourself.";
+ return pick(["I'm listening. 👀 Tell me what's actually on your mind — it doesn't have to be a schedule problem.","Okay, talk to me like a friend. 😭 What happened, what are you thinking about, and what do you want help with?","Not everything needs to become a task. You can literally just talk to me. Give me the context and I'll respond like a second brain, not a corporate productivity bot.","I can give you an opinion, help you think through a decision, listen to a rant, explain something, or help you plan it. What's up?"]);
+}
+function buddyCommand(){
+ const raw=document.getElementById('buddyInput').value.trim(); if(!raw)return;
+ state.chat.push({who:'you',text:raw}); updateRasiMemory(raw); const x=raw.toLowerCase(); let reply='';
+ if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
+   reply='Yeah. 💛 You do not have to turn everything into a task here. You can tell me about your day, vent, ask what I think, talk about college, friends, work, stress, or just say something random. I’ll remember useful context you share on this device and respond like a familiar second brain — honest when I disagree, but you still make the final call. So… what happened? 👀';
+ } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
+   reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life/college stuff, give an honest second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring schedule reshuffle.';
+ } else const conversation=rasiConversationReply(raw);
+ if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
+   reply='Yeah. 💛 You can talk to me about your day, college, friends, work, stress, random thoughts — whatever. You do NOT have to turn everything into a task. I will remember useful context you share on this phone and give you an honest second opinion when you want one. You still make the final call. So… what is going on? 👀';
+ } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
+   reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life and college, give you a second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring reshuffle.';
+ } else if(conversation){reply=conversation;}
+ else if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
+ else if(/cute|pastel/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cute');reply='Cute mode. 🌸 Still organised. Still dangerous.';}
+ else if(/cyber|neon/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cyber');reply='Cyber mode online. ⚡';}
+ else if(/fun|funny|chaos/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('fun');reply='Fun mode. 😈 Your schedule has been given permission to have a personality.';}
+ else if(/midnight|normal|default/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('midnight');reply='Back to Midnight. 🌌';}
+ else if(/remove everything|clear everything|delete everything/.test(x) && /(body|exercise|workout)/.test(x)){reply=resetSection('body');}
+ else if(/(rebuild|replace|change).*(body|exercise).*add/.test(x)){const part=raw.split(/add/i)[1]?.trim();if(part){const items=part.split(/[,;]+/).map(z=>z.trim()).filter(Boolean);state.customBodyPlan=bodyPlans.map((p,i)=>({...p,items:i===0?items:p.items}));save();reply='I rebuilt the Body section from your instructions and kept the progression staged. Tell me if you want the starting day, duration or exercises changed.';}else reply=resetSection('body');}
+ else if(/missed|forgot|couldn't do|didn't do|skipped/.test(x) && /(exercise|workout|yoga|body)/.test(x)){reply=moveExerciseToNextDay();}
+ else if(/want to learn push[- ]?ups?|learn pushups?/.test(x)){reply=createPushupPlan();}
+ else if(/learn (japanese|python|javascript|java|english|c|coding|public speaking|spanish|german)/.test(x)){const skill=(x.match(/learn (japanese|python|javascript|java|english|c|coding|public speaking|spanish|german)/)||[])[1]||'this skill';reply=askForSkillProfile(skill);}
+ else if(/remove everything|clear everything|delete everything/.test(x) && /(task|schedule|today)/.test(x)){reply=resetSection('tasks');}
+ else if(/remove everything|clear everything|delete everything/.test(x) && /skill/.test(x)){reply=resetSection('skills');}
+ else if(/(change|replace|rebuild|redo).*(whole|entire).*(body|exercise)/.test(x)){reply=resetSection('body');}
+ else if(/(remove|delete|skip|drop|cancel)\b/.test(x)){
+   const cats=[['pinterest',['pinterest','pins','pin']],['coding',['coding','c','programming']],['english',['english','spoken english','speaking','vocabulary']],['study',['study','revision','revise','notes']],['career',['content strategy','chessbase','cbi','agency','creatorcollabs','cold call','marketing']],['knowledge',['reading','book','encyclopedia']]];
+   const cat=cats.find(([c,w])=>w.some(k=>x.includes(k)))?.[0]; const target=todayTasks()?.find(t=>cat&&t.cat===cat);
+   if(target){state.dateTasks[dateKey(window.__selectedDate)]=state.dateTasks[dateKey(window.__selectedDate)].filter(t=>t.id!==target.id);reply=`Done. ${target.n} is removed from ${day}. I kept college, health and protected buffers intact.`;}else reply='Tell me what to remove, e.g. “remove Pinterest today”.';
+ } else if(/(move|shift|reschedule|change).*(coding|study|pinterest|english|career)/.test(x)){
+   const cat=(x.includes('pinterest')?'pinterest':x.includes('coding')?'coding':x.includes('english')?'english':x.includes('career')?'career':'study'); const t=todayTasks()?.find(q=>q.cat===cat); const tm=raw.match(/\b(\d{1,2}:\d{2}\s*(?:am|pm))\b/i);
+   if(t&&tm){t.s=tm[1].toUpperCase();t.e=addMinutes(t.s,Math.max(15,minutes(t.e)-minutes(t.s)));reply=`Moved ${t.n} to ${t.s}–${t.e}. I checked the surrounding blocks before applying it.`;}else reply='Give me the block and time, e.g. “move coding to 7:00 pm”.';
+ } else if(/^(add|schedule|plan)\b/.test(x)){
+   const m=raw.match(/^(?:add|schedule|plan)\s+(.+?)\s+(?:at|from)\s+(\d{1,2}:\d{2}\s*(?:am|pm))(?:\s*(?:for|to)\s*(\d+)\s*(?:min|minutes))?/i);
+   if(m){const start=m[2].toUpperCase(),dur=Number(m[3]||30),end=addMinutes(start,dur);todayTasks().push({id:uid(),s:start,e:end,n:m[1],cat:'flexible',info:'Added by RĀSI',done:false,order:todayTasks().length});reply=`Scheduled ${m[1]} for ${start}–${end}.`;}else reply='Use: “add chemistry revision at 6:30 pm for 30 min”.';
+ } else if(/(lighten|too much|overloaded|tired|low energy|no energy)/.test(x)){const removable=['knowledge','career','english','pinterest'];let removed=[];removable.forEach(c=>{const t=todayTasks()?.find(q=>q.cat===c);if(t){state.dateTasks[dateKey(window.__selectedDate)]=state.dateTasks[dateKey(window.__selectedDate)].filter(q=>q.id!==t.id);removed.push(t.n)}});reply=removed.length?`I lightened today by moving out ${removed.join(', ')}. Your core study, coding, health and buffer stay protected.`:'Today is already at the minimum planned load.';}
+ else if(/month|january|february|march|april|may|june|july|august|september|october|november|december/.test(x) && /(change|rebuild|plan|schedule|remove|delete|drop|skip)/.test(x)){reply=applyMonthInstruction(raw)||'I saved the month-level instruction. Give me the month plus the exact change (for example, “remove Pinterest from October”) and I will apply it across that month.';}
+ else if(/replan|rearrange|reorganize|fix today/.test(x)){reply=replanToday();}
+ else if(/what.*today|what.*do|plan my day/.test(x)){const next=todayTasks().filter(t=>t.cat!=='college'&&!t.done)[0];reply=next?`Your next block is ${next.n} (${next.s}–${next.e}). If something changed, tell me what changed and I’ll replan around it.`:'Your planned flexible blocks are complete. Use the remaining time for college life or rest.';}
+ else {const mh=rasiMemoryHint(raw); reply=rasiFriendReply(raw); if(mh && /what do you remember|remember|you know about me|my preference|my goal/.test(x)) reply='I remember this from you: “'+mh+'” ✦ I keep a small set of useful personal context on this device so I can make future replies less generic.';}
+ state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';state.chatOpen=true;save();render();showToast('RĀSI is here ✦');
+}
+function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
+function replanToday(){
+ let arr=todayTasks()||[];
+ const fixed=arr.filter(t=>t.cat==='college'||t.cat==='health'||t.cat==='buffer'||t.locked);
+ const movable=arr.filter(t=>!fixed.includes(t)).sort((a,b)=>minutes(a.s)-minutes(b.s));
+ const occupied=fixed.map(t=>[minutes(t.s),minutes(t.e)]).sort((a,b)=>a[0]-b[0]);
+ function fits(st,en){return !occupied.some(([a,b])=>st<b&&en>a)}
+ let cursor=16*60+45, moved=0;
+ for(const t of movable){
+   const dur=Math.max(15,minutes(t.e)-minutes(t.s));
+   let st=minutes(t.s);
+   if(!Number.isFinite(st)||!fits(st,st+dur)||st<cursor)st=cursor;
+   while(!fits(st,st+dur)&&st<22*60){st+=5}
+   if(st+dur<=22*60){t.s=toTime(st);t.e=toTime(st+dur);moved++}
+   cursor=Math.max(cursor,st+dur);
+   occupied.push([st,st+dur]);occupied.sort((a,b)=>a[0]-b[0]);
+ }
+ arr.forEach((t,i)=>t.order=i);save();render();
+ return moved?'Replanned '+moved+' flexible block'+(moved===1?'':'s')+' around your fixed commitments. College, health and protected buffers stayed in place.':'Your current plan already fits its protected blocks. Nothing needed moving.';
+}
+function toTime(total){
+ total=((total%1440)+1440)%1440;const h=Math.floor(total/60),m=total%60,ap=h>=12?'PM':'AM',hh=h%12||12;return hh+':'+String(m).padStart(2,'0')+' '+ap;
+}
+function replanWeek(){DAYS.forEach(d=>{if(!state.tasks[d])return;let a=state.tasks[d];a.forEach((t,i)=>t.order=i)});save();render();showToast('Week rebalanced around fixed blocks')}
+function renderInsights(){let all=Object.values(state.tasks).flat(),done=all.filter(t=>t.done).length;document.getElementById('insights').innerHTML=`<div class="two"><div class="info-card"><h3>XP</h3><div class="xp">${state.xp}</div><p>+10 per completed planned task.</p></div><div class="info-card"><h3>Completed</h3><div class="xp">${done}</div><p>Across saved days.</p></div></div><div class="tip" style="margin-top:10px"><b>Anti-all-or-nothing rule:</b> If you miss a day, the next day stays at its planned level. You don't “owe” punishment workouts or double study blocks.</div>`;document.getElementById('collegeTips').innerHTML=['Keep one small social plan each week.','Save assignment deadlines immediately in Important Vault.','After each practical, capture 3 steps + 1 mistake + 1 question.','Use commute/waiting time for vocabulary or audio, not deep coding.','Do not sacrifice sleep to rescue an overloaded plan.'].map((x,i)=>`<div class="info-card" style="margin-bottom:8px"><h3>${i+1}. ${x}</h3></div>`).join('')}
+function quickWin(name){state.xp+=5;save();celebrate();showToast(name+' +5 XP')}
+function backupData(){const payload={app:'RĀSI',version:6,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rasi-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
+function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const payload=JSON.parse(r.result);if(!payload.state)throw new Error('Invalid backup');state=payload.state;ensureState();render();showToast('Backup restored. Welcome back. ✦')}catch(err){showToast('That backup file is not valid.')}};r.readAsText(file);e.target.value=''}
+
+function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modalBack').classList.add('show')}
+function closeModal(e){if(!e||e.target.id==='modalBack')document.getElementById('modalBack').classList.remove('show')}
+function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+// PWA install support
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
+async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=1').catch(()=>{}));
+ensureState();render();setInterval(()=>render(),30000);
+</script>
+</body>
+</html>
