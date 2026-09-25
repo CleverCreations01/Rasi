@@ -1,14 +1,19 @@
 workflows:
-  rasi-android-debug:
-    name: RĀSI Android APK
-    max_build_duration: 30
+  rasi-android-release:
+    name: RASI Android Release
     instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      android_signing:
+        - rasi_release
+      vars:
+        PACKAGE_NAME: "com.rasika.rasi"
     scripts:
       - name: Set Android SDK location
         script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
-      - name: Build RĀSI APK
+      - name: Build signed release APK
         script: |
           cd "$CM_BUILD_DIR/android"
-          gradle assembleDebug --no-daemon
+          ./gradlew assembleRelease
     artifacts:
-      - android/app/build/outputs/apk/debug/*.apk
+      - android/app/build/outputs/apk/release/*.apk
