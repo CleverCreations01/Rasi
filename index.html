@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v15-friend-chat">
+<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v16-ultimate">
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{
@@ -155,6 +155,22 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .skin-anime-op body:after{content:"☠️  GRAND LINE  ⚓";position:fixed;top:72px;right:10px;inset:auto 10px auto auto!important;pointer-events:none;z-index:2;color:#5685a2;font-size:13px;letter-spacing:2px;opacity:.65}
 .skin-sakura .task,.skin-matcha .task,.skin-lavender .task,.skin-anime-ds .task,.skin-anime-op .task{background:var(--panel)!important;color:var(--text)!important}
 </style><style id="rasi-v14-fix">
+/* RĀSI v16 calm-performance layer */
+*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.piece,.confetti,.toast{animation:none!important;transition:none!important}
+.skin-sakura body:before,.skin-lavender body:after,.skin-matcha body:after,.skin-anime-op body:after{animation:none!important}
+/* RĀSI v16 chat + skin consistency */
+:root{--chat-rasi-bg:#eef1ff;--chat-you-bg:#e9fff5;--chat-rasi-border:#cfd6ff;--chat-you-border:#bfe9d5}
+.skin-sakura{--chat-rasi-bg:#fff0f3;--chat-you-bg:#edf7e9;--chat-rasi-border:#edcbd3;--chat-you-border:#cfe2ca}
+.skin-lavender{--chat-rasi-bg:#f2eafa;--chat-you-bg:#edf7ef;--chat-rasi-border:#ddd0e9;--chat-you-border:#cfe2d4}
+.skin-matcha{--chat-rasi-bg:#edf4df;--chat-you-bg:#f8eedf;--chat-rasi-border:#d2dfbb;--chat-you-border:#e6d5b8}
+.skin-anime-op{--chat-rasi-bg:#fff0d5;--chat-you-bg:#e7f3fb;--chat-rasi-border:#e5c88f;--chat-you-border:#c4ddeb}
+.skin-anime-ds{--chat-rasi-bg:#382232;--chat-you-bg:#1d382e;--chat-rasi-border:#71445e;--chat-you-border:#3f6953}
+.skin-minimal{--chat-rasi-bg:#f0f0f0;--chat-you-bg:#e8f2ee;--chat-rasi-border:#d2d2d2;--chat-you-border:#c5d9ce}
+.buddy-msg.rasi{background:var(--chat-rasi-bg)!important;border-color:var(--chat-rasi-border)!important}
+.buddy-msg.you{background:var(--chat-you-bg)!important;border-color:var(--chat-you-border)!important}
+.style-row button,.quickbtn,.quick button,.iconbtn,.modebar button,.college-toggle,.nav button,.bottom button{color:var(--text)!important}
+.style-row button,.iconbtn{background:var(--panel2)!important;border-color:var(--line)!important}
 /* V14: calm rendering + personal chat + no black skin controls */
 .chat-closed{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;border:1px solid var(--line);border-radius:18px;background:var(--panel2);color:var(--text)}
 .chat-closed b{display:block;font-size:14px}.chat-closed small{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.35}.chat-memory-note{opacity:.8}
@@ -447,7 +463,7 @@ function ensureState(){
  if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
  if(!state.reminders)state.reminders=[];
  if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
- if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[];
+ if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(state.chatUiVersion!==16){state.chatOpen=false;state.chatUiVersion=16;}
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
@@ -587,76 +603,14 @@ function saveBuddyName(){const n=document.getElementById('buddyName').value.trim
 function renderChat(){
  const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
  if(!state.chatOpen){
-   const last=chat[chat.length-1]?.text||'I’m here whenever you want to talk.';
-   document.getElementById('chat').innerHTML=`<div class="chat-closed"><div><b>💬 ${esc(name)} chat</b><small>${esc(last.slice(0,110))}${last.length>110?'…':''}</small><small class="chat-memory-note">Your recent useful context is remembered on this device.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>`;
+   const last=chat.length?chat[chat.length-1].text:'I’m here whenever you want to talk.';
+   document.getElementById('chat').innerHTML='<div class="chat-closed"><div><b>💬 '+esc(name)+'</b><small>'+esc(last.slice(0,110))+(last.length>110?'…':'')+'</small><small class="chat-memory-note">I remember useful context locally, so you do not have to repeat yourself.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
    return;
  }
- const recent=chat.slice(-12);
- document.getElementById('chat').innerHTML=`<div class="chat-head"><div><b>💬 ${esc(name)}</b><small>${memory.length?memory.length+' useful memory notes saved locally':'I’ll learn from what you tell me'}</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">${recent.map(m=>`<div class="buddy-msg ${m.who==='you'?'you':'rasi'}"><span class="chat-who">${m.who==='you'?'You':esc(name)}</span>${esc(m.text)}</div>`).join('')}</div>`;
+ const recent=chat.slice(-14);
+ document.getElementById('chat').innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' personal context notes saved on this phone':'I am learning from what you tell me')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
 }
 function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
-
-const campusLocations=[
- ['CR 51','Lecture room','4th Floor','Your Div 12 lecture classroom.'],
- ['Circuit Forge','BXE Lab 1','2nd Floor • right of staircase','Official BXE Lab 1.'],
- ['Catalyst Lab','CHEM Lab 1','3rd Floor • right of staircase','Official Chemistry Lab 1.'],
- ['Code Forge','CC1 Lab','3rd Floor • left of staircase','Official CC1 Lab used for CCC1/FPL practicals.'],
- ['Motion Lab','EM Lab','4th Floor • right of staircase','Official EM Lab.'],
- ['Maker Bay','Workshop','Near Central Library','Workshop area.'],
- ['Physics Lab','PHY Lab','2nd Floor • left of staircase','Campus location reference.'],
- ['Circuit Lab','BEE Lab','2nd Floor • left of staircase','Campus location reference.']
-];
-function renderCollegeView(){
- const currentDt=window.__selectedDate||new Date(), currentWd=DAY_NAME(currentDt.getDay()), slots=timetable[currentWd]||[];
- document.getElementById('collegeToday').innerHTML=`<div class="section-title">${currentDt.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'})} • ${currentWd} timetable</div>`+slots.map((s,i)=>`<button class="task" style="width:100%;text-align:left" onclick='openLecture(${JSON.stringify(s)})'><div class="check">🏫</div><div class="task-main"><div class="task-time">${esc(s[0])} – ${esc(s[1])}</div><div class="task-name">${esc(s[2])}</div><div class="task-meta"><span class="pill accent">${esc(s[3]||'All Div 12')}</span><span class="pill green">${esc(s[4])}</span></div></div><div class="task-actions"><span class="iconbtn">›</span></div></button>`).join('') || '<div class="info-card">No regular timetable entry today.</div>';
- document.getElementById('locations').innerHTML=campusLocations.map(x=>`<div class="info-card" style="margin-bottom:8px"><h3>${esc(x[0])} <span class="pill">${esc(x[1])}</span></h3><p>${esc(x[2])}<br>${esc(x[3])}</p></div>`).join('');
-}
-function openCalendar(){
- const seed=window.__selectedDate||new Date();let y=seed.getFullYear(),m=seed.getMonth();
- function draw(){
-   const first=new Date(y,m,1),last=new Date(y,m+1,0),start=(first.getDay()+6)%7;
-   let html=`<div class="modal-head"><div><div class="eyebrow">PLAN CALENDAR</div><h2>${first.toLocaleDateString([], {month:'long',year:'numeric'})}</h2><div class="tiny">Tap a day → Preview → edit that exact date</div></div><button class="close" onclick="closeModal()">×</button></div><div style="display:flex;justify-content:space-between;margin:14px 0"><button class="quickbtn" onclick="window.__calPrev()">‹ Previous</button><button class="quickbtn" onclick="window.__calToday()">Today</button><button class="quickbtn" onclick="window.__calNext()">Next ›</button></div><div class="calendar-mini">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="tiny" style="text-align:center">${x}</div>`).join('')}`;
-   for(let i=0;i<start;i++)html+='<div></div>';
-   for(let dayNo=1;dayNo<=last.getDate();dayNo++){let dt=new Date(y,m,dayNo),arr=tasksForDate(dt);html+=`<button class="${dt.toDateString()===new Date().toDateString()?'today':''}" onclick="previewDate(${y},${m},${dayNo})"><b>${dayNo}</b><div class="tiny">${arr.length?arr.length+' blocks':''}</div></button>`}
-   html+='</div><div id="calendarPreview" class="day-preview"></div>';document.getElementById('modal').innerHTML=html;
-   window.__calPrev=()=>{m--;if(m<0){m=11;y--;}draw()};window.__calNext=()=>{m++;if(m>11){m=0;y++;}draw()};window.__calToday=()=>{const n=new Date();y=n.getFullYear();m=n.getMonth();draw()};
- }
- draw();document.getElementById('modalBack').classList.add('show');
-}
-function previewDate(y,m,d){const dt=new Date(y,m,d),arr=tasksForDate(dt).slice().sort((a,b)=>minutes(a.s)-minutes(b.s));const box=document.getElementById('calendarPreview');box.innerHTML=`<div class="panel-head"><div><h3>${dt.toLocaleDateString([], {weekday:'long',day:'numeric',month:'long'})}</h3><div class="tiny">Full schedule • ${arr.length} blocks</div></div><button class="primary" onclick="editDayFromCalendar(${y},${m},${d})">Preview / Edit</button></div>`+(arr.length?arr.map(t=>`<div class="preview-item"><b>${esc(t.s)}–${esc(t.e)} • ${t.cat==='college'?'🏫 ':''}${esc(t.n)}</b><small>${esc(t.collegeData?.[4]||t.info||'')}</small></div>`).join(''):'<div class="info-card">No plan yet.</div>')}
-function editDayFromCalendar(y,m,d){window.__selectedDate=new Date(y,m,d);day=DAY_NAME(window.__selectedDate.getDay());closeModal();render();showView('today');showToast(`Editing ${selectedDateLabel()}`)}
-
-function moveExerciseToNextDay(){
- const today=todayTasks(),ex=today.find(t=>t.exercise===true);if(!ex)return 'I could not find today’s exercise block.';
- const base=new Date(window.__selectedDate||new Date());const next=new Date(base);next.setDate(base.getDate()+1);const nextArr=tasksForDate(next);const existing=nextArr.find(t=>t.exercise===true);
- const mins=bodyMinutes();if(existing){existing.done=false;existing.s='5:30 AM';existing.e=addMinutes(existing.s,mins);existing.info='Repeated because the previous day was missed. No catch-up workout.';}else nextArr.push({...ex,id:uid(),done:false,s:'5:30 AM',e:addMinutes('5:30 AM',mins),order:nextArr.length,info:'Repeated because the previous day was missed. No catch-up workout.'});
- ex.done=true;ex.info='Marked as rescheduled by RĀSI. Progress stays at the same level.';state.exerciseMissed=true;save();
- return `Rescheduled exercise to ${next.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'})} at 5:30 AM. I did not advance the progression.`;
-}
-function bodyMinutes(){return (bodyPlans[Math.min(9,(state.bodyDay||1)-1)]||bodyPlans[0]).mins}
-function createPushupPlan(){
- state.learningPlans=state.learningPlans||{};
- const days=['Wall push-ups + wrist/shoulder prep','Wall push-ups 2×8 + incline hold','High-incline push-ups 2×5','High-incline push-ups 3×5','Lower the incline + 3×4','Incline push-ups 3×6','Incline push-ups 3×8','Knee push-ups 2×4','Knee push-ups 3×5','Knee push-ups 3×6','Knee push-ups 3×8','Knee push-ups + slow negatives','Test 1–3 controlled real reps if ready','Technique + easy reps; repeat before progressing'];
- state.learningPlans.pushups={start:dateKey(window.__selectedDate||new Date()),step:0,days};
- for(let i=0;i<days.length;i++){const dt=new Date(window.__selectedDate||new Date());dt.setDate(dt.getDate()+i+1);const arr=tasksForDate(dt);if(!arr.some(t=>t.learning==='pushups'))arr.push({id:uid(),s:'5:30 AM',e:'5:45 AM',n:`Push-up training • Level ${i+1}`,cat:'health',info:days[i],done:false,order:arr.length,exercise:true,learning:'pushups',learningStep:i,locked:i>0});}
- save();render();
- return 'Push-up training is mapped from wall work toward controlled real reps. Each next level unlocks from completion of the current level — no rushing just because the calendar moved.';
-}
-function askForSkillProfile(skill){state.pendingSkill={skill,questions:['What is your current level?','What is your main goal?','How many minutes can you give it per day?','Do you have a target date or just want steady progress?'],answers:[]};return `Let’s build ${skill} around you. First: what is your current level (complete beginner / some basics / intermediate)?`}
-function skillAnswer(raw){if(!state.pendingSkill)return null;state.pendingSkill.answers.push(raw);const n=state.pendingSkill.answers.length,skill=state.pendingSkill.skill;if(n<state.pendingSkill.questions.length)return state.pendingSkill.questions[n];const mins=(state.pendingSkill.answers.join(' ').match(/\b(\d+)\s*(?:min|minutes|mins)\b/i)||[])[1]||30;state.learningPlans=state.learningPlans||{};state.learningPlans[skill]={minutes:Number(mins),answers:state.pendingSkill.answers,start:new Date().toISOString().slice(0,10),days:7};const planText=`${skill} is now a ${mins}-minute/day adaptive plan. I’ll keep sessions small, spaced and progressive, and adjust the next steps from your feedback.`;state.pendingSkill=null;save();return planText}
-function resetSection(section){
- if(section==='body'){state.bodyDay=1;state.exerciseMissed=false;state.customBodyPlan=null;state.learningPlans={...(state.learningPlans||{}),body:null};}
- if(section==='tasks'){state.dateTasks[dateKey(window.__selectedDate)]=[];}
- if(section==='skills'){state.learningPlans={};}
- save();render();return `I rebuilt ${section} from a clean slate. Tell me what you want added and I’ll place it around your fixed commitments.`;
-}
-function applyMonthInstruction(raw){
- const x=raw.toLowerCase();const months={january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11};let mi=null;for(const [name,num] of Object.entries(months))if(x.includes(name)){mi=num;break;}if(mi===null)return null;
- const cats=[['pinterest',['pinterest','pins','pin']],['coding',['coding','c']],['english',['english','speaking','vocabulary']],['study',['study','revision','notes']],['career',['career','creatorcollabs','marketing','content strategy']],['knowledge',['reading','knowledge']],['health',['exercise','workout','yoga','body']]];const hit=cats.find(([c,w])=>w.some(k=>x.includes(k)));if(!hit)return null;
- let changed=0;const year=(mi < new Date().getMonth() && /next|upcoming|future/.test(x))?new Date().getFullYear()+1:new Date().getFullYear();const last=new Date(year,mi+1,0).getDate();for(let d=1;d<=last;d++){const dt=new Date(year,mi,d);const arr=tasksForDate(dt);if(/remove|delete|drop|skip/.test(x)){const before=arr.length;state.dateTasks[dateKey(dt)]=arr.filter(t=>t.cat!==hit[0]);changed+=before-state.dateTasks[dateKey(dt)].length;} }
- save();return changed?`Done. I applied the ${hit[0]} change across ${Object.keys(months).find(k=>months[k]===mi)} ${year}: ${changed} scheduled blocks removed. College entries stayed intact.`:null;
-}
-
 function updateRasiMemory(raw){
  const text=String(raw||'').trim(); if(text.length<8)return;
  const useful=/\b(i want|i like|i love|i hate|i don't like|i dont like|i prefer|my goal|my plan|i am|i'm|i need|i struggle|i usually|i can|i can't|college|pg|creator|pinterest|coding|english|study|exercise|sleep|family|friend|career)\b/i.test(text);
@@ -669,6 +623,18 @@ function updateRasiMemory(raw){
 function rasiMemoryHint(raw){
  const x=String(raw||'').toLowerCase(), words=x.split(/\W+/).filter(w=>w.length>=5);
  return (state.rasiMemory||[]).find(m=>words.some(w=>m.toLowerCase().includes(w)))||'';
+}
+function rasiConversationReply(raw){
+ const x=String(raw||'').toLowerCase().trim(), mem=state.rasiMemory||[], recent=mem[0];
+ const pick=function(a){return a[Math.floor(Math.random()*a.length)]};
+ if(/^(good morning|good afternoon|good evening|good night|hi|hey|hii|hello|yo)\b/.test(x)) return pick(['Hiiii 😭💛 I am here. How is your day actually going?','Heyyy. RĀSI is awake. What are we dealing with today — college chaos, life chaos, or both?','Yo 😭 talk to me. What happened?']);
+ if(/\bhow are you\b|\bhow was your day\b/.test(x)) return 'Honestly, my day is basically whatever you bring me 😭. So give me the interesting part — how are YOU doing?';
+ if(/\bthank(s| you)\b/.test(x)) return pick(['Always. 🫶','Anytime. Now do not disappear on me after saying thank you 😭','Of course. That is literally what I am here for. ✨']);
+ if(/\bi (just|finally) (got|finished|did)\b|\bi did it\b|\bi finished\b/.test(x)) return pick(['AYEEE. 😭🔥 That counts. Tell me what you finished.','Okayyy, I see you. ✨ What did you manage to get done?','LET’S GO. One less thing living rent-free in your brain. 😭']);
+ if(/\bi feel |\bi'm feeling |\bi am feeling |\bi don't feel |\bi feel like/.test(x)) return pick(['Okay. You do not have to make that sound neat for me. Tell me the unfiltered version.','I am listening. No productivity lecture unless you ask for one. 🫂','Got you. Let us separate what you are feeling from what actually needs action. What happened?']);
+ if(/\bwhat do you think about me\b|\bwhat is your impression of me\b/.test(x)) return 'My current impression? You are ambitious, curious, and you care about doing things properly — but you can also pile ten things onto one day and then wonder why your brain is screaming 😭. That is an observation, not a diagnosis. And you can absolutely tell me I am wrong.';
+ if(/\bremember\b|\bdo you remember me\b/.test(x)) return recent?'Yeah. I keep a small amount of useful context on this phone. One thing I remember is: “'+recent+'” 💛':'I have not saved much useful context yet. Tell me things that matter to you and I will keep the useful bits locally.';
+ return null;
 }
 function rasiFriendReply(raw){
  const x=raw.toLowerCase().trim(),done=(todayTasks()||[]).filter(t=>t.done).length,total=(todayTasks()||[]).length;
@@ -703,7 +669,13 @@ function buddyCommand(){
    reply='Yeah. 💛 You do not have to turn everything into a task here. You can tell me about your day, vent, ask what I think, talk about college, friends, work, stress, or just say something random. I’ll remember useful context you share on this device and respond like a familiar second brain — honest when I disagree, but you still make the final call. So… what happened? 👀';
  } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
    reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life/college stuff, give an honest second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring schedule reshuffle.';
- } else if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
+ } else const conversation=rasiConversationReply(raw);
+ if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
+   reply='Yeah. 💛 You can talk to me about your day, college, friends, work, stress, random thoughts — whatever. You do NOT have to turn everything into a task. I will remember useful context you share on this phone and give you an honest second opinion when you want one. You still make the final call. So… what is going on? 👀';
+ } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
+   reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life and college, give you a second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring reshuffle.';
+ } else if(conversation){reply=conversation;}
+ else if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
  else if(/cute|pastel/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cute');reply='Cute mode. 🌸 Still organised. Still dangerous.';}
  else if(/cyber|neon/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cyber');reply='Cyber mode online. ⚡';}
  else if(/fun|funny|chaos/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('fun');reply='Fun mode. 😈 Your schedule has been given permission to have a personality.';}
