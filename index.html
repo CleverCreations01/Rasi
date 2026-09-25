@@ -687,7 +687,7 @@ function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.c
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v11.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v12.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
 </body>
