@@ -1,0 +1,25 @@
+name: Build RASI APK
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - '.github/workflows/build-rasi-apk.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build debug APK
+        working-directory: android
+        run: gradle assembleDebug --no-daemon
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: RASI-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
