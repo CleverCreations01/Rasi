@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://clevercreations01.github.io/Rasi/rasi-v15.html?rasiapp=1");
+        webView.loadUrl("https://clevercreations01.github.io/Rasi/?rasiapp=1");
     }
     @Override public void onBackPressed() {
         if (webView.canGoBack()) webView.goBack(); else super.onBackPressed();
