@@ -458,30 +458,18 @@ function taskEl(t,i,arr){
  return d;
 }
 function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}celebrate();state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render()}
-const WIN_LINES=[
-'Main character behavior. ✨','Okayyy, look at you actually doing it. 😭👏','Task got absolutely folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon loading…','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.'
-];
+const WIN_LINES=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded. Respectfully.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.','Bro actually did the task. 😭','The checklist got humbled.','We love to see it.','Okay productivity arc??','Certified W moment.','That was kinda iconic.','Future-you just said thanks.','Zero excuses, one W.','Character development detected.','That checkbox never stood a chance.','Lowkey ate that.','Mission cleared. 🎮','Main quest complete.'];
+let lastWin=-1;
 function celebrate(){
- const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast');
- const skin=state.skin||'midnight', line=WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)];
- toast.innerHTML='<b>✓ '+line+'</b><small>+XP • RĀSI saw that. 👀</small>';toast.classList.add('show');
- const count=skin==='sakura'?16:skin==='matcha'?12:8;
- for(let i=0;i<count;i++){
-   const isFlower=skin==='sakura' && i%5===0;
-   const p=document.createElement(isFlower?'span':(skin==='matcha'?'span':'i'));
-   p.className=isFlower?'flower-piece':(skin==='matcha'?'matcha-piece':'petal');
-   p.style.left=(38+Math.random()*24)+'%';
-   p.style.top=(42+Math.random()*8)+'%';
-   p.style.setProperty('--dx',((Math.random()-.5)*260)+'px');
-   p.style.setProperty('--dy',(90+Math.random()*260)+'px');
-   p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');
-   p.style.animationDelay=(Math.random()*.35)+'s';
-   if(isFlower)p.textContent=['🌸','🌺','✿'][i%3];
-   else if(skin==='matcha')p.textContent=['🍵','🍃','🌱'][i%3];
-   else if(skin!=='sakura')p.style.background=['#f3aabd','#c7d8c3','#d8b6e6','#f6cf8c'][i%4];
-   layer.appendChild(p);setTimeout(()=>p.remove(),3600);
- }
- setTimeout(()=>toast.classList.remove('show'),3000);
+ const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast'),skin=state.skin||'midnight';
+ let idx=Math.floor(Math.random()*WIN_LINES.length);if(idx===lastWin)idx=(idx+1)%WIN_LINES.length;lastWin=idx;
+ const subs={sakura:'+XP • sakura approval acquired 🌸',matcha:'+XP • matcha energy secured 🍵','anime-ds':'+XP • wisteria arc cleared ⚔️','anime-op':'+XP • grand line progress 🏴‍☠️',lavender:'+XP • soft productivity unlocked 🪻',minimal:'+XP • clean and done.',midnight:'+XP • RĀSI saw that. 👀'};
+ toast.innerHTML='<b>✓ '+WIN_LINES[idx]+'</b><small>'+(subs[skin]||subs.midnight)+'</small>';
+ toast.classList.remove('show');void toast.offsetWidth;toast.classList.add('show');layer.replaceChildren();
+ const sets={sakura:[34,['🌸','🌺','✿','🌷']],matcha:[28,['🍵','🍃','🌱','☘️']],'anime-ds':[28,['🌸','🌿','⚔️','✿']],'anime-op':[28,['☠️','⚓','🌊','☀️']],lavender:[24,['🪻','✦','💜','🌿']],minimal:[10,['✦','·','✧']],midnight:[18,['✦','✨','·']]};
+ const set=sets[skin]||sets.midnight;
+ for(let i=0;i<set[0];i++){const p=document.createElement('span');const petal=skin==='sakura'&&i%4!==0;p.className=petal?'petal':(skin==='matcha'?'matcha-piece':'flower-piece');p.textContent=petal?'':set[1][i%set[1].length];p.style.left=(35+Math.random()*30)+'%';p.style.top=(43+Math.random()*7)+'%';p.style.setProperty('--dx',((Math.random()-.5)*360)+'px');p.style.setProperty('--dy',(120+Math.random()*300)+'px');p.style.setProperty('--rot',((Math.random()-.5)*900)+'deg');p.style.animationDelay=(Math.random()*.12)+'s';layer.appendChild(p);}
+ setTimeout(()=>{toast.classList.remove('show');layer.replaceChildren()},3200);
 }
 function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
