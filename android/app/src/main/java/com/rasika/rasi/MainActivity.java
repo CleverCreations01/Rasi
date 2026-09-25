@@ -15,11 +15,12 @@ public class MainActivity extends Activity {
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
         s.setDatabaseEnabled(true);
         s.setAllowFileAccess(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://clevercreations01.github.io/Rasi/?rasiapp=1");
+        webView.loadUrl("https://clevercreations01.github.io/Rasi/rasi-v15.html?rasiapp=1");
     }
     @Override public void onBackPressed() {
         if (webView.canGoBack()) webView.goBack(); else super.onBackPressed();
