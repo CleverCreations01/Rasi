@@ -1,7 +1,7 @@
 {
   "name":"RĀSI — Rasika's Personal OS",
   "short_name":"RĀSI",
-  "start_url":"./",
+  "start_url":"./rasi.html",
   "scope":"./",
   "display":"standalone",
   "orientation":"portrait",
