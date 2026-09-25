@@ -96,7 +96,42 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 @keyframes petalFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
 @keyframes flowerFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
 </style>
-</head>
+<style id="rasi-app-polish-v10">
+/* RĀSI mobile = app UI, not tiny website */
+@media(max-width:600px){
+  html,body{min-height:100%;overflow-x:hidden}
+  .app{padding:52px 12px 104px!important}
+  .topbar{margin-bottom:12px!important}
+  .nav{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px!important;overflow:visible!important;padding:10px 0 9px!important}
+  .nav button{width:100%;min-height:46px;padding:10px 6px!important;font-size:13px!important;border-radius:15px!important}
+  .bottom{padding:10px 12px calc(10px + env(safe-area-inset-bottom))!important}
+  .bottom-inner{gap:9px!important}
+  .bottom button{min-height:48px!important;padding:12px 8px!important;font-size:13px!important;border-radius:17px!important}
+  .stats{gap:8px!important}
+  .stat{padding:9px 10px!important;font-size:12px!important}
+  .stat b{font-size:18px!important}
+  .task-name{font-size:16px!important}
+  .task-time{font-size:12px!important}
+  .pill{font-size:11px!important}
+}
+/* Sakura is a complete soft app skin — no dark cards */
+.skin-sakura .bottom{background:rgba(255,247,247,.96)!important;border-top:1px solid #efd8dc!important;box-shadow:0 -8px 28px rgba(150,91,104,.10)}
+.skin-sakura .bottom button{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .bottom button.primary,.skin-sakura .nav button.active{background:linear-gradient(135deg,#efb1c0,#cfe2ca)!important;color:#563e47!important}
+.skin-sakura .nav{background:rgba(255,247,245,.94)!important}
+.skin-sakura .nav button{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .task,.skin-sakura .slot-card,.skin-sakura .info-card,.skin-sakura .exercise,.skin-sakura .preview-item{background:rgba(255,252,251,.94)!important;border-color:#efdfe0!important}
+.skin-sakura .check{background:#fff7f8!important;border-color:#dfbdc5!important;color:#765c65!important}
+.skin-sakura .iconbtn{background:#fff5f6!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .pill{background:#f3e8ea!important;color:#765c65!important}
+.skin-sakura .college-toggle{background:#fffaf9!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .progress{background:#eadfe2!important}
+.skin-sakura .panel{background:rgba(255,252,251,.90)!important}
+.skin-sakura .modal{background:#fffaf9!important;border-color:#ead9dc!important;color:#5b4650!important}
+.skin-sakura .close{background:#f3e5e8!important;color:#765c65!important}
+.skin-sakura .quick button,.skin-sakura .quickbtn{background:#fff7f8!important;border-color:#ead9dc!important;color:#765c65!important}
+.skin-sakura .toast{background:#fffaf9!important;color:#5b4650!important}
+</style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -643,7 +678,7 @@ function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.c
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v9.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v10.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
 </body>
