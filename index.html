@@ -306,10 +306,13 @@ function tasksForDate(dt=new Date()){
  }
  return state.dateTasks[key];
 }
+function collegeEnabledForDate(dt=window.__selectedDate||new Date()){
+ return !state.collegeOffDates?.[dateKey(dt)];
+}
 function todayTasks(){
  const dt=window.__selectedDate||new Date();
  let arr=tasksForDate(dt);
- if(!state.collegeOn)arr=arr.filter(t=>t.cat!=='college');
+ if(!collegeEnabledForDate(dt))arr=arr.filter(t=>t.cat!=='college');
  return arr.sort((a,b)=>a.order-b.order);
 }
 function selectedDateLabel(){const dt=window.__selectedDate||new Date();return dt.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'});}
@@ -320,6 +323,7 @@ function ensureState(){
  if(oldSchema<5){state.schema=5;state.collegeOn=true;state.skin=state.skin||'midnight';}
  if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
  if(!state.reminders)state.reminders=[];
+ if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
  if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}];
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
@@ -347,7 +351,8 @@ function render(){
  document.getElementById('clock').textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
  document.getElementById('date').textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
  const selected=window.__selectedDate||new Date(), isToday=selected.toDateString()===new Date().toDateString();
- document.getElementById('dayLabel').textContent=(isToday?'TODAY':selected.toLocaleDateString([], {weekday:'short'}).toUpperCase())+' • '+(day==='Fri'?'WEEK CLOSE':'COMMAND CENTER');
+ const selectedWd=DAY_NAME(selected.getDay());
+ document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
  document.getElementById('scheduleTitle').textContent=isToday?"Today's plan":selected.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'})+' plan';
  document.getElementById('greeting').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', Rasika.';
  document.getElementById('mission').textContent=missions[DAYS.indexOf(day)]||missions[0];
@@ -355,7 +360,8 @@ function render(){
  const visible=todayTasks(), done=visible.filter(t=>t.done).length, total=visible.length, pct=total?Math.round(done/total*100):0;
  document.getElementById('doneCount').textContent=done; document.getElementById('xp').textContent=state.xp;
  document.getElementById('streak').textContent=state.streak; document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';
- document.getElementById('collegeToggle').classList.toggle('on',state.collegeOn);document.getElementById('collegeToggleText').textContent=state.collegeOn?'ON':'OFF';
+ const collegeOn=collegeEnabledForDate(selected);
+ document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
  renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();renderCollegeView();document.getElementById('buffer').textContent=calcBuffer(visible);
 }
 function calcBuffer(arr){let total=0;arr.forEach(t=>{if(t.cat==='buffer')total+=Math.max(0,minutes(t.e)-minutes(t.s));});return total>=60?`${Math.floor(total/60)}h ${total%60?total%60+'m':''}`.trim():total+'m';}
@@ -374,7 +380,12 @@ function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)
 function celebrate(){for(let i=0;i<20;i++){let p=document.createElement('i');p.className='piece';p.style.left=Math.random()*100+'%';p.style.top='-20px';p.style.background=['#9b7cff','#6ee7b7','#ffd166','#ff7aa2'][i%4];p.style.animationDelay=Math.random()*.25+'s';document.getElementById('confetti').appendChild(p);setTimeout(()=>p.remove(),1400)}showToast('✓ Win logged. Keep going.')}
 function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
-function toggleCollege(){state.collegeOn=!state.collegeOn;save();render()}
+function toggleCollege(){
+ const k=dateKey(window.__selectedDate||new Date());
+ state.collegeOffDates=state.collegeOffDates||{};
+ if(state.collegeOffDates[k])delete state.collegeOffDates[k];else state.collegeOffDates[k]=true;
+ save();render();showToast(collegeEnabledForDate()?'College blocks restored for this date.':'College hidden for this date only.');
+}
 function openTask(id){const t=todayTasks().find(x=>x.id===id);if(!t)return;if(t.cat==='college'){return openLecture(t.collegeData||[t.s,t.e,t.n,'',t.info]);}showModal(`<div class="modal-head"><div><div class="eyebrow">${esc(t.cat)}</div><h2>${esc(t.n)}</h2><div class="tiny">${esc(t.s)} – ${esc(t.e)}</div></div><button class="close" onclick="closeModal()">×</button></div><div class="info-card" style="margin-top:15px"><h3>Why this block exists</h3><p>${esc(t.info||'Keep the task small, concrete and finishable.')}</p></div><div class="quick" style="margin-top:10px"><button onclick="completeTask('${t.id}');closeModal()">✓ Mark complete</button><button onclick="closeModal();openAddTask('${t.id}')">✎ Edit</button><button onclick="moveTask('${t.id}',-1);closeModal()">↑ Earlier</button><button onclick="moveTask('${t.id}',1);closeModal()">↓ Later</button><button onclick="deleteTask('${t.id}')">🗑 Delete</button></div>`)}
 function openLecture(s){showModal(`<div class="modal-head"><div><div class="eyebrow">${esc(s[0])} – ${esc(s[1])}</div><h2>${esc(s[2])}</h2><div class="tiny">Faculty / group: ${esc(s[3]||'Not specified')}</div></div><button class="close" onclick="closeModal()">×</button></div><div class="info-card" style="margin-top:15px"><h3>📍 Where</h3><p>${esc(s[4])}</p></div><div class="tip" style="margin-top:10px"><b>Micro-prep:</b> Before class, write one question you want answered. After class, capture 3 recall bullets instead of rewriting everything.</div>`)}
 function openAddTask(editId=null){
@@ -382,7 +393,13 @@ function openAddTask(editId=null){
  showModal(`<div class="modal-head"><div><div class="eyebrow">FLEXIBLE TASK</div><h2>${t?'Edit task':'Add task'}</h2></div><button class="close" onclick="closeModal()">×</button></div>
  <div class="form" style="margin-top:15px"><input id="fName" placeholder="Task name" value="${t?esc(t.n):''}"><div class="form-row"><input id="fStart" placeholder="Start e.g. 6:30 PM" value="${t?esc(t.s):''}"><input id="fEnd" placeholder="End e.g. 7:00 PM" value="${t?esc(t.e):''}"></div><select id="fCat"><option>study</option><option>coding</option><option>pinterest</option><option>english</option><option>career</option><option>health</option><option>life</option><option>buffer</option></select><textarea id="fInfo" placeholder="Why / instructions">${t?esc(t.info||''):''}</textarea><button class="primary" onclick="saveTask('${editId||''}')">Save task</button></div>`);
 }
-function saveTask(id){let n=document.getElementById('fName').value.trim(),s=document.getElementById('fStart').value.trim(),e=document.getElementById('fEnd').value.trim(),cat=document.getElementById('fCat').value,info=document.getElementById('fInfo').value.trim();if(!n||!s||!e){showToast('Add a task name and time');return}let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RĀSI updated this date')}function renderBrief(){
+function saveTask(id){
+ let n=document.getElementById('fName').value.trim(),s=document.getElementById('fStart').value.trim(),e=document.getElementById('fEnd').value.trim(),cat=document.getElementById('fCat').value,info=document.getElementById('fInfo').value.trim();
+ if(!n||!s||!e){showToast('Add a task name and time');return}
+ s=s.replace(/\s+/g,' ').toUpperCase();e=e.replace(/\s+/g,' ').toUpperCase();
+ const sm=minutes(s),em=minutes(e);
+ if(!Number.isFinite(sm)||!Number.isFinite(em)||em<=sm){showToast('Use valid times, e.g. 6:30 PM → 7:00 PM');return}
+ let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RĀSI updated this date')}function renderBrief(){
  const idx=Math.max(0,(state.bodyDay||1)-1);const dayNum=Math.min(10,idx+1);
  const plans=[
   ['Day 1','5–10 min gentle mobility + 2–3 beginner poses. Your only job is to show up.','C: variables + input/output.','Pinterest: one easy maintenance pin.'],
@@ -519,11 +536,32 @@ function buddyCommand(){
  state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';save();render();showToast('RĀSI updated your plan');
 }
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
-function replanToday(){let a=todayTasks()||[];let flex=a.filter(t=>['career','knowledge','english','pinterest','coding','study'].includes(t.cat));flex.sort((x,y)=>minutes(x.s)-minutes(y.s));return `Rebalance complete. 🎯 College stays fixed, buffers stay protected, and flexible blocks stay in sensible time order. If life throws a chair at the schedule, tell me what changed and I’ll rebuild around it.`}
+function replanToday(){
+ let arr=todayTasks()||[];
+ const fixed=arr.filter(t=>t.cat==='college'||t.cat==='health'||t.cat==='buffer'||t.locked);
+ const movable=arr.filter(t=>!fixed.includes(t)).sort((a,b)=>minutes(a.s)-minutes(b.s));
+ const occupied=fixed.map(t=>[minutes(t.s),minutes(t.e)]).sort((a,b)=>a[0]-b[0]);
+ function fits(st,en){return !occupied.some(([a,b])=>st<b&&en>a)}
+ let cursor=16*60+45, moved=0;
+ for(const t of movable){
+   const dur=Math.max(15,minutes(t.e)-minutes(t.s));
+   let st=minutes(t.s);
+   if(!Number.isFinite(st)||!fits(st,st+dur)||st<cursor)st=cursor;
+   while(!fits(st,st+dur)&&st<22*60){st+=5}
+   if(st+dur<=22*60){t.s=toTime(st);t.e=toTime(st+dur);moved++}
+   cursor=Math.max(cursor,st+dur);
+   occupied.push([st,st+dur]);occupied.sort((a,b)=>a[0]-b[0]);
+ }
+ arr.forEach((t,i)=>t.order=i);save();render();
+ return moved?'Replanned '+moved+' flexible block'+(moved===1?'':'s')+' around your fixed commitments. College, health and protected buffers stayed in place.':'Your current plan already fits its protected blocks. Nothing needed moving.';
+}
+function toTime(total){
+ total=((total%1440)+1440)%1440;const h=Math.floor(total/60),m=total%60,ap=h>=12?'PM':'AM',hh=h%12||12;return hh+':'+String(m).padStart(2,'0')+' '+ap;
+}
 function replanWeek(){DAYS.forEach(d=>{if(!state.tasks[d])return;let a=state.tasks[d];a.forEach((t,i)=>t.order=i)});save();render();showToast('Week rebalanced around fixed blocks')}
 function renderInsights(){let all=Object.values(state.tasks).flat(),done=all.filter(t=>t.done).length;document.getElementById('insights').innerHTML=`<div class="two"><div class="info-card"><h3>XP</h3><div class="xp">${state.xp}</div><p>+10 per completed planned task.</p></div><div class="info-card"><h3>Completed</h3><div class="xp">${done}</div><p>Across saved days.</p></div></div><div class="tip" style="margin-top:10px"><b>Anti-all-or-nothing rule:</b> If you miss a day, the next day stays at its planned level. You don't “owe” punishment workouts or double study blocks.</div>`;document.getElementById('collegeTips').innerHTML=['Keep one small social plan each week.','Save assignment deadlines immediately in Important Vault.','After each practical, capture 3 steps + 1 mistake + 1 question.','Use commute/waiting time for vocabulary or audio, not deep coding.','Do not sacrifice sleep to rescue an overloaded plan.'].map((x,i)=>`<div class="info-card" style="margin-bottom:8px"><h3>${i+1}. ${x}</h3></div>`).join('')}
 function quickWin(name){state.xp+=5;save();celebrate();showToast(name+' +5 XP')}
-function backupData(){const payload={app:'RĀSI',version:5,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`riva-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
+function backupData(){const payload={app:'RĀSI',version:6,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rasi-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
 function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const payload=JSON.parse(r.result);if(!payload.state)throw new Error('Invalid backup');state=payload.state;ensureState();render();showToast('Backup restored. Welcome back. ✦')}catch(err){showToast('That backup file is not valid.')}};r.readAsText(file);e.target.value=''}
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}
