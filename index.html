@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<title>RĀSI — Rasika's Personal OS</title>
+<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v15-friend-chat">
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{
@@ -584,7 +584,17 @@ function saveReminder(){let title=document.getElementById('rTitle').value.trim()
 function deleteReminder(id){state.reminders=state.reminders.filter(r=>String(r.id)!==String(id));save();render()}
 function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebrow">IDENTITY</div><h2>Rename your buddy</h2><div class="tiny">The name is cosmetic and can be changed anytime.</div></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="buddyName" maxlength="24" value="${esc(state.appName||DEFAULT_APP_NAME)}" placeholder="e.g. RĀSI"><button class="primary" onclick="saveBuddyName()">Save name</button></div>`)}
 function saveBuddyName(){const n=document.getElementById('buddyName').value.trim().replace(/\s+/g,' ');if(!n){showToast('Give me a name first 😌');return}state.appName=n;state.chat.push({who:'nova',text:`New name locked in: ${n}. Same brain, better branding. ✦`});save();closeModal();render();showToast('Name changed ✦')}
-function renderChat(){const name=state.appName||DEFAULT_APP_NAME;document.getElementById('chat').innerHTML=state.chat.map(m=>`<div class="buddy-msg ${m.who==='you'?'you':''}"><b>${m.who==='you'?'You':esc(name)}</b><br>${esc(m.text)}</div>`).join('')}
+function renderChat(){
+ const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ if(!state.chatOpen){
+   const last=chat[chat.length-1]?.text||'I’m here whenever you want to talk.';
+   document.getElementById('chat').innerHTML=`<div class="chat-closed"><div><b>💬 ${esc(name)} chat</b><small>${esc(last.slice(0,110))}${last.length>110?'…':''}</small><small class="chat-memory-note">Your recent useful context is remembered on this device.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>`;
+   return;
+ }
+ const recent=chat.slice(-12);
+ document.getElementById('chat').innerHTML=`<div class="chat-head"><div><b>💬 ${esc(name)}</b><small>${memory.length?memory.length+' useful memory notes saved locally':'I’ll learn from what you tell me'}</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">${recent.map(m=>`<div class="buddy-msg ${m.who==='you'?'you':'rasi'}"><span class="chat-who">${m.who==='you'?'You':esc(name)}</span>${esc(m.text)}</div>`).join('')}</div>`;
+}
+function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
 
 const campusLocations=[
  ['CR 51','Lecture room','4th Floor','Your Div 12 lecture classroom.'],
@@ -647,6 +657,19 @@ function applyMonthInstruction(raw){
  save();return changed?`Done. I applied the ${hit[0]} change across ${Object.keys(months).find(k=>months[k]===mi)} ${year}: ${changed} scheduled blocks removed. College entries stayed intact.`:null;
 }
 
+function updateRasiMemory(raw){
+ const text=String(raw||'').trim(); if(text.length<8)return;
+ const useful=/\b(i want|i like|i love|i hate|i don't like|i dont like|i prefer|my goal|my plan|i am|i'm|i need|i struggle|i usually|i can|i can't|college|pg|creator|pinterest|coding|english|study|exercise|sleep|family|friend|career)\b/i.test(text);
+ if(!useful)return;
+ state.rasiMemory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ state.rasiMemory=state.rasiMemory.filter(x=>x.toLowerCase()!==text.toLowerCase());
+ state.rasiMemory.unshift(text);
+ state.rasiMemory=state.rasiMemory.slice(0,20);
+}
+function rasiMemoryHint(raw){
+ const x=String(raw||'').toLowerCase(), words=x.split(/\W+/).filter(w=>w.length>=5);
+ return (state.rasiMemory||[]).find(m=>words.some(w=>m.toLowerCase().includes(w)))||'';
+}
 function rasiFriendReply(raw){
  const x=raw.toLowerCase().trim(),done=(todayTasks()||[]).filter(t=>t.done).length,total=(todayTasks()||[]).length;
  const next=(todayTasks()||[]).filter(t=>t.cat!=='college'&&!t.done)[0];
@@ -676,7 +699,11 @@ function rasiFriendReply(raw){
 function buddyCommand(){
  const raw=document.getElementById('buddyInput').value.trim(); if(!raw)return;
  state.chat.push({who:'you',text:raw}); updateRasiMemory(raw); const x=raw.toLowerCase(); let reply='';
- if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
+ if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
+   reply='Yeah. 💛 You do not have to turn everything into a task here. You can tell me about your day, vent, ask what I think, talk about college, friends, work, stress, or just say something random. I’ll remember useful context you share on this device and respond like a familiar second brain — honest when I disagree, but you still make the final call. So… what happened? 👀';
+ } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
+   reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life/college stuff, give an honest second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring schedule reshuffle.';
+ } else if(state.pendingSkill && !/cancel|stop|reset/.test(x)){reply=skillAnswer(raw)||'';}
  else if(/cute|pastel/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cute');reply='Cute mode. 🌸 Still organised. Still dangerous.';}
  else if(/cyber|neon/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('cyber');reply='Cyber mode online. ⚡';}
  else if(/fun|funny|chaos/.test(x) && /(theme|skin|look|style|make)/.test(x)){setSkin('fun');reply='Fun mode. 😈 Your schedule has been given permission to have a personality.';}
