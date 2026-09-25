@@ -616,6 +616,32 @@ function applyMonthInstruction(raw){
  save();return changed?`Done. I applied the ${hit[0]} change across ${Object.keys(months).find(k=>months[k]===mi)} ${year}: ${changed} scheduled blocks removed. College entries stayed intact.`:null;
 }
 
+function rasiFriendReply(raw){
+ const x=raw.toLowerCase().trim(),done=(todayTasks()||[]).filter(t=>t.done).length,total=(todayTasks()||[]).length;
+ const next=(todayTasks()||[]).filter(t=>t.cat!=='college'&&!t.done)[0];
+ const pick=a=>a[Math.floor(Math.random()*a.length)];
+ if(/^(hi|hey|hello|hii|yo|sup|good morning|good night|good evening)\b/.test(x))
+   return pick(["Heyyy Rasika. ✨ I'm here. What's going on?","Hii. RĀSI reporting for duty 😭 What are we dealing with today?","Yo. Give me the situation — college chaos, life chaos, or both? 😭"]);
+ if(/vent|rant|bad day|rough day|awful day|hate today|fed up|frustrated|overwhelmed|stressed|stress|anxious|anxiety|burnt out|burnout|exhausted|drained|crying|sad|lonely|guilty|guilt|demotivated|no motivation/.test(x))
+   return pick(["Okay. No fixing mode for a second. 🫂 You can just tell me what happened. I'll listen first, then we can figure out what actually needs fixing.","That sounds like a lot to carry at once. Don't turn one rough day into a verdict about yourself. Tell me the messiest part; we'll separate the real problem from the guilt.","Pause. Breathe. You do not need to solve your entire life tonight. 😭 Tell me what happened and I'll give you my honest take — you still make the final call."]);
+ if(/(should i|what do you think|your opinion|do you think|would you|is it better|which should|help me decide|can't decide|confused about|confused)/.test(x))
+   return "My take: "+pick(["I'd look at what gives you the biggest useful result without wrecking your energy.","I'd avoid making the decision from panic or guilt; compare the actual trade-offs first.","I'd choose the option that keeps future-you's choices open while still being realistic today."])+" I can give you a proper pros/cons view if you tell me the two options. I'm an AI, so treat my opinion as a second brain — not the final decision.";
+ if(/college|class|lecture|professor|assignment|exam|attendance|notes|roommate|pg|hostel|friends|club|society/.test(x))
+   return pick(["College brain unlocked 😭. What exactly happened? Give me the context and I'll help you think it through — practical answer, not textbook nonsense.","Okay, college situation. Tell me the people + deadline + what you actually want. I'll help you work out the least-chaotic move.","Ah, the college cinematic universe. 😭 What's the problem? We can break it into what matters now, what can wait, and what you're overthinking."]);
+ if(/study|studying|revision|syllabus|backlog|marks|grades|exam prep|jee|test/.test(x))
+   return "Real talk: "+pick(["you do not need a perfect study day to make progress.","a smaller focused block is usually more useful than staring at a huge backlog and panicking.","backlog feels enormous when it stays undefined, so I'd turn it into the next concrete 30–60 minutes."])+" "+(next?"Right now your next planned block is "+next.n+".":"If you tell me what is pending, I can help you choose the next move.")+" And yes, you can disagree with me. 😭";
+ if(/friend|friendship|crush|relationship|family|parents|argument|fight|someone/.test(x))
+   return "Okay, human-drama department is open. 😭 Tell me what happened and what outcome you actually want. I'll give you my honest perspective without pretending I know the other person's intentions.";
+ if(/sleep|sleeping|can't sleep|wake up|5 am|tired/.test(x))
+   return "Honestly? Your energy matters more than winning a productivity contest. If you're running on fumes, I'd rather protect sleep and make tomorrow workable than squeeze in one more fake-productive hour. Tell me what time you need to wake up and what is genuinely non-negotiable.";
+ if(/productive|productivity|procrastinat|lazy|scrolling|instagram|phone addiction/.test(x))
+   return "My take: don't label yourself lazy from one behaviour. 😭 Make the next action stupidly small: phone away, one task, 15–25 minutes, then reassess. If you tell me what you're avoiding, I'll help you make it less painful.";
+ if(/what do you know about me|know about me|describe me|my personality|who am i/.test(x))
+   return "From what you've taught me here, you're ambitious, curious, creative, a little chaotic when too many goals collide, and you care a LOT about doing things properly. 😭 My job isn't to flatter you though — if I think you're overloading yourself, I'll say so, and you can tell me I'm wrong.";
+ if(/how am i doing|am i doing enough|am i behind|behind in life|behind everyone/.test(x))
+   return "I wouldn't measure your whole life from one week. You currently have "+done+" completed task"+(done===1?"":"s")+" out of "+total+" shown today, but that number is not a score for your worth. If you want an honest assessment, tell me what you're comparing yourself against and I'll separate facts from the pressure you're putting on yourself.";
+ return pick(["I'm listening. 👀 Tell me what's actually on your mind — it doesn't have to be a schedule problem.","Okay, talk to me like a friend. 😭 What happened, what are you thinking about, and what do you want help with?","Not everything needs to become a task. You can literally just talk to me. Give me the context and I'll respond like a second brain, not a corporate productivity bot.","I can give you an opinion, help you think through a decision, listen to a rant, explain something, or help you plan it. What's up?"]);
+}
 function buddyCommand(){
  const raw=document.getElementById('buddyInput').value.trim(); if(!raw)return;
  state.chat.push({who:'you',text:raw}); const x=raw.toLowerCase(); let reply='';
@@ -646,7 +672,7 @@ function buddyCommand(){
  else if(/month|january|february|march|april|may|june|july|august|september|october|november|december/.test(x) && /(change|rebuild|plan|schedule|remove|delete|drop|skip)/.test(x)){reply=applyMonthInstruction(raw)||'I saved the month-level instruction. Give me the month plus the exact change (for example, “remove Pinterest from October”) and I will apply it across that month.';}
  else if(/replan|rearrange|reorganize|fix today/.test(x)){reply=replanToday();}
  else if(/what.*today|what.*do|plan my day/.test(x)){const next=todayTasks().filter(t=>t.cat!=='college'&&!t.done)[0];reply=next?`Your next block is ${next.n} (${next.s}–${next.e}). If something changed, tell me what changed and I’ll replan around it.`:'Your planned flexible blocks are complete. Use the remaining time for college life or rest.';}
- else {reply='Tell me the outcome you want, not just a button to press. I can change tasks, times, sections, exercise progression, skill plans, week/month rules and reminders inside this app.';}
+ else {reply=rasiFriendReply(raw);}
  state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';save();render();showToast('RĀSI updated your plan');
 }
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
