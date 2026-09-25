@@ -50,9 +50,10 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:90}.piece{position:absolute;width:7px;height:13px;border-radius:2px;animation:fall 1.1s ease-out forwards}@keyframes fall{from{transform:translateY(-20px) rotate(0)}to{transform:translateY(100vh) rotate(720deg);opacity:0}}
 @media(max-width:800px){.grid{grid-template-columns:1fr}.hero-row{align-items:flex-start;flex-direction:column}.progress-wrap{width:100%}.two{grid-template-columns:1fr}.greeting{font-size:27px}}
 @media(max-width:600px){
- .app{padding:6px 8px 88px}.topbar{gap:6px;margin-bottom:7px}.brand{gap:7px}.logo{width:38px;height:38px;border-radius:12px;font-size:19px}.eyebrow{font-size:8px}.title{font-size:18px}.sub{font-size:10px}.clock{font-size:15px}.date{font-size:9px}
- .hero{padding:13px;border-radius:20px}.greeting{font-size:22px}.mission{font-size:11px}.stats{margin-top:9px}.stat{padding:6px 8px;font-size:9px}.stat b{font-size:14px}.progress-wrap{min-width:0}
- .nav{gap:5px;padding:9px 0 5px}.nav button{padding:8px 11px;font-size:11px;border-radius:12px}.panel{padding:13px;border-radius:19px}.panel h2{font-size:16px}.task{padding:9px;border-radius:16px;gap:8px}.task-name{font-size:13px}.task-time{font-size:10px}.check{width:24px;height:24px}.task-meta{margin-top:5px}.pill{font-size:9px;padding:3px 6px}.college-toggle{padding:10px 11px;font-size:12px}.bottom{padding:7px 9px calc(7px + env(safe-area-inset-bottom))}.bottom button{padding:10px 8px;font-size:10px}
+ .app{padding:calc(30px + env(safe-area-inset-top)) 10px calc(96px + env(safe-area-inset-bottom));}
+ .topbar{gap:8px;margin-bottom:10px}.brand{gap:9px}.logo{width:44px;height:44px;border-radius:14px;font-size:23px}.eyebrow{font-size:10px}.title{font-size:21px}.sub{font-size:12px}.clock{font-size:19px}.date{font-size:10px}
+ .hero{padding:16px;border-radius:22px}.greeting{font-size:28px}.mission{font-size:13px}.stats{margin-top:11px}.stat{padding:8px 10px;font-size:11px}.stat b{font-size:16px}.progress-wrap{min-width:0}
+ .nav{gap:6px;padding:10px 0 7px}.nav button{padding:10px 13px;font-size:12px;border-radius:13px}.panel{padding:16px;border-radius:20px}.panel h2{font-size:18px}.task{padding:11px;border-radius:18px;gap:10px}.task-name{font-size:14px}.task-time{font-size:11px}.check{width:27px;height:27px}.task-meta{margin-top:6px}.pill{font-size:10px;padding:4px 7px}.college-toggle{padding:12px 13px;font-size:13px}.bottom{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}.bottom button{padding:11px 9px;font-size:11px}
 }
 
 .quickbtn{padding:10px 12px;border-radius:13px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:900}.style-row{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.style-row button{padding:8px 10px;border-radius:12px;background:#171f35;border:1px solid var(--line);font-size:11px;font-weight:850}.day-preview{margin-top:12px}.calendar-mini{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.calendar-mini button{min-height:55px;border-radius:12px;background:#11182a;border:1px solid var(--line);font-weight:850}.calendar-mini button.today{background:rgba(155,124,255,.22);border-color:#9b7cff}.preview-item{padding:10px 11px;border:1px solid #252e47;background:#11182a;border-radius:13px;margin:7px 0}.preview-item b{font-size:12px}.preview-item small{display:block;color:var(--muted);margin-top:3px}/* RĀSI skins: full visual worlds */
@@ -89,16 +90,18 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .skin-minimal{--bg:#f7f7f4;--panel:#ffffff;--panel2:#f0f0ec;--text:#252525;--muted:#747474;--line:#deded8;--accent:#222;--accent2:#777;--gold:#9a8050;--shadow:0 10px 28px rgba(0,0,0,.06)}
 .skin-minimal body{background:#f7f7f4}.skin-minimal .hero{background:#fff;border-color:#deded8}.skin-minimal .panel,.skin-minimal .task,.skin-minimal .slot-card,.skin-minimal .info-card,.skin-minimal .exercise,.skin-minimal .preview-item{background:#fff;border-color:#e2e2dd;box-shadow:none}.skin-minimal .nav{background:#f7f7f4e8}.skin-minimal .nav button,.skin-minimal .bottom button,.skin-minimal .quick button,.skin-minimal .quickbtn,.skin-minimal .iconbtn,.skin-minimal .modebar button,.skin-minimal .college-toggle{background:#fff;border-color:#ddd;color:#333}.skin-minimal .logo{background:#222;color:#fff;box-shadow:none}.skin-minimal .primary,.skin-minimal .nav button.active,.skin-minimal .bottom button.primary,.skin-minimal .modebar button.active{background:#222;color:#fff}.skin-minimal .bar{background:#222}
 
-.complete-toast{position:fixed;top:18px;left:50%;transform:translate(-50%,-170px) scale(.92);z-index:120;background:rgba(255,255,255,.96);color:#3f3440;border:1px solid rgba(0,0,0,.08);border-radius:20px;padding:12px 18px;text-align:center;font-size:13px;font-weight:950;box-shadow:0 18px 50px rgba(0,0,0,.18);transition:transform .28s ease,opacity .28s ease;opacity:0;max-width:88%}
-.complete-toast.show{transform:translate(-50%,0) scale(1);opacity:1}.complete-toast b{display:block;font-size:15px}.complete-toast small{display:block;margin-top:3px;opacity:.72;font-weight:750}
-.petals-layer{position:fixed;inset:0;pointer-events:none;z-index:115;overflow:hidden}.petal{position:absolute;top:-30px;width:12px;height:18px;border-radius:70% 30% 70% 30%;background:#f3aabd;box-shadow:0 2px 6px #a44a6a33;animation:petalFall 2.8s ease-out forwards}.matcha-piece{position:absolute;top:-30px;font-size:24px;animation:petalFall 2.8s ease-out forwards}@keyframes petalFall{to{transform:translate3d(var(--dx),110vh,0) rotate(520deg);opacity:0}}
+.complete-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-42%) scale(.82);z-index:120;background:rgba(255,251,250,.97);color:#4c3a43;border:1px solid rgba(180,120,135,.20);border-radius:24px;padding:18px 24px;text-align:center;font-size:14px;font-weight:950;box-shadow:0 22px 70px rgba(80,45,60,.24);transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s ease;opacity:0;max-width:82%;min-width:210px;backdrop-filter:blur(12px)}
+.complete-toast.show{transform:translate(-50%,-50%) scale(1);opacity:1}.complete-toast b{display:block;font-size:17px;line-height:1.18}.complete-toast small{display:block;margin-top:6px;opacity:.72;font-weight:800}
+.petals-layer{position:fixed;inset:0;pointer-events:none;z-index:115;overflow:hidden}.petal{position:absolute;top:42%;left:50%;width:11px;height:17px;border-radius:70% 30% 70% 30%;background:#f3aabd;box-shadow:0 2px 6px #a44a6a22;animation:petalFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.flower-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.matcha-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}
+@keyframes petalFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
+@keyframes flowerFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
 </style>
 </head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
 <header class="topbar">
- <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, without the boring parts. ✦</div></div></div>
+ <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, but make it ✨actually yours✨.</div></div></div>
  <div style="display:flex;align-items:center;gap:8px"><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
 </header>
 
@@ -196,7 +199,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 
 <section id="view-buddy" class="view">
  <div class="grid">
-  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Adaptive personal command center • works offline</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
+  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Your slightly chaotic life, organised. No corporate vibes.</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
    <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('sakura')">🌸 Sakura</button><button onclick="setSkin('matcha')">🍵 Matcha</button><button onclick="setSkin('lavender')">🪻 Lavender</button><button onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button onclick="setSkin('anime-op')">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal')">◻ Minimal</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
    <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RĀSI can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
    <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RĀSI naturally. Examples:
@@ -426,19 +429,24 @@ const WIN_LINES=[
 function celebrate(){
  const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast');
  const skin=state.skin||'midnight', line=WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)];
- toast.innerHTML='<b>✓ '+line+'</b><small>+XP • keep the streak alive</small>';toast.classList.add('show');
- for(let i=0;i<28;i++){
-   const p=document.createElement(skin==='matcha'?'span':'i');
-   p.className=skin==='matcha'?'matcha-piece':'petal';
-   p.style.left=(5+Math.random()*90)+'%';
-   p.style.setProperty('--dx',((Math.random()-.5)*180)+'px');
-   p.style.animationDelay=(Math.random()*.45)+'s';
-   if(skin==='matcha')p.textContent=['🍵','🍃','✨'][i%3];
-   else if(skin!=='sakura'){p.style.background=['#f3aabd','#c7d8c3','#d8b6e6','#f6cf8c'][i%4];}
-   layer.appendChild(p);setTimeout(()=>p.remove(),3400);
+ toast.innerHTML='<b>✓ '+line+'</b><small>+XP • RĀSI saw that. 👀</small>';toast.classList.add('show');
+ const count=skin==='sakura'?16:skin==='matcha'?12:8;
+ for(let i=0;i<count;i++){
+   const isFlower=skin==='sakura' && i%5===0;
+   const p=document.createElement(isFlower?'span':(skin==='matcha'?'span':'i'));
+   p.className=isFlower?'flower-piece':(skin==='matcha'?'matcha-piece':'petal');
+   p.style.left=(38+Math.random()*24)+'%';
+   p.style.top=(42+Math.random()*8)+'%';
+   p.style.setProperty('--dx',((Math.random()-.5)*260)+'px');
+   p.style.setProperty('--dy',(90+Math.random()*260)+'px');
+   p.style.setProperty('--rot',((Math.random()-.5)*720)+'deg');
+   p.style.animationDelay=(Math.random()*.35)+'s';
+   if(isFlower)p.textContent=['🌸','🌺','✿'][i%3];
+   else if(skin==='matcha')p.textContent=['🍵','🍃','🌱'][i%3];
+   else if(skin!=='sakura')p.style.background=['#f3aabd','#c7d8c3','#d8b6e6','#f6cf8c'][i%4];
+   layer.appendChild(p);setTimeout(()=>p.remove(),3600);
  }
- setTimeout(()=>toast.classList.remove('show'),2800);
- showToast('✓ Win logged. '+line);
+ setTimeout(()=>toast.classList.remove('show'),3000);
 }
 function deleteTask(id){const arr=todayTasks();const t=arr.find(x=>x.id===id);if(!t)return;if(!confirm(`Delete “${t.n}”?`))return;state.dateTasks[dateKey(window.__selectedDate||new Date())]=arr.filter(x=>x.id!==id);save();closeModal();render();showToast('Deleted. One less thing haunting you. 👻')}
 function moveTask(id,dir){let a=todayTasks().sort((x,y)=>x.order-y.order),i=a.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=a.length)return;[a[i].order,a[j].order]=[a[j].order,a[i].order];save();render()}
