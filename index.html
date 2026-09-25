@@ -665,11 +665,7 @@ function rasiFriendReply(raw){
 function buddyCommand(){
  const raw=document.getElementById('buddyInput').value.trim(); if(!raw)return;
  state.chat.push({who:'you',text:raw}); updateRasiMemory(raw); const x=raw.toLowerCase(); let reply='';
- if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
-   reply='Yeah. 💛 You do not have to turn everything into a task here. You can tell me about your day, vent, ask what I think, talk about college, friends, work, stress, or just say something random. I’ll remember useful context you share on this device and respond like a familiar second brain — honest when I disagree, but you still make the final call. So… what happened? 👀';
- } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
-   reply='A lot, actually 😭. I can talk with you, remember useful context locally, help you think through life/college stuff, give an honest second opinion, and change your RĀSI plan — tasks, times, reminders, study/skill plans, exercise progression and themes. You tell me what changed; I handle the boring schedule reshuffle.';
- } else const conversation=rasiConversationReply(raw);
+ const conversation=rasiConversationReply(raw);
  if(/^(can you )?(talk|chat|speak) (to )?me (as|like) a friend\b|\bcan you be my friend\b|\btalk to me like a friend\b/i.test(x)){
    reply='Yeah. 💛 You can talk to me about your day, college, friends, work, stress, random thoughts — whatever. You do NOT have to turn everything into a task. I will remember useful context you share on this phone and give you an honest second opinion when you want one. You still make the final call. So… what is going on? 👀';
  } else if(/^(what can you do|what do you do|how can you help)\??$/i.test(x)){
