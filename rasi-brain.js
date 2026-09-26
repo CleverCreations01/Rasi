@@ -9,7 +9,7 @@
   const MAX_CONTEXT_MESSAGES = 16;
   const EMOJIS = ["✨","👀","😭","😂","🫶","💀","🤨","😌","🔥","🌱","🧠","🙃"];
 
-  const safeState = () => window.state || {};
+  const safeState = () => (window.RASI_RUNTIME && window.RASI_RUNTIME.getState) ? window.RASI_RUNTIME.getState() : {};
   const pick = (arr) => arr[Math.floor(Math.random()*arr.length)];
   const norm = s => String(s||"").trim();
   const lower = s => norm(s).toLowerCase();
@@ -66,7 +66,12 @@
   }
 
   function saveRender(){
-    try{ if(typeof save==="function") save(); if(typeof render==="function") render(); }catch(e){}
+    try{
+      if(window.RASI_RUNTIME?.save) window.RASI_RUNTIME.save();
+      else if(typeof save==="function") save();
+      if(window.RASI_RUNTIME?.render) window.RASI_RUNTIME.render();
+      else if(typeof render==="function") render();
+    }catch(e){}
   }
 
   function pushReply(reply){
