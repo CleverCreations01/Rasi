@@ -217,7 +217,8 @@
     const actionLike=/^(add|schedule|plan|move|shift|reschedule|remove|delete|change|rebuild|replace|skip|cancel|replan|rearrange|lighten)\b/.test(x) ||
       /\b(move|add|remove|delete|reschedule|replan)\b.*\b(today|tomorrow|coding|study|pinterest|english|exercise|workout|task|schedule)\b/.test(x);
     if(actionLike && typeof window.rasiLegacyBuddyCommand==="function"){
-      // Restore the input temporarily because the legacy handler reads it.
+      // The legacy handler owns action execution and also records the user message.
+      s.chat.pop();
       input.value=raw;
       window.rasiLegacyBuddyCommand();
       return;
