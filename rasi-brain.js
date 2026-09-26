@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v1";
+  const VERSION = "brain-v2";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -54,13 +54,15 @@
     const brain=ensureBrain();
     const ts=taskSummary();
     return {
-      assistantName:s.buddyName||"RĀSI",
+      assistantName:s.buddyName||s.appName||"RĀSI",
       date:typeof day!=="undefined"?day:"",
       selectedDate:typeof window.__selectedDate!=="undefined"?window.__selectedDate:null,
       tasks:ts,
-      memories:(s.rasiMemory||[]).slice(0,12),
+      memories:(s.rasiMemory||[]).slice(0,16),
       brainProfile:brain.profile||{},
       pending:brain.pending||null,
+      skin:s.skin||"midnight",
+      body:{day:s.bodyDay||1,mode:s.bodyMode||"normal"},
       recentChat:(s.chat||[]).slice(-MAX_CONTEXT_MESSAGES).map(m=>({who:m.who,text:m.text}))
     };
   }
@@ -84,12 +86,23 @@
   }
 
   function rememberUser(raw){
-    const x=lower(raw);
-    // Keep useful facts, not every message.
-    if(/\b(i (am|work|study|live|want|need|prefer|like|hate|love|usually|always|never))\b/.test(x) ||
-       /\b(my (goal|routine|college|school|job|work|schedule|preference|project|plan))\b/.test(x)){
-      remember(raw,"user-fact");
-    }
+    const s=safeState(), x=lower(raw);
+    const useful=/\b(i (am|work|study|live|want|need|prefer|like|hate|love|usually|always|never|can|can't|cannot))\b/.test(x) ||
+      /\b(my (goal|routine|college|school|job|work|schedule|preference|project|plan|name|friend|family))\b/.test(x);
+    if(!useful)return;
+    remember(raw,"user-fact");
+    const brain=ensureBrain(), p=brain.profile;
+    const groups=[
+      ["preferences",/\b(i prefer|i like|i love|i hate|i don't like|i dont like)\b/],
+      ["goals",/\b(my goal|i want to|i wanna|i need to)\b/],
+      ["constraints",/\b(i can't|i cannot|i dont have|i don't have|only have|can't afford)\b/],
+      ["routine",/\b(i usually|i always|my routine|my schedule|i wake|i sleep)\b/],
+      ["context",/\b(college|pg|hostel|family|friend|work|project)\b/]
+    ];
+    groups.forEach(([key,re])=>{
+      if(re.test(x)){p[key]=Array.isArray(p[key])?p[key]:[];p[key]=[raw,...p[key].filter(v=>v!==raw)].slice(0,8);}
+    });
+    p.lastUserMessage=raw;
   }
 
   function setPending(mode,missing){
