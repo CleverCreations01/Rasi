@@ -316,6 +316,16 @@ button,a,[role="button"],input,textarea{touch-action:manipulation;-webkit-tap-hi
  .clock-date .date{font-size:9px}
  .settings-top-btn{white-space:nowrap}
 }
+</style><style id="rasi-v18-topbar-final">
+.top-tools{display:flex!important;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
+.time-box{width:68px;flex:0 0 68px;text-align:right;min-width:0}
+.time-box .clock{display:block;white-space:nowrap;font-size:19px;line-height:1.1}
+.time-box .date{display:block;white-space:nowrap;font-size:10px;line-height:1.2}
+@media(max-width:600px){
+ .time-box{width:62px;flex-basis:62px}
+ .time-box .clock{font-size:16px}
+ .time-box .date{font-size:9px}
+}
 </style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
