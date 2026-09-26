@@ -274,13 +274,31 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
   .chat-composer textarea{min-height:46px}
   .chat-composer .chat-send{padding:0 12px}
 }
+</style><style id="rasi-v18-core-fix">
+.top-tools{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
+.time-box{width:66px;flex:0 0 66px;text-align:right;overflow:visible}
+.time-box .clock{white-space:nowrap;font-size:18px;line-height:1.1}
+.time-box .date{white-space:nowrap;font-size:10px;line-height:1.25}
+@media(max-width:600px){
+  .app{padding-top:calc(18px + env(safe-area-inset-top))}
+  .topbar{align-items:center}
+  .brand{min-width:0;flex:1}
+  .brand>div:last-child{min-width:0}
+  .brand .sub{white-space:normal}
+  .top-tools{gap:6px}
+  .top-tools .install-btn{display:none!important}
+  .settings-top-btn{white-space:nowrap;padding:9px 10px}
+  .time-box{width:62px;flex-basis:62px}
+  .time-box .clock{font-size:17px}
+  .time-box .date{font-size:9px}
+}
 </style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
 <header class="topbar">
  <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, but make it ✨actually yours✨.</div></div></div>
- <div style="display:flex;align-items:center;gap:8px"><button class="settings-top-btn" onclick="openRasiSettings()">⚙ Settings</button><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
+ <div class="top-tools"><button class="settings-top-btn" onclick="openRasiSettings()">⚙ Settings</button><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div class="time-box"><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
 </header>
 
 <section class="hero">
@@ -544,9 +562,12 @@ function dateKey(dt=new Date()){return `${dt.getFullYear()}-${String(dt.getMonth
 function tasksForDate(dt=new Date()){
  const key=dateKey(dt),wd=DAY_NAME(dt.getDay());
  state.dateTasks=state.dateTasks||{};
- if(!Array.isArray(state.dateTasks[key])){
-   const source=(state.tasks[wd]||buildDayTasks(wd)).map(t=>({...t,id:uid(),done:false,order:t.order}));
+ state.dateTasksInitialized=state.dateTasksInitialized||{};
+ if(!Array.isArray(state.dateTasks[key]) || (state.dateTasks[key].length===0 && !state.dateTasksInitialized[key])){
+   const template=Array.isArray(state.tasks[wd])&&state.tasks[wd].length ? state.tasks[wd] : buildDayTasks(wd);
+   const source=template.map(t=>({...t,id:uid(),done:false,order:t.order}));
    state.dateTasks[key]=source;
+   state.dateTasksInitialized[key]=true;
    save();
  }
  return state.dateTasks[key];
@@ -566,10 +587,10 @@ function ensureState(){
  if(!state||typeof state!=='object')state=defaultState();
  const oldSchema=Number(state.schema||0);
  if(oldSchema<5){state.schema=5;state.collegeOn=true;state.skin=state.skin||'midnight';}
- if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
+ if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};if(!state.dateTasksInitialized||typeof state.dateTasksInitialized!=='object')state.dateTasksInitialized={};
  if(!state.reminders)state.reminders=[];
  if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
- if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(state.chatUiVersion!==17){state.chatOpen=false;state.chatUiVersion=17;}
+ if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(state.chatUiVersion!==18){state.chatUiVersion=18;}
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
@@ -856,7 +877,7 @@ function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.c
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v17.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v18.js?v=1').catch(()=>{}));
 ensureState();render();
 window.RASI_RUNTIME={
   getState:()=>state,
