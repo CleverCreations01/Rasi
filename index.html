@@ -292,6 +292,30 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
   .time-box .clock{font-size:17px}
   .time-box .date{font-size:9px}
 }
+</style><style id="rasi-v18-stability">
+/* v18 stability: readable header, reliable taps, no nested scroll traps */
+.topbar{min-width:0}
+.topbar .brand{min-width:0;flex:1 1 auto}
+.topbar .brand>div:last-child{min-width:0}
+.topbar-actions{display:flex!important;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
+.clock-date{width:68px;flex:0 0 68px;text-align:right}
+.clock-date .clock,.clock-date .date{display:block;white-space:nowrap;overflow:visible}
+button,a,[role="button"],input,textarea{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.nav{position:relative!important;top:auto!important;z-index:10!important;touch-action:pan-x}
+.nav button{pointer-events:auto!important}
+.bottom,.bottom-inner,.bottom button{pointer-events:auto!important}
+.view,.panel,.hero{position:relative}
+.rasi-settings-backdrop{pointer-events:none}
+.rasi-settings-backdrop.show{pointer-events:auto}
+@media(max-width:600px){
+ .app{padding-left:10px;padding-right:10px}
+ .topbar{align-items:center}
+ .topbar .sub{white-space:normal}
+ .clock-date{width:60px;flex-basis:60px}
+ .clock-date .clock{font-size:16px}
+ .clock-date .date{font-size:9px}
+ .settings-top-btn{white-space:nowrap}
+}
 </style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
@@ -688,16 +712,24 @@ function saveTask(id){
  const sm=minutes(s),em=minutes(e);
  if(!Number.isFinite(sm)||!Number.isFinite(em)||em<=sm){showToast('Use valid times, e.g. 6:30 PM → 7:00 PM');return}
  let arr=todayTasks();if(id){Object.assign(arr.find(x=>x.id===id)||{}, {n,s:s.toUpperCase(),e:e.toUpperCase(),cat,info})}else arr.push({id:uid(),s:s.toUpperCase(),e:e.toUpperCase(),n,cat,info,done:false,order:arr.length});arr.sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);save();closeModal();render();showToast('Saved — RĀSI updated this date')}function renderBrief(){
- const idx=Math.max(0,(state.bodyDay||1)-1);const dayNum=Math.min(10,idx+1);
- const plans=[
-  ['Day 1','5–10 min gentle mobility + 2–3 beginner poses. Your only job is to show up.','C: variables + input/output.','Pinterest: one easy maintenance pin.'],
-  ['Day 2','Warm-up + 3–4 easy poses + short breathing.','C: if/else + 3 tiny problems.','English: 60-second spoken summary.'],
-  ['Day 3','Add a little walking/indoor march; keep yoga easy.','C: loops + trace code on paper.','Content strategy: analyse one CBI hook.'],
-  ['Day 4','Mobility + 4–5 comfortable poses, no forcing range.','C: nested loops + pattern problem.','Agency: one focused brand/creator pipeline action.'],
-  ['Day 5','Gentle full-body flow + longer quiet sit.','C: functions + one mini program.','Weekly proof: save your best work from the week.']
- ];
- const p=plans[idx]||plans[0];
- document.getElementById('todayBrief').innerHTML=`<div class="info-card"><h3>🧘 ${p[0]} body mission</h3><p>${p[1]}</p></div><div class="info-card" style="margin-top:8px"><h3>💻 Learn</h3><p>${p[2]}</p></div><div class="info-card" style="margin-top:8px"><h3>📌 Career / audience</h3><p>${p[3]}</p></div><div class="tip" style="margin-top:8px"><b>Today's thought:</b> ${missions[idx]||missions[0]}</div>`;
+ const host=document.getElementById('todayBrief'); if(!host)return;
+ const n=Math.min(10,Math.max(1,Number(state.bodyDay)||1));
+ const p=[
+  ['5–10 min gentle mobility + 2–3 beginner poses.','C: variables + input/output.','Pinterest: one easy maintenance pin.'],
+  ['Warm-up + 3–4 easy poses + short breathing.','C: if/else + 3 tiny problems.','English: 60-second spoken summary.'],
+  ['Add a little walking/indoor march; keep yoga easy.','C: loops + trace code on paper.','Content strategy: analyse one CBI hook.'],
+  ['Mobility + 4–5 comfortable poses, no forcing range.','C: nested loops + pattern problem.','Agency: one focused brand/creator pipeline action.'],
+  ['Gentle full-body flow + longer quiet sit.','C: functions + one mini program.','Weekly proof: save your best work from the week.'],
+  ['Mobility + gentle progression based on completion.','C: arrays + small practice set.','CreatorCollabsIndia: one pipeline action.'],
+  ['Recovery-friendly movement + breathing.','C: revise the week’s weakest concept.','Pinterest: improve one existing concept.'],
+  ['Repeat or progress only if the previous level felt comfortable.','C: functions/arrays practice.','English: one 2-minute spoken answer.'],
+  ['Light mobility + optional comfortable walk.','C: debugging practice.','Content strategy: analyse one retention moment.'],
+  ['Easy review + recovery. No “earning” rest.','C: mini review project.','Weekly proof: save what you learned.']
+ ][n-1];
+ host.innerHTML='<div class="info-card"><h3>🧘 Day '+n+' body mission</h3><p>'+esc(p[0])+'</p></div>'+
+  '<div class="info-card" style="margin-top:8px"><h3>💻 Learn</h3><p>'+esc(p[1])+'</p></div>'+
+  '<div class="info-card" style="margin-top:8px"><h3>📌 Career / audience</h3><p>'+esc(p[2])+'</p></div>'+
+  '<div class="tip" style="margin-top:8px"><b>Today’s thought:</b> '+esc(missions[(n-1)%missions.length])+'</div>';
 }
 function renderWeek(){
  const box=document.getElementById('weekMap');box.innerHTML='';
