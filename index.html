@@ -587,14 +587,15 @@ function tasksForDate(dt=new Date()){
  const key=dateKey(dt),wd=DAY_NAME(dt.getDay());
  state.dateTasks=state.dateTasks||{};
  state.dateTasksInitialized=state.dateTasksInitialized||{};
- if(!Array.isArray(state.dateTasks[key]) || (state.dateTasks[key].length===0 && !state.dateTasksInitialized[key])){
+ const existing=state.dateTasks[key];
+ const weekend=(wd==='Sat'||wd==='Sun');
+ if(!Array.isArray(existing) || (!state.dateTasksInitialized[key]) || (weekend && existing.length===0)){
    const template=Array.isArray(state.tasks[wd])&&state.tasks[wd].length ? state.tasks[wd] : buildDayTasks(wd);
-   const source=template.map(t=>({...t,id:uid(),done:false,order:t.order}));
-   state.dateTasks[key]=source;
+   state.dateTasks[key]=(template||[]).map(t=>({...t,id:uid(),done:false,order:typeof t.order==='number'?t.order:0}));
    state.dateTasksInitialized[key]=true;
    save();
  }
- return state.dateTasks[key];
+ return Array.isArray(state.dateTasks[key])?state.dateTasks[key]:[];
 }
 function collegeEnabledForDate(dt=window.__selectedDate||new Date()){
  return !state.collegeOffDates?.[dateKey(dt)];
