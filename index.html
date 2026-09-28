@@ -95,7 +95,7 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .petals-layer{position:fixed;inset:0;pointer-events:none;z-index:115;overflow:hidden}.petal{position:absolute;top:42%;left:50%;width:11px;height:17px;border-radius:70% 30% 70% 30%;background:#f3aabd;box-shadow:0 2px 6px #a44a6a22;animation:petalFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.flower-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}.matcha-piece{position:absolute;top:43%;left:50%;font-size:22px;animation:flowerFall 3.2s cubic-bezier(.2,.65,.35,1) forwards}
 @keyframes petalFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
 @keyframes flowerFall{to{transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot));opacity:0}}
-</style>
+.rasi-settings-styles{margin-top:0}.settings-wide{width:100%;text-align:left;margin-bottom:4px}</style>
 <style id="rasi-app-polish-v10">
 /* RĀSI mobile = app UI, not tiny website */
 @media(max-width:600px){
@@ -191,12 +191,71 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 @keyframes petalFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot))}}
 @keyframes flowerFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.92)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot)) scale(1.02)}}
 @media(max-width:600px){.chat-closed{padding:13px}.chat-open-btn{padding:9px 10px}.chat-thread{max-height:360px}.buddy-msg{font-size:14px;line-height:1.48}.style-row button{font-size:12px;padding:9px 11px}}
+</style><style id="rasi-presentation-v1">
+/* Presentation pass: visual-only. Planner/data logic is intentionally untouched. */
+.rasi-mark{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;padding:0;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.rasi-mark svg{width:32px;height:32px;fill:none;stroke:var(--text);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.rasi-mark-detail{stroke:var(--accent2);stroke-width:3}
+.rasi-mark:active{transform:scale(.96)}
+.rasi-chat-page{max-width:780px;margin:0 auto}
+.rasi-chat-panel{padding:12px!important}
+.rasi-chat-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 4px 12px}
+.rasi-chat-title{display:flex;align-items:center;gap:10px}
+.rasi-chat-title h2{font-size:20px;letter-spacing:-.02em}
+.rasi-avatar{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-weight:950;background:linear-gradient(145deg,var(--accent),var(--accent2));color:var(--bg);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.rasi-more{width:38px;height:38px;border-radius:13px;background:var(--panel2);border:1px solid var(--line);font-size:22px;line-height:1;color:var(--text)}
+.rasi-composer{display:flex;align-items:flex-end;gap:7px;margin-top:8px;padding:8px;border:1px solid var(--line);border-radius:20px;background:var(--panel2);box-shadow:0 10px 26px rgba(0,0,0,.10)}
+.rasi-composer textarea{flex:1;min-height:42px!important;max-height:120px;padding:10px 8px!important;border:0!important;background:transparent!important;color:var(--text)!important;resize:none!important;outline:none!important;font-size:14px;line-height:1.4}
+.rasi-composer textarea::placeholder{color:var(--muted);opacity:.9}
+.composer-plus,.composer-send{width:40px;height:40px;flex:0 0 40px;border-radius:13px;border:1px solid var(--line);display:grid;place-items:center;font-weight:950}
+.composer-plus{background:var(--panel);color:var(--text);font-size:20px}
+.composer-send{background:var(--accent);color:var(--bg);font-size:21px}
+.composer-send:active,.composer-plus:active{transform:scale(.94)}
+.rasi-about{margin-top:18px;border-top:1px solid var(--line);padding-top:4px}
+.rasi-about summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;padding:13px 4px;font-weight:900;color:var(--text)}
+.rasi-about summary::-webkit-details-marker{display:none}
+.rasi-about summary:after{content:"⌄";opacity:.65}
+.rasi-about summary span{margin-left:auto;font-size:10px;color:var(--muted);font-weight:700}
+.rasi-about-body{padding:0 4px 8px;color:var(--muted);font-size:12px;line-height:1.5}
+.rasi-about-body p{margin-bottom:10px;color:var(--text)}
+.rasi-about-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rasi-about-grid>div{padding:11px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.rasi-about-grid b{display:block;font-size:12px;color:var(--text);margin-bottom:3px}
+.rasi-about-grid small{display:block;color:var(--muted);line-height:1.4}
+.rasi-chat-panel .chat-closed{margin:2px 0 4px;padding:16px;border-radius:20px;background:linear-gradient(145deg,var(--panel2),var(--panel))}
+.rasi-chat-panel .chat-closed small{display:none}
+.rasi-chat-panel .chat-closed b{font-size:14px}
+.rasi-chat-panel .chat-open-btn{padding:10px 13px;border-radius:13px}
+.rasi-chat-panel .chat-head{padding:2px 2px 9px}
+.rasi-chat-panel .chat-thread{max-height:52vh;min-height:260px;overflow-y:auto;overscroll-behavior:contain;padding:6px 3px 12px;scroll-behavior:auto}
+.rasi-chat-panel .buddy-msg{font-size:14px;line-height:1.55;padding:13px 14px;border-radius:18px;max-width:88%;box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.rasi-chat-panel .buddy-msg.rasi{justify-self:start;border-top-left-radius:7px}
+.rasi-chat-panel .buddy-msg.you{justify-self:end;margin-left:0!important;border-top-right-radius:7px}
+.rasi-chat-panel .chat-who{font-size:9px;letter-spacing:.1em;margin-bottom:5px}
+@media(max-width:600px){
+ .rasi-mark{width:44px;height:44px;border-radius:14px}
+ .rasi-mark svg{width:29px;height:29px}
+ .rasi-chat-panel{padding:10px!important}
+ .rasi-chat-title h2{font-size:19px}
+ .rasi-chat-panel .chat-thread{min-height:240px;max-height:58vh}
+ .rasi-chat-panel .buddy-msg{max-width:92%;font-size:14px}
+ .rasi-about-grid{grid-template-columns:1fr}
+ .rasi-about summary span{display:none}
+}
+/* Midnight must keep the chat visible and readable. */
+body:not([class*="skin-"]) .rasi-chat-panel,
+.skin-midnight .rasi-chat-panel{display:block!important;visibility:visible!important;opacity:1!important}
+.skin-midnight .rasi-chat-panel .chat-thread,
+.skin-midnight .rasi-chat-panel .chat-closed,
+.skin-midnight .rasi-chat-panel .rasi-composer{background:#11182a!important;color:#f6f7fb!important}
+.skin-midnight .rasi-chat-panel .buddy-msg.rasi{background:#19152a!important;border-color:#3b3157!important}
+.skin-midnight .rasi-chat-panel .buddy-msg.you{background:#112820!important;border-color:#29493e!important}
 </style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
 <header class="topbar">
- <div class="brand"><div class="logo">R</div><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, but make it ✨actually yours✨.</div></div></div>
+ <div class="brand"><button class="rasi-mark" aria-label="Open RĀSI settings" onclick="openRasiSettings()"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 36V11h14c8 0 12 4 12 9s-4 9-12 9H10m12-9 15 16"/><path d="M36 7v6m-3-3h6" class="rasi-mark-detail"/></svg></button><div><div class="eyebrow">RASIKA'S PERSONAL OS</div><div class="title" id="appNameLabel">RĀSI</div><div class="sub">Your day, but make it ✨actually yours✨.</div></div></div>
  <div style="display:flex;align-items:center;gap:8px"><button id="installBtn" class="install-btn" onclick="installApp()">＋ Install</button><div><div class="clock" id="clock">--:--</div><div class="date" id="date">---</div></div></div>
 </header>
 
@@ -293,19 +352,34 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 </section>
 
 <section id="view-buddy" class="view">
- <div class="grid">
-  <div class="panel"><div class="panel-head"><div><h2 id="buddyTitle">RĀSI planner</h2><div class="tiny">Your slightly chaotic life, organised. No corporate vibes.</div></div><span class="badge" id="coreBadge">RĀSI CORE</span></div><div id="chat"></div>
-   <div class="style-row"><button onclick="setSkin('midnight')">🌌 Midnight</button><button onclick="setSkin('sakura')">🌸 Sakura</button><button onclick="setSkin('matcha')">🍵 Matcha</button><button onclick="setSkin('lavender')">🪻 Lavender</button><button onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button onclick="setSkin('anime-op')">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal')">◻ Minimal</button></div><div class="style-row"><button onclick="renameBuddy()">✦ Rename my buddy</button></div><div class="style-row"><button onclick="backupData()">⬇ Backup data</button><button onclick="document.getElementById('restoreFile').click()">⬆ Restore data</button><input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)"></div>
-   <div class="info-card" style="margin:10px 0"><h3>Fast changes</h3><p>RĀSI can safely change your plan, sections, themes, XP rules and learning progressions. Code-level feature changes stay separate so your data cannot accidentally wreck the app.</p></div>
-   <div class="form" style="margin-top:10px"><textarea id="buddyInput" placeholder="Tell RĀSI naturally. Examples:
-I missed exercise today
-I want to learn pushups
-I want to learn Japanese and only have 15 min
-Remove everything from Body and rebuild it
-Change my whole October schedule
-Move coding to 7 pm"></textarea><button class="primary" onclick="buddyCommand()">Send to RĀSI ✦</button></div>
+ <div class="rasi-chat-page">
+  <div class="panel rasi-chat-panel">
+   <div class="rasi-chat-top">
+    <div class="rasi-chat-title">
+      <div class="rasi-avatar">R</div>
+      <div><h2 id="buddyTitle">RĀSI</h2><div class="tiny">private little corner • say literally anything</div></div>
+    </div>
+    <button class="rasi-more" aria-label="RĀSI settings" onclick="openRasiSettings()">⋯</button>
+   </div>
+   <div id="chat"></div>
+   <div class="rasi-composer">
+    <button class="composer-plus" aria-label="RĀSI options" onclick="openRasiSettings()">＋</button>
+    <textarea id="buddyInput" rows="1" autocomplete="off" spellcheck="true" placeholder="Say whatever. RĀSI's listening."></textarea>
+    <button class="composer-send" aria-label="Send to RĀSI" onclick="buddyCommand()">↑</button>
+   </div>
+   <details class="rasi-about">
+    <summary>About RĀSI <span>what this little menace can actually do</span></summary>
+    <div class="rasi-about-body">
+      <p>RĀSI is your personal AI companion — part second brain, part planner, part chaos translator.</p>
+      <div class="rasi-about-grid">
+       <div><b>Talk</b><small>Normal conversation, opinions, rants, jokes and random thoughts.</small></div>
+       <div><b>Think</b><small>Help you choose, learn, understand and work through messy situations.</small></div>
+       <div><b>Act</b><small>Change your tasks and plans only when you actually ask.</small></div>
+       <div><b>Remember</b><small>Keep useful context locally so every conversation doesn't start from zero.</small></div>
+      </div>
+    </div>
+   </details>
   </div>
-  <div class="panel"><h2>RĀSI can adapt</h2><div class="tiny" style="margin:5px 0 12px">You control your plan. RĀSI can edit its schedule, sections and learning plans.</div><div class="info-card"><ul><li>Tasks, times, order and whole sections can be rebuilt.</li><li>Exercise can pause, repeat, progress or reschedule.</li><li>Skills can become day-by-day learning plans after a few questions.</li><li>Week/month changes are applied around your fixed college commitments unless you explicitly change them.</li><li>Safety guardrails stay on: no medical diagnosis or risky training progression.</li></ul></div></div>
  </div>
 </section>
 
@@ -602,13 +676,15 @@ function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebr
 function saveBuddyName(){const n=document.getElementById('buddyName').value.trim().replace(/\s+/g,' ');if(!n){showToast('Give me a name first 😌');return}state.appName=n;state.chat.push({who:'nova',text:`New name locked in: ${n}. Same brain, better branding. ✦`});save();closeModal();render();showToast('Name changed ✦')}
 function renderChat(){
  const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ const box=document.getElementById('chat');
  if(!state.chatOpen){
-   const last=chat.length?chat[chat.length-1].text:'I’m here whenever you want to talk.';
-   document.getElementById('chat').innerHTML='<div class="chat-closed"><div><b>💬 '+esc(name)+'</b><small>'+esc(last.slice(0,110))+(last.length>110?'…':'')+'</small><small class="chat-memory-note">I remember useful context locally, so you do not have to repeat yourself.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
+   box.innerHTML='<div class="chat-closed"><div><b>🔒 Private chat</b><small>Your messages stay tucked away until you open this.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
    return;
  }
  const recent=chat.slice(-14);
- document.getElementById('chat').innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' personal context notes saved on this phone':'I am learning from what you tell me')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
+ box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful context notes saved locally':'Private on this phone')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
+ const thread=box.querySelector('.chat-thread');
+ if(thread) requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
 }
 function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
 function updateRasiMemory(raw){
@@ -699,7 +775,7 @@ function buddyCommand(){
  else if(/replan|rearrange|reorganize|fix today/.test(x)){reply=replanToday();}
  else if(/what.*today|what.*do|plan my day/.test(x)){const next=todayTasks().filter(t=>t.cat!=='college'&&!t.done)[0];reply=next?`Your next block is ${next.n} (${next.s}–${next.e}). If something changed, tell me what changed and I’ll replan around it.`:'Your planned flexible blocks are complete. Use the remaining time for college life or rest.';}
  else {const mh=rasiMemoryHint(raw); reply=rasiFriendReply(raw); if(mh && /what do you remember|remember|you know about me|my preference|my goal/.test(x)) reply='I remember this from you: “'+mh+'” ✦ I keep a small set of useful personal context on this device so I can make future replies less generic.';}
- state.chat.push({who:'nova',text:reply});document.getElementById('buddyInput').value='';state.chatOpen=true;save();render();showToast('RĀSI is here ✦');
+ state.chat.push({who:'nova',text:reply});const composer=document.getElementById('buddyInput');if(composer)composer.value='';state.chatOpen=true;save();render();requestAnimationFrame(()=>{const input=document.getElementById('buddyInput');if(input){input.value='';input.focus();}});showToast('RĀSI is here ✦');
 }
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
 function replanToday(){
@@ -732,6 +808,23 @@ function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=n
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function openRasiSettings(){
+ const s=state||{};
+ showModal(`
+  <div class="modal-head"><div><div class="eyebrow">RĀSI SETTINGS</div><h2 style="margin-top:5px">Make it yours.</h2><div class="tiny" style="margin-top:5px">Style, identity and data tools live here — not in your chat.</div></div><button class="close" onclick="closeModal()">×</button></div>
+  <div class="section-title">Style</div>
+  <div class="style-row rasi-settings-styles">
+   <button onclick="setSkin('midnight');closeModal()">🌌 Midnight</button><button onclick="setSkin('sakura');closeModal()">🌸 Sakura</button><button onclick="setSkin('matcha');closeModal()">🍵 Matcha</button><button onclick="setSkin('lavender');closeModal()">🪻 Lavender</button><button onclick="setSkin('anime-ds');closeModal()">⚔️ Anime: DS</button><button onclick="setSkin('anime-op');closeModal()">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal');closeModal()">◻ Minimal</button>
+  </div>
+  <div class="section-title">Identity</div>
+  <button class="quickbtn settings-wide" onclick="closeModal();renameBuddy()">✦ Rename RĀSI</button>
+  <div class="section-title">Your data</div>
+  <div class="two"><button class="quickbtn" onclick="backupData()">↓ Backup data</button><button class="quickbtn" onclick="document.getElementById('restoreFile').click()">↑ Restore data</button></div>
+  <input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)">
+  <div class="section-title">About this build</div>
+  <div class="info-card"><p style="color:var(--muted);font-size:12px;line-height:1.55">Everyday schedule and chat data stays on this device. Code and AI infrastructure are separate from your personal data.</p></div>
+ `);
+}
 function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modalBack').classList.add('show')}
 function closeModal(e){if(!e||e.target.id==='modalBack')document.getElementById('modalBack').classList.remove('show')}
 function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
@@ -750,6 +843,6 @@ async function installApp(){if(!deferredInstall){showToast('Use browser menu →
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
-<script src="./rasi-brain.js?v=4.2"></script>
+<script src="./rasi-brain.js?v=5.0"></script>
 </body>
 </html>
