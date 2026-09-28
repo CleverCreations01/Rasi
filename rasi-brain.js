@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v4";
+  const VERSION = "brain-v4.1";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -276,7 +276,7 @@
     }
 
     if(/\b(free|open|make|give me|leave me)\b.*\b(slot|time|space)\b/.test(x) && /\bchess\b/.test(x) && /\btoday\b/.test(x)){
-      const today=new Date();today.setHours(12,0,0,0),k=dateKey(today),arr=tasksForDate(today);
+      const today=new Date();today.setHours(12,0,0,0); const k=dateKey(today), arr=tasksForDate(today);
       if(arr.some(t=>/\bchess\b/i.test(t.n||"")))return "You already have a Chess practice block today.";
       const buffer=arr.find(t=>t.cat==="buffer"&&!t.done);
       if(buffer){
@@ -319,6 +319,7 @@
     return null;
   }
   async function brainCommand(){
+    try{
     const input=document.getElementById("buddyInput");
     const raw=norm(input?.value);
     if(!raw) return;
@@ -345,6 +346,14 @@
     if(!reply) reply=await remoteReply(raw);
     if(!reply) reply=variedFriendReply(x);
     pushReply(reply);
+    }catch(err){
+      console.error("RASI brain error",err);
+      const input=document.getElementById("buddyInput");
+      if(input) input.value=raw||input.value||"";
+      const s=safeState();
+      if(s.chat && s.chat[s.chat.length-1]?.who==="you") s.chat.pop();
+      pushReply("I hit a small brain error instead of sending that. Your schedule was not changed. Try sending it again.");
+    }
   }
 
   // Replace only the chat brain; the existing planner/action functions remain intact.
