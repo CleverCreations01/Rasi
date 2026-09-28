@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v5.0";
+  const VERSION = "brain-v5.1";
   const CONFIG = window.RASI_CONFIG || {aiEndpoint:(localStorage.getItem("rasiAiEndpoint")||"")};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -221,7 +221,13 @@
     }
     if(/\b(today|tomorrow|yesterday|college|class|festival|friend|family|roommate|pg|project|assignment|teacher|professor|exam|chess|treasure hunt)\b/.test(x))
       return freshPick(["Okay, I'm following. Keep going.","Yeah, I get the context. What happened next?","Got you. What's the part you want me to help with?","I'm following you — continue."]);
-    return freshPick(["Go on. I'm listening.","Okay, I'm with you. Keep going.","Tell me more — I don't want to guess.","Yeah? 👀","I'm listening. What happened?"]);
+    return freshPick([
+      "Yeah, continue. I'm actually listening.",
+      "Okay, what's the actual problem here?",
+      "Go on. Give me the unfiltered version.",
+      "Hmm. Keep talking — I need the missing piece.",
+      "Alright, I'm listening. No productivity TED Talk incoming."
+    ]);
   }
 
   async function remoteReply(raw){
