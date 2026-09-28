@@ -378,6 +378,11 @@
       !/^(hi|hey|hello|hii|yo|thanks|thank you|okay|ok|cool|nice|lol|haha)\b/.test(x) &&
       !/\b(change|move|remove|add|schedule|plan|tomorrow|today|college|festival|chess|study|workout|exercise)\b/.test(x);
     reply=pendingCanContinue ? (onboardingReply(x)||exerciseReply(x)) : null;
+    if(!reply){
+      // Local conversation replies are immediate. Never make the chat feel frozen while waiting on a network model.
+      reply=naturalConversationReply(raw);
+      if(reply){pushReply(reply);return;}
+    }
     if(!reply) reply=await remoteReply(raw);
     if(!reply) reply=naturalConversationReply(raw);
     pushReply(reply);
