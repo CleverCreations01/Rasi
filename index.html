@@ -250,7 +250,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
 .skin-midnight .rasi-chat-panel .rasi-composer{background:#11182a!important;color:#f6f7fb!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.rasi{background:#19152a!important;border-color:#3b3157!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.you{background:#112820!important;border-color:#29493e!important}
-</style></head>
+<style id="rasi-chatgpt-v1">#view-buddy{min-height:calc(100vh - 210px)}#view-buddy .rasi-chat-page{max-width:860px;margin:0 auto}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 230px);display:flex!important;flex-direction:column}#view-buddy .rasi-chat-top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 4px}#view-buddy #chat{flex:1;min-height:0}#view-buddy .chat-thread{max-height:none!important;min-height:calc(100vh - 390px);padding:14px 4px 120px;overflow-y:auto}#view-buddy .rasi-composer{position:sticky;bottom:0;z-index:6;margin-top:auto;background:var(--panel2);box-shadow:0 -10px 30px rgba(0,0,0,.14)}.rasi-history-btn{padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:850}@media(max-width:600px){#view-buddy{min-height:calc(100vh - 150px)}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 170px);border-radius:20px}#view-buddy .chat-thread{min-height:calc(100vh - 350px);padding-bottom:110px}}</style></style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -359,7 +359,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
       <div class="rasi-avatar">R</div>
       <div><h2 id="buddyTitle">RĀSI</h2><div class="tiny">private little corner • say literally anything</div></div>
     </div>
-    <button class="rasi-more" aria-label="RĀSI settings" onclick="openRasiSettings()">⋯</button>
+    <div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ History</button><button class="rasi-more" aria-label="RĀSI settings" onclick="openRasiSettings()">⋯</button></div>
    </div>
    <div id="chat"></div>
    <div class="rasi-composer">
@@ -577,7 +577,7 @@ document.getElementById('mission').textContent=vibeLines;
  document.getElementById('streak').textContent=state.streak; document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';
  const collegeOn=collegeEnabledForDate(selected);
  document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
- renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();renderCollegeView();document.getElementById('buffer').textContent=calcBuffer(visible);
+ renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();const bufferEl=document.getElementById('buffer');if(bufferEl)bufferEl.textContent=calcBuffer(visible);
 }
 function calcBuffer(arr){let total=0;arr.forEach(t=>{if(t.cat==='buffer')total+=Math.max(0,minutes(t.e)-minutes(t.s));});return total>=60?`${Math.floor(total/60)}h ${total%60?total%60+'m':''}`.trim():total+'m';}
 function renderTasks(arr){
@@ -681,12 +681,18 @@ function renderChat(){
    box.innerHTML='<div class="chat-closed"><div><b>🔒 Private chat</b><small>Your messages stay tucked away until you open this.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
    return;
  }
- const recent=chat.slice(-14);
+ const recent=chat.slice(-100);
  box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful context notes saved locally':'Private on this phone')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
  const thread=box.querySelector('.chat-thread');
  if(thread) requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
 }
 function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
+function showRasiHistory(){
+ const chat=Array.isArray(state.chat)?state.chat:[];
+ showModal('<div class="modal-head"><div><div class="eyebrow">RĀSI HISTORY</div><h2>Conversation history</h2><div class="tiny">Saved locally on this device.</div></div><button class="close" onclick="closeModal()">×</button></div><div style="margin-top:14px;max-height:55vh;overflow:auto">'+
+ (chat.length?chat.map((m)=>'<div class="info-card" style="margin-bottom:8px"><b>'+(m.who==='you'?'You':esc(state.appName||DEFAULT_APP_NAME))+'</b><p style="margin-top:5px">'+esc(m.text)+'</p></div>').join(''):'<div style="padding:30px;text-align:center;color:var(--muted)">No chats yet. Start talking.</div>')+
+ '</div><button class="quickbtn" style="width:100%;margin-top:10px" onclick="closeModal()">Back to chat</button>');
+}
 function updateRasiMemory(raw){
  const text=String(raw||'').trim(); if(text.length<8)return;
  const useful=/\b(i want|i like|i love|i hate|i don't like|i dont like|i prefer|my goal|my plan|i am|i'm|i need|i struggle|i usually|i can|i can't|college|pg|creator|pinterest|coding|english|study|exercise|sleep|family|friend|career)\b/i.test(text);
