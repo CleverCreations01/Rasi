@@ -250,7 +250,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
 .skin-midnight .rasi-chat-panel .rasi-composer{background:#11182a!important;color:#f6f7fb!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.rasi{background:#19152a!important;border-color:#3b3157!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.you{background:#112820!important;border-color:#29493e!important}
-<style id="rasi-chatgpt-v1">#view-buddy{min-height:calc(100vh - 210px)}#view-buddy .rasi-chat-page{max-width:860px;margin:0 auto}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 230px);display:flex!important;flex-direction:column}#view-buddy .rasi-chat-top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 4px}#view-buddy #chat{flex:1;min-height:0}#view-buddy .chat-thread{max-height:none!important;min-height:calc(100vh - 390px);padding:14px 4px 120px;overflow-y:auto}#view-buddy .rasi-composer{position:sticky;bottom:0;z-index:6;margin-top:auto;background:var(--panel2);box-shadow:0 -10px 30px rgba(0,0,0,.14)}.rasi-history-btn{padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:850}@media(max-width:600px){#view-buddy{min-height:calc(100vh - 150px)}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 170px);border-radius:20px}#view-buddy .chat-thread{min-height:calc(100vh - 350px);padding-bottom:110px}}</style></style></head>
+<style id="rasi-chatgpt-v1">#view-buddy{min-height:calc(100vh - 210px)}#view-buddy .rasi-chat-page{max-width:860px;margin:0 auto}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 230px);display:flex!important;flex-direction:column}#view-buddy .rasi-chat-top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 4px}#view-buddy #chat{flex:1;min-height:0}#view-buddy .chat-thread{max-height:none!important;min-height:calc(100vh - 390px);padding:14px 4px 120px;overflow-y:auto}#view-buddy .rasi-composer{position:sticky;bottom:0;z-index:6;margin-top:auto;background:var(--panel2);box-shadow:0 -10px 30px rgba(0,0,0,.14)}.rasi-history-btn{padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:850}@media(max-width:600px){#view-buddy{min-height:calc(100vh - 150px)}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 170px);border-radius:20px}#view-buddy .chat-thread{min-height:calc(100vh - 350px);padding-bottom:110px}}</style><style id="rasi-chat-history-v2">.rasi-chat-row{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:14px;margin:0 0 7px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--text)}.rasi-chat-row small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.rasi-chat-row:hover{filter:brightness(.98)}.chat-head{display:flex!important;align-items:center;justify-content:space-between;gap:8px}.chat-thread{scroll-behavior:auto!important}</style></style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -494,7 +494,7 @@ function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),o
 function defaultState(){
  return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
- ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
+ ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],conversations:[],currentChatId:null,chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
 let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||defaultState();
 let currentDay=new Date().getDay(); // 0 Sun
@@ -537,7 +537,7 @@ function ensureState(){
  if(!state.tasks||typeof state.tasks!=='object')state.tasks={};if(!state.dateTasks||typeof state.dateTasks!=='object')state.dateTasks={};
  if(!state.reminders)state.reminders=[];
  if(!state.collegeOffDates||typeof state.collegeOffDates!=='object')state.collegeOffDates={};
- if(!state.chat)state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(state.chatUiVersion!==16){state.chatOpen=false;state.chatUiVersion=16;}
+ if(!Array.isArray(state.chat))state.chat=[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it.'}]; if(typeof state.chatOpen!=='boolean')state.chatOpen=false; if(!Array.isArray(state.rasiMemory))state.rasiMemory=[]; if(!Array.isArray(state.conversations))state.conversations=[]; if(!state.currentChatId){state.currentChatId='chat-'+uid();} if(state.chatUiVersion!==18){state.chatOpen=false;state.chatUiVersion=18;}
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
@@ -674,25 +674,51 @@ function saveReminder(){let title=document.getElementById('rTitle').value.trim()
 function deleteReminder(id){state.reminders=state.reminders.filter(r=>String(r.id)!==String(id));save();render()}
 function renameBuddy(){showModal(`<div class="modal-head"><div><div class="eyebrow">IDENTITY</div><h2>Rename your buddy</h2><div class="tiny">The name is cosmetic and can be changed anytime.</div></div><button class="close" onclick="closeModal()">×</button></div><div class="form" style="margin-top:15px"><input id="buddyName" maxlength="24" value="${esc(state.appName||DEFAULT_APP_NAME)}" placeholder="e.g. RĀSI"><button class="primary" onclick="saveBuddyName()">Save name</button></div>`)}
 function saveBuddyName(){const n=document.getElementById('buddyName').value.trim().replace(/\s+/g,' ');if(!n){showToast('Give me a name first 😌');return}state.appName=n;state.chat.push({who:'nova',text:`New name locked in: ${n}. Same brain, better branding. ✦`});save();closeModal();render();showToast('Name changed ✦')}
+function currentChatTitle(){
+ const first=(state.chat||[]).find(m=>m.who==='you'&&String(m.text||'').trim());
+ if(!first)return 'New chat';
+ const t=String(first.text).trim().replace(/\\s+/g,' ');
+ return t.length>38?t.slice(0,35)+'…':t;
+}
+function persistCurrentChat(){
+ if(!Array.isArray(state.conversations))state.conversations=[];
+ const msgs=Array.isArray(state.chat)?state.chat:[];
+ if(!msgs.some(m=>m.who==='you'))return;
+ const id=state.currentChatId||('chat-'+uid());state.currentChatId=id;
+ const item={id,title:currentChatTitle(),updatedAt:new Date().toISOString(),messages:msgs.slice()};
+ const idx=state.conversations.findIndex(x=>x.id===id);
+ if(idx>=0)state.conversations[idx]=item;else state.conversations.unshift(item);
+ state.conversations.sort((x,y)=>String(y.updatedAt).localeCompare(String(x.updatedAt)));
+ state.conversations=state.conversations.slice(0,100);
+}
+function newRasiChat(){
+ persistCurrentChat();
+ state.currentChatId='chat-'+uid();
+ state.chat=[{who:'nova',text:'New chat. 👀 What are we talking about?' }];
+ state.chatOpen=true;save();renderChat();closeModal();showToast('New RĀSI chat ✦');
+}
+function openRasiChat(id){
+ persistCurrentChat();
+ const item=(state.conversations||[]).find(x=>x.id===id);
+ if(!item)return;
+ state.currentChatId=item.id;state.chat=(item.messages||[]).slice();state.chatOpen=true;save();closeModal();renderChat();
+ requestAnimationFrame(()=>{const thread=document.querySelector('.chat-thread');if(thread)thread.scrollTop=thread.scrollHeight;});
+}
+function showRasiHistory(){
+ persistCurrentChat();save();
+ const items=(state.conversations||[]).slice().sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
+ showModal('<div class="modal-head"><div><div class="eyebrow">RĀSI</div><h2>Your chats</h2><div class="tiny">Saved on this device. Your memory stays shared across chats.</div></div><button class="close" onclick="closeModal()">×</button></div><button class="primary" style="width:100%;margin:14px 0" onclick="newRasiChat()">＋ New chat</button><div style="max-height:62vh;overflow:auto">'+
+ (items.length?items.map(x=>'<button class="rasi-chat-row" onclick="openRasiChat('+JSON.stringify(x.id)+')"><span><b>'+esc(x.title||'New chat')+'</b><small>'+esc(new Date(x.updatedAt||Date.now()).toLocaleDateString([], {day:'numeric',month:'short'}))+' • '+(x.messages||[]).length+' messages</small></span><span>›</span></button>').join(''):'<div style="padding:30px;text-align:center;color:var(--muted)">No previous chats yet.</div>')+
+ '</div>');
+}
 function renderChat(){
  const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
- const box=document.getElementById('chat');
- if(!state.chatOpen){
-   box.innerHTML='<div class="chat-closed"><div><b>🔒 Private chat</b><small>Your messages stay tucked away until you open this.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
-   return;
- }
+ const box=document.getElementById('chat');if(!box)return;
  const recent=chat.slice(-20);
- box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful context notes saved locally':'Private on this phone')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
- const thread=box.querySelector('.chat-thread');
- if(thread) requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
+ box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful memories saved':'Memory is shared across your chats')+'</small></div><div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ Chats</button><button class="rasi-history-btn" onclick="newRasiChat()">＋ New</button></div></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
+ const thread=box.querySelector('.chat-thread');if(thread)requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
 }
 function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
-function showRasiHistory(){
- const chat=Array.isArray(state.chat)?state.chat:[];
- showModal('<div class="modal-head"><div><div class="eyebrow">RĀSI HISTORY</div><h2>Conversation history</h2><div class="tiny">Saved locally on this device.</div></div><button class="close" onclick="closeModal()">×</button></div><div style="margin-top:14px;max-height:55vh;overflow:auto">'+
- (chat.length?chat.map((m)=>'<div class="info-card" style="margin-bottom:8px"><b>'+(m.who==='you'?'You':esc(state.appName||DEFAULT_APP_NAME))+'</b><p style="margin-top:5px">'+esc(m.text)+'</p></div>').join(''):'<div style="padding:30px;text-align:center;color:var(--muted)">No chats yet. Start talking.</div>')+
- '</div><button class="quickbtn" style="width:100%;margin-top:10px" onclick="closeModal()">Back to chat</button>');
-}
 function updateRasiMemory(raw){
  const text=String(raw||'').trim(); if(text.length<8)return;
  const useful=/\b(i want|i like|i love|i hate|i don't like|i dont like|i prefer|my goal|my plan|i am|i'm|i need|i struggle|i usually|i can|i can't|college|pg|creator|pinterest|coding|english|study|exercise|sleep|family|friend|career)\b/i.test(text);
@@ -846,9 +872,9 @@ window.RASI_RUNTIME={
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=1').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=18').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
-<script src="./rasi-brain.js?v=5.0"></script>
+<script src="./rasi-brain.js?v=6.0"></script>
 </body>
 </html>
