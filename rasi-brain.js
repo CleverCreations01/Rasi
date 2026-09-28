@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v4.1";
+  const VERSION = "brain-v4.2";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -257,65 +257,63 @@
   function scheduleCommand(raw){
     const x=lower(raw), s=safeState();
     if(typeof tasksForDate!=="function"||typeof dateKey!=="function")return null;
-    const base=new Date(); base.setHours(12,0,0,0);
-    const dates=[];
+    const now=new Date(), base=new Date(now); base.setHours(12,0,0,0), dates=[];
     if(/\btomorrow\b/.test(x)){const d=new Date(base);d.setDate(base.getDate()+1);dates.push(d);}
     if(/\bday after tomorrow\b/.test(x)){const d=new Date(base);d.setDate(base.getDate()+2);dates.push(d);}
     if(!dates.length)dates.push(...datesForRange(raw));
+    const results=[];
     const hasIntent=/\b(change|alter|adjust|rearrange|reorganize|reschedule|modify|fix|update|replace|remove|drop|skip|cancel|free up|make room|make space|add|put|keep|leave)\b/.test(x);
 
-    if(hasIntent && /\b(no classes|no class|festival|college (one|blocks?|schedule)|change the college|there won't be classes|there wont be classes|classes won't|classes wont)\b/.test(x) && (dates.length>=2 || /\bnext 2 days\b/.test(x))){
-      let changed=0;
-      state.collegeOffDates=state.collegeOffDates||{};
+    if(hasIntent && /\b(no classes|no class|festival|college (one|blocks?|schedule)|change the college|there won't be classes|there wont be classes|classes won't|classes wont)\b/.test(x) && dates.length>=2){
+      let changed=0; state.collegeOffDates=state.collegeOffDates||{};
       dates.forEach(d=>{const k=dateKey(d);if(!state.collegeOffDates[k]){state.collegeOffDates[k]=true;changed++;}});
-      saveRender();
-      const label=dates.map(d=>d.toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"})).join(" & ");
-      return changed
-        ? "Done. I turned OFF the normal college timetable for "+label+" because you said there are no classes. I kept your other mandatory blocks. I did not invent times for Chess or Treasure Hunt because you haven't given me those timings."
-        : "The college timetable is already OFF for "+label+".";
+      results.push(changed?"College timetable OFF for "+dates.map(d=>d.toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"})).join(" & "):"College timetable was already OFF for those dates");
     }
 
-    if(/\b(free|open|make|give me|leave me)\b.*\b(slot|time|space)\b/.test(x) && /\bchess\b/.test(x) && /\btoday\b/.test(x)){
-      const today=new Date();today.setHours(12,0,0,0); const k=dateKey(today), arr=tasksForDate(today);
-      if(arr.some(t=>/\bchess\b/i.test(t.n||"")))return "You already have a Chess practice block today.";
-      const buffer=arr.find(t=>t.cat==="buffer"&&!t.done);
-      if(buffer){
-        const dur=Math.max(20,Math.min(45,minutes(buffer.e)-minutes(buffer.s)));
-        buffer.n="Chess practice";buffer.cat="life";buffer.info="Free slot requested by you.";
-        buffer.e=addMins(buffer.s,dur);saveRender();
-        return "Done. I turned today's open buffer into a "+dur+"-minute Chess practice slot at "+buffer.s+"–"+buffer.e+". I left college, study and health alone.";
+    if(/\b(free|open|make|give me|leave me)\b.*\b(slot|time|space)\b/.test(x)&&/\bchess\b/.test(x)&&/\btoday\b/.test(x)){
+      const today=new Date();today.setHours(12,0,0,0);const k=dateKey(today),arr=tasksForDate(today);
+      if(arr.some(t=>/\bchess\b/i.test(t.n||"")))results.push("Chess practice is already on today's plan.");
+      else{
+        const current=new Date(), nowMin=current.getHours()*60+current.getMinutes();
+        const future=t=>!t.done&&minutes(t.e)>nowMin;
+        const candidate=arr.find(t=>t.cat==="buffer"&&future(t))||arr.find(t=>["knowledge","career","pinterest","english","life"].includes(t.cat)&&future(t));
+        if(candidate){
+          const st=candidate.s,dur=Math.max(20,Math.min(45,minutes(candidate.e)-minutes(candidate.s)));
+          candidate.n="Chess practice";candidate.cat="life";candidate.info="Free slot requested by you.";
+          candidate.e=addMins(st,dur);results.push("Chess practice added today at "+st+"–"+candidate.e);
+        }else results.push("I couldn't find a safe future slot for Chess today without moving a protected block.");
       }
-      const candidate=arr.find(t=>["knowledge","career","pinterest","english"].includes(t.cat)&&!t.done);
-      if(candidate){
-        const st=candidate.s,dur=Math.max(20,Math.min(45,minutes(candidate.e)-minutes(candidate.s)));
-        candidate.n="Chess practice";candidate.cat="life";candidate.info="Free slot requested by you; lower-priority block replaced.";
-        candidate.e=addMins(st,dur);saveRender();
-        return "Done. I made "+st+"–"+candidate.e+" a Chess practice slot by replacing the lowest-priority flexible block. Mandatory blocks stayed protected.";
-      }
-      return "I couldn't find a safe free block today without deleting a protected task. Tell me whether 20, 30 or 45 minutes works.";
     }
 
     const target=taskWords(raw),time=parseTime(raw);
     if(target&&/\b(remove|delete|drop|skip|pause|stop)\b/.test(x)&&(/\bnext \d+ days?\b/.test(x)||/\btomorrow\b/.test(x)||/\bthis week\b/.test(x))){
       let changed=0;dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),before=arr.length;state.dateTasks[k]=arr.filter(t=>!(t.cat===target.cat&&t.cat!=="college"));changed+=before-state.dateTasks[k].length;});
-      saveRender();return changed?"Done. I removed the "+target.cat+" blocks across "+rangeLabel(dates)+".":"There was no "+target.cat+" block to remove across "+rangeLabel(dates)+".";
+      results.push(changed?"Removed "+target.cat+" blocks across "+rangeLabel(dates):"There was no "+target.cat+" block across "+rangeLabel(dates));
     }
     if(target&&time&&/\b(move|shift|reschedule|change|put|make)\b/.test(x)){
       const changed=[];dates.forEach(d=>{const arr=tasksForDate(d),t=findTask(arr,raw);if(!t)return;const dur=Math.max(15,minutes(t.e)-minutes(t.s));t.s=time;t.e=addMins(time,dur);arr.sort((a,z)=>minutes(a.s)-minutes(z.s)).forEach((q,i)=>q.order=i);changed.push(t.n+" → "+t.s+"–"+t.e);});
-      if(changed.length){saveRender();return "Done. I moved the "+target.cat+" block for "+rangeLabel(dates)+".\n"+changed.slice(0,4).join("\n");}
+      if(changed.length)results.push("Moved "+target.cat+" for "+rangeLabel(dates)+": "+changed.slice(0,4).join(", "));
     }
     if(/\b(more study|more revision|need extra study|study more|exam prep|exam is coming)\b/.test(x)){
       const removed=[];dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["pinterest","career","english","knowledge"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
-      saveRender();return removed.length?"I made the next "+dates.length+" days more study-heavy by clearing lower-priority blocks: "+removed.slice(0,5).join(", ")+".":"Those days already have the lower-priority blocks cleared.";
+      results.push(removed.length?"Made the next "+dates.length+" days more study-heavy by clearing lower-priority blocks.":"Those days already have the lower-priority blocks cleared.");
     }
     if(/\b(lighten|lighter|less packed|less busy|reduce my load)\b/.test(x)){
       const removed=[];dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["knowledge","career","pinterest","english"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
-      saveRender();return removed.length?"Done. I lightened "+rangeLabel(dates)+" by removing the least essential flexible blocks.":"Those days are already relatively light.";
+      results.push(removed.length?"Lightened "+rangeLabel(dates)+" by removing the least essential flexible blocks.":"Those days are already relatively light.");
     }
+    if(results.length){saveRender();return "Done. "+results.join(". ")+".";}
     return null;
   }
   function scheduleConversationReply(raw){
-    const x=lower(raw); if(/\bwhat did you change\b|\bwhat have you changed\b/.test(x))return ensureBrain().profile.lastScheduleChange||"I have not changed the schedule yet.";
+    const x=lower(raw), s=safeState();
+    if(/\b(did you|have you|did rasi|did you actually)\b.*\b(change|update|modify|rearrange|schedule|plan)\b/.test(x)&&/\b(tomorrow|day after tomorrow|today)\b/.test(x)){
+      const d=new Date();d.setHours(12,0,0,0);
+      if(/\bday after tomorrow\b/.test(x))d.setDate(d.getDate()+2);else if(/\btomorrow\b/.test(x))d.setDate(d.getDate()+1);
+      const k=dateKey(d),off=!!(s.collegeOffDates&&s.collegeOffDates[k]),label=d.toLocaleDateString([],{weekday:"long",day:"numeric",month:"short"});
+      return off?"Yes — I changed "+label+". The normal college timetable is OFF for that day, and the rest of your plan remains in place.":"Not yet. I only changed today's Chess slot; I didn't apply the college change to "+label+". That's my mistake.";
+    }
+    if(/\bwhat did you change\b|\bwhat have you changed\b/.test(x))return ensureBrain().profile.lastScheduleChange||"I haven't changed the schedule yet.";
     return null;
   }
   async function brainCommand(){
