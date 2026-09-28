@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v17-ai-first-chat">
+<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v18-stable-ui">
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{
@@ -212,6 +212,29 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
  .rasi-chat-panel{height:calc(100dvh - 128px);min-height:460px}
  .rasi-chat-panel .buddy-msg{max-width:92%;font-size:14px}
 }
+</style><style id="rasi-stability-v18">
+:root{--r:16px}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.panel,.hero,.task,.slot-card,.info-card,.exercise,.preview-item,.rasi-chat-panel,.bottom button{border-radius:16px}
+.bottom{z-index:9999!important;pointer-events:auto!important}
+.bottom-inner{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important;width:100%;max-width:720px}
+.bottom button{min-width:0!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;white-space:nowrap!important;overflow:hidden!important;pointer-events:auto!important;touch-action:manipulation!important;padding:9px 4px!important}
+.bottom-icon{font-size:17px;line-height:1;flex:0 0 auto}.bottom button span:last-child{font-size:10px;overflow:hidden;text-overflow:ellipsis}
+.app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
+#celebrationLayer,#confetti{pointer-events:none!important}
+</style><style id="rasi-settings-v18">
+.rasi-settings-page{max-width:860px;margin:0 auto}.rasi-settings-panel{padding:18px!important}.settings-wide{width:100%;text-align:left}.rasi-settings-styles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.rasi-settings-panel input{margin-top:2px}
+@media(max-width:600px){.rasi-settings-styles{grid-template-columns:1fr}.rasi-settings-panel{min-height:calc(100vh - 170px)}}
+</style><style id="rasi-stability-v18">
+:root{--r:16px}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.panel,.hero,.task,.slot-card,.info-card,.exercise,.preview-item,.rasi-chat-panel,.bottom button{border-radius:16px}
+.bottom{z-index:9999!important;pointer-events:auto!important}
+.bottom-inner{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important;width:100%;max-width:720px}
+.bottom button{min-width:0!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;white-space:nowrap!important;overflow:hidden!important;pointer-events:auto!important;touch-action:manipulation!important;padding:9px 4px!important}
+.bottom-icon{font-size:17px;line-height:1;flex:0 0 auto}.bottom button span:last-child{font-size:10px;overflow:hidden;text-overflow:ellipsis}
+.app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
+#celebrationLayer,#confetti{pointer-events:none!important}
 </style></style><style id="rasi-presentation-v1">
 /* Presentation pass: visual-only. Planner/data logic is intentionally untouched. */
 .rasi-mark{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;padding:0;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.16)}
@@ -404,15 +427,61 @@ body:not([class*="skin-"]) .rasi-chat-panel,
  </div>
 </section>
 
+<section id="view-settings" class="view">
+ <div class="rasi-settings-page">
+  <div class="panel rasi-settings-panel">
+   <div class="panel-head">
+    <div><div class="eyebrow">RĀSI SETTINGS</div><h2>Make it yours.</h2><div class="tiny">Style, identity, data and AI connection live here.</div></div>
+    <button type="button" class="quickbtn" onclick="showView('today')">← Back</button>
+   </div>
+   <div class="section-title">Theme</div>
+   <div class="style-row rasi-settings-styles">
+    <button type="button" onclick="setSkin('midnight')">🌌 Midnight</button><button type="button" onclick="setSkin('sakura')">🌸 Sakura</button><button type="button" onclick="setSkin('matcha')">🍵 Matcha</button><button type="button" onclick="setSkin('lavender')">🪻 Lavender</button><button type="button" onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button type="button" onclick="setSkin('anime-op')">🏴‍☠️ Anime: OP</button><button type="button" onclick="setSkin('minimal')">◻ Minimal</button>
+   </div>
+   <div class="section-title">Identity</div>
+   <button type="button" class="quickbtn settings-wide" onclick="renameBuddy()">✦ Rename RĀSI</button>
+   <div class="section-title">AI connection</div>
+   <div class="info-card">
+    <p style="color:var(--muted);font-size:12px;line-height:1.45;margin-bottom:9px">RĀSI sends the last 15 chat messages and the current schedule to the secure AI endpoint. Your API key never belongs in this app.</p>
+    <input id="rasiAiEndpoint" placeholder="https://your-backend.example/api/rasi" value="${esc(localStorage.getItem("rasiAiEndpoint")||"")}">
+    <button type="button" class="primary" style="width:100%;margin-top:8px" onclick="saveRasiAiEndpoint()">Save AI endpoint</button>
+   </div>
+   <div class="section-title">Your data</div>
+   <div class="two"><button type="button" class="quickbtn" onclick="backupData()">↓ Backup data</button><button type="button" class="quickbtn" onclick="document.getElementById('restoreFile').click()">↑ Restore data</button></div>
+   <input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)">
+  </div>
+ </div>
+</section>
 </main>
 </div>
 
-<div class="bottom"><div class="bottom-inner"><button onclick="openAddTask()">＋ Add task</button><button class="primary" onclick="showView('today')">⌂ Today</button><button onclick="showView('buddy')">💬 RĀSI</button><button onclick="openImportant()">🔔 Important</button></div></div>
+<div class="bottom" role="navigation" aria-label="RĀSI quick navigation"><div class="bottom-inner">
+ <button type="button" onclick="showView('today')" aria-label="Today"><span class="bottom-icon">⌂</span><span>Today</span></button>
+ <button type="button" onclick="openAddTask()" aria-label="Add task"><span class="bottom-icon">＋</span><span>Add</span></button>
+ <button type="button" onclick="showView('buddy')" aria-label="RĀSI chat"><span class="bottom-icon">💬</span><span>RĀSI</span></button>
+ <button type="button" onclick="openImportant()" aria-label="Important"><span class="bottom-icon">🔔</span><span>Important</span></button>
+</div></div>
 
 <div class="modal-back" id="modalBack" onclick="closeModal(event)"><div class="modal" id="modal"></div></div>
 
 <script>
-const STORAGE='rasika-os-v2';
+const STORAGE='rasi_data_v1';
+const LEGACY_STORAGE_KEYS=['rasika-os-v2'];
+function loadSavedState(){
+  try{
+    const current=localStorage.getItem(STORAGE);
+    if(current)return JSON.parse(current);
+    for(const legacyKey of LEGACY_STORAGE_KEYS){
+      const legacy=localStorage.getItem(legacyKey);
+      if(legacy){
+        const parsed=JSON.parse(legacy);
+        localStorage.setItem(STORAGE,legacy);
+        return parsed;
+      }
+    }
+  }catch(err){console.error('RĀSI storage migration failed',err);}
+  return null;
+}
 const DEFAULT_APP_NAME='RĀSI';
 const DAYS=['Mon','Tue','Wed','Thu','Fri'];
 const missions=[
@@ -517,7 +586,7 @@ function defaultState(){
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
  ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],conversations:[],currentChatId:null,chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
-let state=JSON.parse(localStorage.getItem(STORAGE)||'null')||defaultState();
+let state=loadSavedState()||defaultState();
 let currentDay=new Date().getDay(); // 0 Sun
 let day=DAY_NAME(currentDay);
 if(!DAYS.includes(day)) day='Mon';
@@ -578,8 +647,21 @@ function ensureState(){
 function applySkin(){document.documentElement.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-minimal');if(state.skin&&state.skin!=='midnight')document.documentElement.classList.add('skin-'+state.skin);}
 function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵', 'anime-ds':'Anime mode: DS ⚔️', 'anime-op':'Anime mode: OP 🏴‍☠️',minimal:'Minimal mode ◻'}[s]||'Style changed');render();}
 
+function updateLiveClock(){
+ try{
+  const now=new Date(),hr=now.getHours();
+  const clockEl=document.getElementById('clock');
+  const dateEl=document.getElementById('date');
+  const greetingEl=document.getElementById('greeting');
+  if(clockEl)clockEl.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
+  if(dateEl)dateEl.textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
+  if(greetingEl)greetingEl.textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', Rasika.';
+ }catch(err){console.error('RĀSI clock error',err);}
+}
 function render(){
- const now=new Date(), hr=now.getHours();
+ updateLiveClock();
+ try{
+  const now=new Date(), hr=now.getHours();
  const appName=state.appName||DEFAULT_APP_NAME;
  const appNameEl=document.getElementById('appNameLabel');if(appNameEl)appNameEl.textContent=appName;const buddyTitleEl=document.getElementById('buddyTitle');if(buddyTitleEl)buddyTitleEl.textContent=appName+' planner';const coreBadgeEl=document.getElementById('coreBadge');if(coreBadgeEl)coreBadgeEl.textContent=appName+' CORE';
  const clockEl=document.getElementById('clock');if(clockEl)clockEl.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
@@ -599,7 +681,7 @@ document.getElementById('mission').textContent=vibeLines;
  const collegeOn=collegeEnabledForDate(selected);
  document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
  renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();const bufferEl=document.getElementById('buffer');if(bufferEl)bufferEl.textContent=calcBuffer(visible);
-}
+}\n}catch(err){console.error('RĀSI render error',err);}
 function calcBuffer(arr){let total=0;arr.forEach(t=>{if(t.cat==='buffer')total+=Math.max(0,minutes(t.e)-minutes(t.s));});return total>=60?`${Math.floor(total/60)}h ${total%60?total%60+'m':''}`.trim():total+'m';}
 function renderTasks(arr){
  const list=document.getElementById('taskList');list.innerHTML='';
@@ -862,29 +944,7 @@ function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=n
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-function openRasiSettings(){
- const s=state||{};
- showModal(`
-  <div class="modal-head"><div><div class="eyebrow">RĀSI SETTINGS</div><h2 style="margin-top:5px">Make it yours.</h2><div class="tiny" style="margin-top:5px">Style, identity and data tools live here — not in your chat.</div></div><button class="close" onclick="closeModal()">×</button></div>
-  <div class="section-title">Style</div>
-  <div class="style-row rasi-settings-styles">
-   <button onclick="setSkin('midnight');closeModal()">🌌 Midnight</button><button onclick="setSkin('sakura');closeModal()">🌸 Sakura</button><button onclick="setSkin('matcha');closeModal()">🍵 Matcha</button><button onclick="setSkin('lavender');closeModal()">🪻 Lavender</button><button onclick="setSkin('anime-ds');closeModal()">⚔️ Anime: DS</button><button onclick="setSkin('anime-op');closeModal()">🏴‍☠️ Anime: OP</button><button onclick="setSkin('minimal');closeModal()">◻ Minimal</button>
-  </div>
-  <div class="section-title">Identity</div>
-  <button class="quickbtn settings-wide" onclick="closeModal();renameBuddy()">✦ Rename RĀSI</button>
-  <div class="section-title">AI connection</div>
-  <div class="info-card">
-   <p style="color:var(--muted);font-size:12px;line-height:1.45;margin-bottom:9px">RĀSI sends only the last 15 chat messages and the current schedule to your secure AI endpoint. Your OpenAI key never belongs in this app.</p>
-   <input id="rasiAiEndpoint" placeholder="https://your-backend.example/api/rasi" value="${esc(localStorage.getItem("rasiAiEndpoint")||"")}">
-   <button class="primary" style="width:100%;margin-top:8px" onclick="saveRasiAiEndpoint()">Save AI endpoint</button>
-  </div>
-  <div class="section-title">Your data</div>
-  <div class="two"><button class="quickbtn" onclick="backupData()">↓ Backup data</button><button class="quickbtn" onclick="document.getElementById('restoreFile').click()">↑ Restore data</button></div>
-  <input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)">
-  <div class="section-title">About this build</div>
-  <div class="info-card"><p style="color:var(--muted);font-size:12px;line-height:1.55">Everyday schedule and chat data stays on this device. Code and AI infrastructure are separate from your personal data.</p></div>
- `);
-}
+function openRasiSettings(){try{showView('settings');}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
 function saveRasiAiEndpoint(){
  const input=document.getElementById('rasiAiEndpoint');
  const value=(input?.value||'').trim().replace(/\\s+$/,'');
@@ -908,8 +968,12 @@ let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v18.js?v=18').catch(()=>{}));
-ensureState();render();setInterval(()=>render(),30000);
+try{ensureState();}catch(err){console.error('RĀSI startup error',err);}
+try{updateLiveClock();}catch(err){console.error('RĀSI clock startup error',err);}
+render();
+setInterval(()=>{try{updateLiveClock();}catch(err){console.error('RĀSI clock tick error',err);}},1000);
+setInterval(()=>{try{render();}catch(err){console.error('RĀSI periodic render error',err);}},30000);
 </script>
-<script src="./rasi-brain.js?v=7.0"></script>
+<script src="./rasi-brain.js?v=7.1"></script>
 </body>
 </html>
