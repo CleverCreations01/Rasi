@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v3";
+  const VERSION = "brain-v4";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -255,24 +255,62 @@
     return ds[0].toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"})+" → "+ds[ds.length-1].toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"});
   }
   function scheduleCommand(raw){
-    const x=lower(raw), s=safeState(); if(typeof tasksForDate!=="function"||typeof dateKey!=="function")return null;
-    const ds=datesForRange(raw), target=taskWords(raw), time=parseTime(raw);
+    const x=lower(raw), s=safeState();
+    if(typeof tasksForDate!=="function"||typeof dateKey!=="function")return null;
+    const base=new Date(); base.setHours(12,0,0,0);
+    const dates=[];
+    if(/\btomorrow\b/.test(x)){const d=new Date(base);d.setDate(base.getDate()+1);dates.push(d);}
+    if(/\bday after tomorrow\b/.test(x)){const d=new Date(base);d.setDate(base.getDate()+2);dates.push(d);}
+    if(!dates.length)dates.push(...datesForRange(raw));
+    const hasIntent=/\b(change|alter|adjust|rearrange|reorganize|reschedule|modify|fix|update|replace|remove|drop|skip|cancel|free up|make room|make space|add|put|keep|leave)\b/.test(x);
+
+    if(hasIntent && /\b(no classes|no class|festival|college (one|blocks?|schedule)|change the college|there won't be classes|there wont be classes|classes won't|classes wont)\b/.test(x) && (dates.length>=2 || /\bnext 2 days\b/.test(x))){
+      let changed=0;
+      state.collegeOffDates=state.collegeOffDates||{};
+      dates.forEach(d=>{const k=dateKey(d);if(!state.collegeOffDates[k]){state.collegeOffDates[k]=true;changed++;}});
+      saveRender();
+      const label=dates.map(d=>d.toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"})).join(" & ");
+      return changed
+        ? "Done. I turned OFF the normal college timetable for "+label+" because you said there are no classes. I kept your other mandatory blocks. I did not invent times for Chess or Treasure Hunt because you haven't given me those timings."
+        : "The college timetable is already OFF for "+label+".";
+    }
+
+    if(/\b(free|open|make|give me|leave me)\b.*\b(slot|time|space)\b/.test(x) && /\bchess\b/.test(x) && /\btoday\b/.test(x)){
+      const today=new Date();today.setHours(12,0,0,0),k=dateKey(today),arr=tasksForDate(today);
+      if(arr.some(t=>/\bchess\b/i.test(t.n||"")))return "You already have a Chess practice block today.";
+      const buffer=arr.find(t=>t.cat==="buffer"&&!t.done);
+      if(buffer){
+        const dur=Math.max(20,Math.min(45,minutes(buffer.e)-minutes(buffer.s)));
+        buffer.n="Chess practice";buffer.cat="life";buffer.info="Free slot requested by you.";
+        buffer.e=addMins(buffer.s,dur);saveRender();
+        return "Done. I turned today's open buffer into a "+dur+"-minute Chess practice slot at "+buffer.s+"–"+buffer.e+". I left college, study and health alone.";
+      }
+      const candidate=arr.find(t=>["knowledge","career","pinterest","english"].includes(t.cat)&&!t.done);
+      if(candidate){
+        const st=candidate.s,dur=Math.max(20,Math.min(45,minutes(candidate.e)-minutes(candidate.s)));
+        candidate.n="Chess practice";candidate.cat="life";candidate.info="Free slot requested by you; lower-priority block replaced.";
+        candidate.e=addMins(st,dur);saveRender();
+        return "Done. I made "+st+"–"+candidate.e+" a Chess practice slot by replacing the lowest-priority flexible block. Mandatory blocks stayed protected.";
+      }
+      return "I couldn't find a safe free block today without deleting a protected task. Tell me whether 20, 30 or 45 minutes works.";
+    }
+
+    const target=taskWords(raw),time=parseTime(raw);
     if(target&&/\b(remove|delete|drop|skip|pause|stop)\b/.test(x)&&(/\bnext \d+ days?\b/.test(x)||/\btomorrow\b/.test(x)||/\bthis week\b/.test(x))){
-      let changed=0; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),before=arr.length;state.dateTasks[k]=arr.filter(t=>!(t.cat===target.cat&&t.cat!=="college"));changed+=before-state.dateTasks[k].length;});
-      if(changed){saveRender();return "Done. I removed the "+target.cat+" block"+(changed>1?"s":"")+" across "+rangeLabel(ds)+". College and protected blocks were left alone.";}
-      return "There was no "+target.cat+" block to remove across "+rangeLabel(ds)+".";
+      let changed=0;dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),before=arr.length;state.dateTasks[k]=arr.filter(t=>!(t.cat===target.cat&&t.cat!=="college"));changed+=before-state.dateTasks[k].length;});
+      saveRender();return changed?"Done. I removed the "+target.cat+" blocks across "+rangeLabel(dates)+".":"There was no "+target.cat+" block to remove across "+rangeLabel(dates)+".";
     }
     if(target&&time&&/\b(move|shift|reschedule|change|put|make)\b/.test(x)){
-      const changed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),t=findTask(arr,raw);if(!t)return;const dur=Math.max(15,minutes(t.e)-minutes(t.s));t.s=time;t.e=addMins(time,dur);arr.sort((a,z)=>minutes(a.s)-minutes(z.s)).forEach((q,i)=>q.order=i);changed.push(t.n+" → "+t.s+"–"+t.e);});
-      if(changed.length){saveRender();return "Done. I moved the "+target.cat+" block for "+rangeLabel(ds)+".\n"+changed.slice(0,4).join("\n")+(changed.length>4?"\n…and applied the same change to the remaining days.":"");}
+      const changed=[];dates.forEach(d=>{const arr=tasksForDate(d),t=findTask(arr,raw);if(!t)return;const dur=Math.max(15,minutes(t.e)-minutes(t.s));t.s=time;t.e=addMins(time,dur);arr.sort((a,z)=>minutes(a.s)-minutes(z.s)).forEach((q,i)=>q.order=i);changed.push(t.n+" → "+t.s+"–"+t.e);});
+      if(changed.length){saveRender();return "Done. I moved the "+target.cat+" block for "+rangeLabel(dates)+".\n"+changed.slice(0,4).join("\n");}
     }
     if(/\b(more study|more revision|need extra study|study more|exam prep|exam is coming)\b/.test(x)){
-      const removed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["pinterest","career","english","knowledge"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
-      saveRender();return removed.length?"I made the next "+ds.length+" day"+(ds.length>1?"s":"")+" more study-heavy by clearing lower-priority flexible blocks: "+removed.slice(0,5).join(", ")+(removed.length>5?" and others.":".")+"":"The next "+ds.length+" day"+(ds.length>1?"s":"")+" already have the lower-priority blocks cleared.";
+      const removed=[];dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["pinterest","career","english","knowledge"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
+      saveRender();return removed.length?"I made the next "+dates.length+" days more study-heavy by clearing lower-priority blocks: "+removed.slice(0,5).join(", ")+".":"Those days already have the lower-priority blocks cleared.";
     }
     if(/\b(lighten|lighter|less packed|less busy|reduce my load)\b/.test(x)){
-      const removed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["knowledge","career","pinterest","english"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
-      saveRender();return removed.length?"Done. I lightened "+rangeLabel(ds)+" by removing the least essential flexible blocks. Fixed college, health and core study stayed protected.":"Those days are already relatively light.";
+      const removed=[];dates.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["knowledge","career","pinterest","english"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
+      saveRender();return removed.length?"Done. I lightened "+rangeLabel(dates)+" by removing the least essential flexible blocks.":"Those days are already relatively light.";
     }
     return null;
   }
@@ -293,7 +331,8 @@
     // Explicit app actions still go through the existing controlled tool logic.
     const x=lower(raw);
     const actionLike=/^(add|schedule|plan|move|shift|reschedule|remove|delete|change|rebuild|replace|skip|cancel|replan|rearrange|lighten)\b/.test(x) ||
-      /\b(move|add|remove|delete|reschedule|replan|lighten)\b.*\b(today|tomorrow|coding|study|pinterest|english|exercise|workout|task|schedule|days?)\b/.test(x);
+      /\b(move|add|remove|delete|reschedule|replan|lighten|change|adjust|modify|rearrange|reorganize|free up|make room|make space)\b/.test(x) ||
+      /\b(no classes|no class|festival|there won't be classes|there wont be classes|free slot|open slot)\b/.test(x);
     let reply=scheduleConversationReply(raw)||scheduleCommand(raw);
     if(reply){
       const brain=ensureBrain(); brain.profile.lastScheduleChange=reply; brain.updatedAt=new Date().toISOString();
