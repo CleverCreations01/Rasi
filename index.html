@@ -872,12 +872,25 @@ function openRasiSettings(){
   </div>
   <div class="section-title">Identity</div>
   <button class="quickbtn settings-wide" onclick="closeModal();renameBuddy()">✦ Rename RĀSI</button>
+  <div class="section-title">AI connection</div>
+  <div class="info-card">
+   <p style="color:var(--muted);font-size:12px;line-height:1.45;margin-bottom:9px">RĀSI sends only the last 15 chat messages and the current schedule to your secure AI endpoint. Your OpenAI key never belongs in this app.</p>
+   <input id="rasiAiEndpoint" placeholder="https://your-backend.example/api/rasi" value="${esc(localStorage.getItem("rasiAiEndpoint")||"")}">
+   <button class="primary" style="width:100%;margin-top:8px" onclick="saveRasiAiEndpoint()">Save AI endpoint</button>
+  </div>
   <div class="section-title">Your data</div>
   <div class="two"><button class="quickbtn" onclick="backupData()">↓ Backup data</button><button class="quickbtn" onclick="document.getElementById('restoreFile').click()">↑ Restore data</button></div>
   <input id="restoreFile" type="file" accept="application/json" style="display:none" onchange="restoreData(event)">
   <div class="section-title">About this build</div>
   <div class="info-card"><p style="color:var(--muted);font-size:12px;line-height:1.55">Everyday schedule and chat data stays on this device. Code and AI infrastructure are separate from your personal data.</p></div>
  `);
+}
+function saveRasiAiEndpoint(){
+ const input=document.getElementById('rasiAiEndpoint');
+ const value=(input?.value||'').trim().replace(/\\s+$/,'');
+ if(value && !/^https?:\\/\\//i.test(value)){showToast('Use a full https:// AI endpoint');return;}
+ if(value)localStorage.setItem('rasiAiEndpoint',value);else localStorage.removeItem('rasiAiEndpoint');
+ closeModal();showToast(value?'AI endpoint saved.':'AI endpoint cleared.');
 }
 function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modalBack').classList.add('show')}
 function closeModal(e){if(!e||e.target.id==='modalBack')document.getElementById('modalBack').classList.remove('show')}
