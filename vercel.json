@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/rasi.js": {
+      "maxDuration": 30
+    }
+  }
+}
