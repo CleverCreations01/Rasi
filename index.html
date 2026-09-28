@@ -560,9 +560,9 @@ function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to
 function render(){
  const now=new Date(), hr=now.getHours();
  const appName=state.appName||DEFAULT_APP_NAME;
- document.getElementById('appNameLabel').textContent=appName;document.getElementById('buddyTitle').textContent=appName+' planner';document.getElementById('coreBadge').textContent=appName+' CORE';
- document.getElementById('clock').textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
- document.getElementById('date').textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
+ document.getElementById('appNameLabel')?.textContent=appName;document.getElementById('buddyTitle')?.textContent=appName+' planner';document.getElementById('coreBadge')?.textContent=appName+' CORE';
+ document.getElementById('clock')?.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
+ document.getElementById('date')?.textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
  const selected=window.__selectedDate||new Date(), isToday=selected.toDateString()===new Date().toDateString();
  const selectedWd=DAY_NAME(selected.getDay());
  document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
