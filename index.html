@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1020">
-<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v16-ultimate">
+<title>RĀSI — Rasika's Personal OS</title><meta name="rasi-build" content="v17-ai-first-chat">
 <link rel="manifest" href="./manifest.json">
 <style>
 :root{
@@ -191,7 +191,28 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 @keyframes petalFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot))}}
 @keyframes flowerFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.92)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot)) scale(1.02)}}
 @media(max-width:600px){.chat-closed{padding:13px}.chat-open-btn{padding:9px 10px}.chat-thread{max-height:360px}.buddy-msg{font-size:14px;line-height:1.48}.style-row button{font-size:12px;padding:9px 11px}}
-</style><style id="rasi-presentation-v1">
+<style id="rasi-ai-chat-v7">
+/* AI-first chat: the conversation is its own viewport; composer stays pinned. */
+.rasi-chat-panel{height:calc(100dvh - 150px);min-height:500px;display:flex!important;flex-direction:column;overflow:hidden}
+.rasi-chat-panel #chat{display:flex;flex:1;min-height:0;flex-direction:column}
+.rasi-chat-panel .chat-head{flex:0 0 auto}
+.rasi-chat-panel .chat-thread{flex:1!important;min-height:0!important;max-height:none!important;height:auto!important;overflow-y:auto!important;overscroll-behavior:contain!important;padding:10px 5px 18px!important;scroll-behavior:auto!important}
+.rasi-chat-panel .buddy-msg{width:fit-content;max-width:min(88%,680px);word-break:break-word;white-space:normal}
+.rasi-chat-panel .buddy-msg.you{align-self:flex-end}
+.rasi-chat-panel .buddy-msg.rasi{align-self:flex-start}
+.rasi-chat-panel .chat-text{white-space:normal}
+.rasi-composer{position:sticky!important;bottom:0!important;z-index:5;flex:0 0 auto;margin-top:8px!important}
+.rasi-composer textarea{max-height:140px!important}
+.rasi-typing{display:flex;align-items:center;gap:8px;min-width:58px}
+.typing-dots{display:inline-flex;gap:4px;align-items:center;padding:2px 0}
+.typing-dots i{display:block;width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45;animation:rasiTyping 1s infinite ease-in-out}
+.typing-dots i:nth-child(2){animation-delay:.15s}.typing-dots i:nth-child(3){animation-delay:.3s}
+@keyframes rasiTyping{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-3px);opacity:1}}
+@media(max-width:600px){
+ .rasi-chat-panel{height:calc(100dvh - 128px);min-height:460px}
+ .rasi-chat-panel .buddy-msg{max-width:92%;font-size:14px}
+}
+</style></style><style id="rasi-presentation-v1">
 /* Presentation pass: visual-only. Planner/data logic is intentionally untouched. */
 .rasi-mark{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;padding:0;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.16)}
 .rasi-mark svg{width:32px;height:32px;fill:none;stroke:var(--text);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
@@ -712,11 +733,12 @@ function showRasiHistory(){
  '</div>');
 }
 function renderChat(){
- const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[], memory=Array.isArray(state.rasiMemory)?state.rasiMemory:[];
+ const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[];
  const box=document.getElementById('chat');if(!box)return;
- const recent=chat.slice(-20);
- box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful memories saved':'Memory is shared across your chats')+'</small></div><div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ Chats</button><button class="rasi-history-btn" onclick="newRasiChat()">＋ New</button></div></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
- const thread=box.querySelector('.chat-thread');if(thread)requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
+ const recent=chat.slice(-15);
+ box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>AI chat • context-aware</small></div><div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ Chats</button><button class="rasi-history-btn" onclick="newRasiChat()">＋ New</button></div></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span><div class="chat-text">'+esc(m.text).replace(/\\n/g,'<br>')+'</div></div>';}).join('')+'</div>';
+ const thread=box.querySelector('.chat-thread');
+ if(thread)requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
 }
 function toggleRasiChat(){state.chatOpen=!state.chatOpen;save();renderChat();}
 function updateRasiMemory(raw){
