@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v5.1";
+  const VERSION = "brain-v6.0";
   const CONFIG = window.RASI_CONFIG || {aiEndpoint:(localStorage.getItem("rasiAiEndpoint")||"")};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -63,12 +63,13 @@
       pending:brain.pending||null,
       skin:s.skin||"midnight",
       body:{day:s.bodyDay||1,mode:s.bodyMode||"normal"},
-      recentChat:(s.chat||[]).slice(-MAX_CONTEXT_MESSAGES).map(m=>({who:m.who,text:m.text}))
+      recentChat:(s.chat||[]).slice(-MAX_CONTEXT_MESSAGES).map(m=>({who:m.who,text:m.text})),previousChats:(s.conversations||[]).filter(x=>x.id!==s.currentChatId).slice(0,8).map(x=>({title:x.title,messages:(x.messages||[]).slice(-4).map(m=>({who:m.who,text:m.text}))}))
     };
   }
 
   function saveRender(){
     try{
+      if(typeof persistCurrentChat==="function") persistCurrentChat();
       if(window.RASI_RUNTIME?.save) window.RASI_RUNTIME.save();
       else if(typeof save==="function") save();
       if(window.RASI_RUNTIME?.render) window.RASI_RUNTIME.render();
