@@ -1,8 +1,35 @@
-const CACHE='rasi-v18';
-const ASSETS=['./','./index.html','./manifest.json','./rasi-brain.js'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=='rasi-v18').map(x=>caches.delete(x)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{
- if(e.request.method!=='GET')return;
- e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{if(r.ok)caches.open(CACHE).then(c=>c.put(e.request,r.clone()));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))));
+const CACHE_NAME="rasi-v18-ai-chat";
+const CORE=["./","./index.html","./manifest.json","./rasi-brain.js?v=7.0"];
+
+self.addEventListener("install",event=>{
+  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
+});
+self.addEventListener("activate",event=>{
+  event.waitUntil(
+    caches.keys()
+      .then(keys=>Promise.all(keys.filter(k=>k.startsWith("rasi-")&&k!==CACHE_NAME).map(k=>caches.delete(k))))
+      .then(()=>self.clients.claim())
+  );
+});
+self.addEventListener("fetch",event=>{
+  if(event.request.method!=="GET")return;
+  if(event.request.mode==="navigate"){
+    event.respondWith(
+      fetch(event.request,{cache:"no-store"})
+        .then(response=>{
+          caches.open(CACHE_NAME).then(cache=>cache.put("./index.html",response.clone())).catch(()=>{});
+          return response;
+        })
+        .catch(()=>caches.match("./index.html"))
+    );
+    return;
+  }
+  event.respondWith(
+    fetch(event.request,{cache:"no-store"})
+      .then(response=>{
+        if(response.ok)caches.open(CACHE_NAME).then(cache=>cache.put(event.request,response.clone())).catch(()=>{});
+        return response;
+      })
+      .catch(()=>caches.match(event.request))
+  );
 });
