@@ -285,6 +285,19 @@
   }
 
   window.buddyCommand=brainCommand;
+  const chatInput=document.getElementById("buddyInput");
+  if(chatInput){
+    chatInput.addEventListener("keydown",event=>{
+      if(event.key==="Enter" && !event.shiftKey){
+        event.preventDefault();
+        brainCommand();
+      }
+    });
+    chatInput.addEventListener("input",()=>{
+      chatInput.style.height="auto";
+      chatInput.style.height=Math.min(chatInput.scrollHeight,140)+"px";
+    });
+  }
   window.RASI_BRAIN={
     version:VERSION,
     scheduleSnapshot,
