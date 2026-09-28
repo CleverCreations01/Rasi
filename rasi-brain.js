@@ -4,7 +4,7 @@
 (() => {
   "use strict";
   const VERSION = "brain-v5.0";
-  const CONFIG = window.RASI_CONFIG || {};
+  const CONFIG = window.RASI_CONFIG || {aiEndpoint:(localStorage.getItem("rasiAiEndpoint")||"")};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
   const EMOJIS = ["✨","👀","😭","😂","🫶","💀","🤨","😌","🔥","🌱","🧠","🙃"];
