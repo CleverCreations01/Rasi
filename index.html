@@ -735,6 +735,14 @@ document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',(
 function showModal(html){document.getElementById('modal').innerHTML=html;document.getElementById('modalBack').classList.add('show')}
 function closeModal(e){if(!e||e.target.id==='modalBack')document.getElementById('modalBack').classList.remove('show')}
 function showToast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+// RĀSI brain bridge: keeps the stable planner intact while adding the smarter conversation layer.
+window.RASI_RUNTIME={
+  getState:()=>state,
+  setState:(v)=>{state=v},
+  save:()=>save(),
+  render:()=>render()
+};
+
 // PWA install support
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
@@ -742,5 +750,6 @@ async function installApp(){if(!deferredInstall){showToast('Use browser menu →
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v14.js?v=1').catch(()=>{}));
 ensureState();render();setInterval(()=>render(),30000);
 </script>
+<script src="./rasi-brain.js?v=3"></script>
 </body>
 </html>
