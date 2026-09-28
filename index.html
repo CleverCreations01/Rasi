@@ -858,8 +858,8 @@ document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',(
 function openRasiSettings(){try{showView('settings');}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
 function saveRasiAiEndpoint(){
  const input=document.getElementById('rasiAiEndpoint');
- const value=(input?.value||'').trim().replace(/\\s+$/,'');
- if(value && !/^https?:\\/\\//i.test(value)){showToast('Use a full https:// AI endpoint');return;}
+ const value=(input?.value||'').trim();
+ if(value && !(value.startsWith('https://')||value.startsWith('http://'))){showToast('Use a full https:// AI endpoint');return;}
  if(value)localStorage.setItem('rasiAiEndpoint',value);else localStorage.removeItem('rasiAiEndpoint');
  closeModal();showToast(value?'AI endpoint saved.':'AI endpoint cleared.');
 }
