@@ -681,7 +681,7 @@ function renderChat(){
    box.innerHTML='<div class="chat-closed"><div><b>🔒 Private chat</b><small>Your messages stay tucked away until you open this.</small></div><button class="chat-open-btn" onclick="toggleRasiChat()">Open chat</button></div>';
    return;
  }
- const recent=chat.slice(-100);
+ const recent=chat.slice(-20);
  box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>'+(memory.length?memory.length+' useful context notes saved locally':'Private on this phone')+'</small></div><button class="chat-close-btn" onclick="toggleRasiChat()">Hide</button></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span>'+esc(m.text)+'</div>';}).join('')+'</div>';
  const thread=box.querySelector('.chat-thread');
  if(thread) requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
