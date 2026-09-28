@@ -367,7 +367,11 @@
     if(actionLike && typeof window.rasiLegacyBuddyCommand==="function"){
       s.chat.pop(); input.value=raw; window.rasiLegacyBuddyCommand(); return;
     }
-    reply=onboardingReply(x)||exerciseReply(x);
+    const brainNow=ensureBrain();
+    const pendingCanContinue=!!brainNow.pending &&
+      !/^(hi|hey|hello|hii|yo|thanks|thank you|okay|ok|cool|nice|lol|haha)\b/.test(x) &&
+      !/\b(change|move|remove|add|schedule|plan|tomorrow|today|college|festival|chess|study|workout|exercise)\b/.test(x);
+    reply=pendingCanContinue ? (onboardingReply(x)||exerciseReply(x)) : null;
     if(!reply) reply=await remoteReply(raw);
     if(!reply) reply=naturalConversationReply(raw);
     pushReply(reply);
