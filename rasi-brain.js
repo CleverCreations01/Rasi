@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v4.2";
+  const VERSION = "brain-v5.0";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -158,43 +158,70 @@
     return null;
   }
 
-  function variedFriendReply(x){
-    const ts=taskSummary();
-    if(/^(hi|hey|hii|hello|yo|sup)\b/.test(x))
-      return pick([
-        "Hiiii. ✨ I'm here. What's going on?",
-        "Heyyy. 👀 Give me the situation — college, life, work, or pure chaos?",
-        "Yo 😭 RĀSI is online. What's happening?"
-      ]);
-    if(/\bhow are you\b/.test(x))
-      return "I'm good in the only way an AI can be 😌 — ready for whatever you throw at me. More importantly, how are YOU actually doing?";
-    if(/\bwhat can you do\b|\bwhat do you do\b|\bhow can you help\b/.test(x))
-      return "A lot more than replying to messages. 🧠 I can learn useful context about you, ask questions before building a plan, reason about your schedule, help with study/skills/exercise, research when that capability is connected, and eventually change your RĀSI plan through controlled actions. I shouldn't blindly change important things — I'll ask when confirmation matters.";
-    if(/\btalk to me (as|like) a friend\b|\bbe my friend\b/.test(x))
-      return "Yeah. 🫶 You don't have to turn every conversation into a task. Tell me what happened, what you're thinking, or what you need — I'll listen first, give you a perspective when useful, and let you make the final call.";
-    if(/\bremember\b|\bdo you remember me\b/.test(x)){
-      const mem=safeState().rasiMemory||[];
-      return mem.length ? "Yeah — I keep a small set of useful context on this device. For example: “"+mem[0]+"” ✦ I won't treat every random message as permanent memory.":"I haven't saved much useful context yet. Tell me the things you want RĀSI to understand about you.";
-    }
-    if(/\b(study|syllabus|backlog|revision|exam)\b/.test(x))
-      return "Okay, let's make that concrete. 🧠 What are you studying, what is currently pending, and how much time do you realistically have today? I don't want to invent a plan without knowing those three things.";
-    if(/\b(stress|stressed|overwhelmed|burnt out|burnout|exhausted|drained|sad|lonely|guilty|demotivated|no motivation)\b/.test(x))
-      return pick([
-        "Okay. No productivity lecture. 🫂 Tell me the messy version first. We can decide what actually needs action after that.",
-        "Pause for a second. You don't have to solve your whole life tonight. Tell me what happened; I'll help separate the actual problem from the pressure around it.",
-        "I'm listening. 👀 What is the part that's bothering you most right now?"
-      ]);
-    if(ts.next)
-      return pick([
-        "I'm with you. ✨ Tell me what changed or what you're thinking about, and I'll use your current plan as context instead of starting from zero.",
-        "Okay, talk to me. 👀 I know your next planned block is "+ts.next+(ts.nextTime?" at "+ts.nextTime:"")+", but that doesn't mean the plan is sacred. What's going on?",
-        "Got you. 🧠 Give me the context first. Then we'll decide whether this needs a conversation, a plan change, or both."
-      ]);
-    return pick([
-      "I'm listening. 👀 What's actually on your mind?",
-      "Go on. 😌 You don't need to phrase it perfectly.",
-      "Okay, I'm here. Tell me the situation and what you want from me — listening, an opinion, or an actual plan."
+  function recentAssistantTexts(){
+    const s=safeState();
+    return (s.chat||[]).filter(m=>m.who!=="you").slice(-8).map(m=>lower(m.text));
+  }
+  function freshPick(options){
+    const recent=recentAssistantTexts();
+    const fresh=options.filter(v=>!recent.includes(lower(v)));
+    return pick(fresh.length?fresh:options);
+  }
+  function clearIrrelevantPending(x){
+    const b=ensureBrain();
+    if(!b.pending)return;
+    const switchTopic=/^(hi|hey|hello|hii|yo|thanks|thank you|okay|ok|cool|nice|lol|haha)\b/.test(x) ||
+      /\b(change|move|remove|add|schedule|plan|tomorrow|today|college|festival|chess|study|workout|exercise)\b/.test(x);
+    if(switchTopic)clearPending();
+  }
+  function naturalConversationReply(raw){
+    const x=lower(raw);
+    clearIrrelevantPending(x);
+    if(/^(hi|hey|hello|hii|hiiii|yo|sup)\b/.test(x))return freshPick([
+      "Heyyy 😭 What's happening?","Hii. I'm here. Tell me everything.","Yo 👀 What are we dealing with today?"
     ]);
+    if(/\bhow are you\b/.test(x))return freshPick([
+      "I'm good 😌 More importantly, how are you actually doing?",
+      "Pretty good 😂 What's going on with you?",
+      "I'm here and functioning 😭 How's your day?"
+    ]);
+    if(/\b(thank you|thanks|thx)\b/.test(x))return freshPick(["Anytime 🫶","Of course.","Always."]);
+    if(/^(okay|ok|alright|cool|nice|got it)\b/.test(x))return freshPick(["Okay 😌","Gotcha.","Cool. What's next?","Alright, I'm with you."]);
+    if(/\b(sorry|my bad)\b/.test(x))return freshPick([
+      "You're fine. Just tell me what changed.","No stress. What's actually going on?","You don't need to apologize to me 😭"
+    ]);
+    if(/\b(what do you think|your opinion|what's your take|what do u think)\b/.test(x))return freshPick([
+      "I can give you my take. Give me the full context first.",
+      "Okay, opinion mode 👀 What's the situation?",
+      "I have a perspective, but I don't want to decide for you. Tell me what happened."
+    ]);
+    if(/\b(stress|stressed|overwhelmed|burnt out|exhausted|drained|sad|lonely|guilty|demotivated|no motivation)\b/.test(x))return freshPick([
+      "Okay, no productivity speech. 🫂 What happened?",
+      "Tell me the messy version first. We can sort it out after.",
+      "Yeah, that sounds like a lot. What's bothering you most?"
+    ]);
+    if(/\b(happy|excited|proud|got selected|did it|finished|passed|won|good news)\b/.test(x))return freshPick([
+      "WAIT 😭 Okay, that's actually good. Tell me what happened.",
+      "Okayyy, I need the story now 👀","Yesss. I'm listening. What happened?"
+    ]);
+    if(/\b(confused|don't understand|dont understand|stuck|can't figure|cannot figure)\b/.test(x))return freshPick([
+      "Okay, show me where you're stuck.","Let's untangle it. What part isn't making sense?","Give me the exact bit that's confusing you."
+    ]);
+    if(/\b(bored|nothing to do)\b/.test(x))return freshPick([
+      "Dangerous sentence 😂 What kind of bored — fun bored or useful bored?",
+      "Choose your chaos: fun, useful, or completely random?","I refuse to let you scroll into another dimension 😭"
+    ]);
+    if(/\bwhat can you do\b|\bhow can you help\b/.test(x))
+      return "I can talk with you normally, or help with your actual day when you want that. I can remember useful context, help with college and skills, and make schedule changes when you ask. Not every message has to become a task.";
+    if(/\btalk to me (as|like) a friend\b|\bbe my friend\b/.test(x))
+      return "Yeah 🫶. And I don't need to keep announcing that every two messages. Just talk normally. I'll listen, joke around when it fits, give you my perspective when you ask, and switch into planning when you actually need it.";
+    if(/\bremember\b.*\bme\b|\bdo you remember\b/.test(x)){
+      const mem=safeState().rasiMemory||[];
+      return mem.length?"Yeah. I keep useful context rather than saving every random sentence. One thing I remember is: “"+mem[0]+"”":"I haven't built much useful memory yet. Tell me what you want me to remember.";
+    }
+    if(/\b(today|tomorrow|yesterday|college|class|festival|friend|family|roommate|pg|project|assignment|teacher|professor|exam|chess|treasure hunt)\b/.test(x))
+      return freshPick(["Okay, I'm following. Keep going.","Yeah, I get the context. What happened next?","Got you. What's the part you want me to help with?","I'm following you — continue."]);
+    return freshPick(["Go on. I'm listening.","Okay, I'm with you. Keep going.","Tell me more — I don't want to guess.","Yeah? 👀","I'm listening. What happened?"]);
   }
 
   async function remoteReply(raw){
@@ -340,9 +367,13 @@
     if(actionLike && typeof window.rasiLegacyBuddyCommand==="function"){
       s.chat.pop(); input.value=raw; window.rasiLegacyBuddyCommand(); return;
     }
-    reply=onboardingReply(x)||exerciseReply(x);
+    const brainNow=ensureBrain();
+    const pendingCanContinue=!!brainNow.pending &&
+      !/^(hi|hey|hello|hii|yo|thanks|thank you|okay|ok|cool|nice|lol|haha)\b/.test(x) &&
+      !/\b(change|move|remove|add|schedule|plan|tomorrow|today|college|festival|chess|study|workout|exercise)\b/.test(x);
+    reply=pendingCanContinue ? (onboardingReply(x)||exerciseReply(x)) : null;
     if(!reply) reply=await remoteReply(raw);
-    if(!reply) reply=variedFriendReply(x);
+    if(!reply) reply=naturalConversationReply(raw);
     pushReply(reply);
     }catch(err){
       console.error("RASI brain error",err);
