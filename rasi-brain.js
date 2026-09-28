@@ -3,7 +3,7 @@
 */
 (() => {
   "use strict";
-  const VERSION = "brain-v2";
+  const VERSION = "brain-v3";
   const CONFIG = window.RASI_CONFIG || {};
   const ENDPOINT = CONFIG.aiEndpoint || "";
   const MAX_CONTEXT_MESSAGES = 16;
@@ -215,6 +215,71 @@
     }catch(e){return null}finally{clearTimeout(timer)}
   }
 
+  // Real schedule reasoning: explicit changes can affect several dates at once.
+  function parseTime(text){
+    const m=String(text||"").match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/i);
+    if(!m)return null; let h=Number(m[1]), min=Number(m[2]||0), ap=m[3].toUpperCase();
+    if(h<1||h>12||min>59)return null; return String(h).padStart(2,"0")+":"+String(min).padStart(2,"0")+" "+ap;
+  }
+  function addMins(time,mins){
+    const p=String(time).match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i); if(!p)return time;
+    let h=Number(p[1]),m=Number(p[2]),ap=p[3].toUpperCase(); if(ap==="PM"&&h!==12)h+=12;if(ap==="AM"&&h===12)h=0;
+    let total=((h*60+m+mins)%1440+1440)%1440, hh=Math.floor(total/60), mm=total%60, outAp=hh>=12?"PM":"AM";
+    hh=hh%12||12; return String(hh).padStart(2,"0")+":"+String(mm).padStart(2,"0")+" "+outAp;
+  }
+  function dayOffset(raw){
+    const x=lower(raw), n=x.match(/(?:next|for|over)\s+(\d+)\s+days?/);
+    if(n)return Math.max(1,Math.min(14,Number(n[1]))); if(/tomorrow/.test(x))return 2;
+    if(/this week|rest of the week/.test(x))return 7; return 1;
+  }
+  function datesForRange(raw){
+    const n=dayOffset(raw), start=new Date(); start.setHours(12,0,0,0); const out=[];
+    for(let i=0;i<n;i++){const d=new Date(start);d.setDate(start.getDate()+i);out.push(d);} return out;
+  }
+  function taskWords(raw){
+    const x=lower(raw), map=[
+      ["coding",["coding","c programming","c code","programming"]],["study",["study","studying","revision","revise","notes","academics"]],
+      ["pinterest",["pinterest","pins","pin"]],["english",["english","spoken english","speaking","vocabulary"]],
+      ["career",["career","content strategy","chessbase","cbi","agency","creatorcollabs","marketing","cold call"]],
+      ["health",["exercise","workout","yoga","pranayama","walk","fitness"]],["knowledge",["reading","read","encyclopedia","curiosity"]],
+      ["life",["friends","college life","social","fun"]]];
+    for(const pair of map)if(pair[1].some(w=>x.includes(w)))return {cat:pair[0]}; return null;
+  }
+  function findTask(arr,raw){
+    const info=taskWords(raw), x=lower(raw);
+    if(info){const t=arr.find(q=>q.cat===info.cat&&!q.done&&q.cat!=="college")||arr.find(q=>q.cat===info.cat);if(t)return t;}
+    return arr.filter(q=>q.cat!=="college").find(q=>x.includes(lower(q.n)))||null;
+  }
+  function rangeLabel(ds){
+    if(ds.length===1)return ds[0].toLocaleDateString([],{weekday:"long"});
+    return ds[0].toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"})+" → "+ds[ds.length-1].toLocaleDateString([],{weekday:"short",day:"numeric",month:"short"});
+  }
+  function scheduleCommand(raw){
+    const x=lower(raw), s=safeState(); if(typeof tasksForDate!=="function"||typeof dateKey!=="function")return null;
+    const ds=datesForRange(raw), target=taskWords(raw), time=parseTime(raw);
+    if(target&&/\b(remove|delete|drop|skip|pause|stop)\b/.test(x)&&(/\bnext \d+ days?\b/.test(x)||/\btomorrow\b/.test(x)||/\bthis week\b/.test(x))){
+      let changed=0; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),before=arr.length;state.dateTasks[k]=arr.filter(t=>!(t.cat===target.cat&&t.cat!=="college"));changed+=before-state.dateTasks[k].length;});
+      if(changed){saveRender();return "Done. I removed the "+target.cat+" block"+(changed>1?"s":"")+" across "+rangeLabel(ds)+". College and protected blocks were left alone.";}
+      return "There was no "+target.cat+" block to remove across "+rangeLabel(ds)+".";
+    }
+    if(target&&time&&/\b(move|shift|reschedule|change|put|make)\b/.test(x)){
+      const changed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d),t=findTask(arr,raw);if(!t)return;const dur=Math.max(15,minutes(t.e)-minutes(t.s));t.s=time;t.e=addMins(time,dur);arr.sort((a,z)=>minutes(a.s)-minutes(z.s)).forEach((q,i)=>q.order=i);changed.push(t.n+" → "+t.s+"–"+t.e);});
+      if(changed.length){saveRender();return "Done. I moved the "+target.cat+" block for "+rangeLabel(ds)+".\n"+changed.slice(0,4).join("\n")+(changed.length>4?"\n…and applied the same change to the remaining days.":"");}
+    }
+    if(/\b(more study|more revision|need extra study|study more|exam prep|exam is coming)\b/.test(x)){
+      const removed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["pinterest","career","english","knowledge"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
+      saveRender();return removed.length?"I made the next "+ds.length+" day"+(ds.length>1?"s":"")+" more study-heavy by clearing lower-priority flexible blocks: "+removed.slice(0,5).join(", ")+(removed.length>5?" and others.":".")+"":"The next "+ds.length+" day"+(ds.length>1?"s":"")+" already have the lower-priority blocks cleared.";
+    }
+    if(/\b(lighten|lighter|less packed|less busy|reduce my load)\b/.test(x)){
+      const removed=[]; ds.forEach(d=>{const k=dateKey(d),arr=tasksForDate(d);["knowledge","career","pinterest","english"].forEach(cat=>{const t=arr.find(q=>q.cat===cat&&!q.done);if(t){state.dateTasks[k]=state.dateTasks[k].filter(q=>q.id!==t.id);removed.push(t.n);}});});
+      saveRender();return removed.length?"Done. I lightened "+rangeLabel(ds)+" by removing the least essential flexible blocks. Fixed college, health and core study stayed protected.":"Those days are already relatively light.";
+    }
+    return null;
+  }
+  function scheduleConversationReply(raw){
+    const x=lower(raw); if(/\bwhat did you change\b|\bwhat have you changed\b/.test(x))return ensureBrain().profile.lastScheduleChange||"I have not changed the schedule yet.";
+    return null;
+  }
   async function brainCommand(){
     const input=document.getElementById("buddyInput");
     const raw=norm(input?.value);
@@ -228,16 +293,16 @@
     // Explicit app actions still go through the existing controlled tool logic.
     const x=lower(raw);
     const actionLike=/^(add|schedule|plan|move|shift|reschedule|remove|delete|change|rebuild|replace|skip|cancel|replan|rearrange|lighten)\b/.test(x) ||
-      /\b(move|add|remove|delete|reschedule|replan)\b.*\b(today|tomorrow|coding|study|pinterest|english|exercise|workout|task|schedule)\b/.test(x);
-    if(actionLike && typeof window.rasiLegacyBuddyCommand==="function"){
-      // The legacy handler owns action execution and also records the user message.
-      s.chat.pop();
-      input.value=raw;
-      window.rasiLegacyBuddyCommand();
-      return;
+      /\b(move|add|remove|delete|reschedule|replan|lighten)\b.*\b(today|tomorrow|coding|study|pinterest|english|exercise|workout|task|schedule|days?)\b/.test(x);
+    let reply=scheduleConversationReply(raw)||scheduleCommand(raw);
+    if(reply){
+      const brain=ensureBrain(); brain.profile.lastScheduleChange=reply; brain.updatedAt=new Date().toISOString();
+      pushReply(reply); return;
     }
-
-    let reply=onboardingReply(x)||exerciseReply(x);
+    if(actionLike && typeof window.rasiLegacyBuddyCommand==="function"){
+      s.chat.pop(); input.value=raw; window.rasiLegacyBuddyCommand(); return;
+    }
+    reply=onboardingReply(x)||exerciseReply(x);
     if(!reply) reply=await remoteReply(raw);
     if(!reply) reply=variedFriendReply(x);
     pushReply(reply);
