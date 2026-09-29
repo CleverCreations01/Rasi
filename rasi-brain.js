@@ -7,7 +7,7 @@
 
   const VERSION = "brain-v7.0-ai-first";
   const CONFIG = window.RASI_CONFIG || {};
-  const ENDPOINT = CONFIG.aiEndpoint || localStorage.getItem("rasiAiEndpoint") || "";
+  function endpoint(){ return CONFIG.aiEndpoint || localStorage.getItem("rasiAiEndpoint") || ""; }
 
   function stateRef(){ return window.state || null; }
   function safeState(){ return stateRef() || {}; }
@@ -95,7 +95,8 @@
   }
 
   async function askAI(){
-    if(!ENDPOINT) throw new Error("RĀSI AI is not connected yet. Add the secure AI endpoint in RASI settings.");
+    const ENDPOINT = endpoint();
+    if(!ENDPOINT) throw new Error("RĀSI AI is not connected yet. Add the secure AI endpoint in RĀSI settings.");
 
     const payload={
       messages:last15(),
@@ -258,7 +259,7 @@
     if(!Array.isArray(s.chat))s.chat=[];
     s.chat.push({who:"you",text:raw});
     persist();
-    if(typeof renderChat==="function")renderChat();
+    if(typeof renderChat==="function")renderChat(true);
     setTyping(true);
 
     try{
@@ -272,7 +273,7 @@
       setTyping(false);
       s.chat.push({who:"rasi",text:norm(result.reply)+(actionNote ? "\n\n✓ "+actionNote : "")});
       persist();
-      if(typeof renderChat==="function")renderChat();
+      if(typeof renderChat==="function")renderChat(true);
       requestAnimationFrame(()=>{
         const t=document.querySelector(".chat-thread");
         if(t)t.scrollTop=t.scrollHeight;

@@ -331,7 +331,25 @@ body:not([class*="skin-"]) .rasi-chat-panel,
 .rasi-chat-panel .buddy-msg.you{background:color-mix(in srgb,var(--accent) 18%,transparent)!important;border-color:color-mix(in srgb,var(--accent) 30%,var(--line))!important}
 .rasi-chat-panel .buddy-msg.rasi{background:color-mix(in srgb,var(--panel2) 82%,transparent)!important}
 .rasi-composer{background:color-mix(in srgb,var(--panel2) 84%,transparent)!important;border-color:color-mix(in srgb,var(--accent) 18%,var(--line))!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-</style></head>
+<style id="rasi-chat-stability-v1">
+/* Chat-only stability fix: the message thread owns scrolling; composer stays pinned inside the chat panel. */
+#view-buddy{height:calc(100dvh - 170px);min-height:0;overflow:hidden}
+#view-buddy .rasi-chat-page{height:100%;min-height:0}
+#view-buddy .rasi-chat-panel{height:100%;min-height:0;max-height:none;overflow:hidden;display:flex!important;flex-direction:column}
+#view-buddy .rasi-chat-top{flex:0 0 auto}
+#view-buddy #chat{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+#view-buddy #chat .chat-head{flex:0 0 auto}
+#view-buddy #chat .chat-thread{flex:1 1 auto;min-height:0;height:auto;max-height:none!important;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scroll-behavior:auto!important;padding:12px 4px 18px}
+#view-buddy .rasi-composer{flex:0 0 auto;position:sticky!important;bottom:0;z-index:20;margin-top:8px}
+#view-buddy .rasi-about{flex:0 0 auto;max-height:28vh;overflow:auto}
+.rasi-scroll-latest{display:none;position:absolute;right:18px;bottom:82px;z-index:25;padding:8px 11px;border-radius:999px;background:var(--accent);color:var(--bg);font-size:11px;font-weight:900;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.rasi-scroll-latest.show{display:block}
+@media(max-width:600px){
+ #view-buddy{height:calc(100dvh - 125px)}
+ #view-buddy .rasi-chat-panel{border-radius:20px}
+ #view-buddy .rasi-about{max-height:22vh}
+}
+</style></style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -870,9 +888,11 @@ function showRasiHistory(){
  (items.length?items.map(x=>'<button class="rasi-chat-row" onclick="openRasiChat('+JSON.stringify(x.id)+')"><span><b>'+esc(x.title||'New chat')+'</b><small>'+esc(new Date(x.updatedAt||Date.now()).toLocaleDateString([], {day:'numeric',month:'short'}))+' • '+(x.messages||[]).length+' messages</small></span><span>›</span></button>').join(''):'<div style="padding:30px;text-align:center;color:var(--muted)">No previous chats yet.</div>')+
  '</div>');
 }
-function renderChat(){
+function renderChat(forceLatest=false){
  const name=state.appName||DEFAULT_APP_NAME, chat=Array.isArray(state.chat)?state.chat:[];
  const box=document.getElementById('chat');if(!box)return;
+ const threadBefore=box.querySelector('.chat-thread');
+ const wasNearBottom=!threadBefore || (threadBefore.scrollHeight-threadBefore.scrollTop-threadBefore.clientHeight)<140;
  const recent=chat.slice(-15);
  box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>AI chat • context-aware</small></div><div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ Chats</button><button class="rasi-history-btn" onclick="newRasiChat()">＋ New</button></div></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span><div class="chat-text">'+esc(m.text).replace(/\\n/g,'<br>')+'</div></div>';}).join('')+'</div>';
  const thread=box.querySelector('.chat-thread');
@@ -884,7 +904,10 @@ function renderChat(){
      const away=thread.scrollHeight-thread.scrollTop-thread.clientHeight;
      latest.classList.toggle('show',away>140);
    },{passive:true});
-   requestAnimationFrame(()=>{goLatest();if(latest)latest.classList.remove('show');});
+   requestAnimationFrame(()=>{
+     if(forceLatest || wasNearBottom)goLatest();
+     if(forceLatest && latest)latest.classList.remove('show');
+   });
  }
 }
 
