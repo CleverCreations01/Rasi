@@ -844,7 +844,16 @@ function renderChat(){
  const recent=chat.slice(-15);
  box.innerHTML='<div class="chat-head"><div><b>💬 '+esc(name)+'</b><small>AI chat • context-aware</small></div><div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ Chats</button><button class="rasi-history-btn" onclick="newRasiChat()">＋ New</button></div></div><div class="chat-thread">'+recent.map(function(m){return '<div class="buddy-msg '+(m.who==='you'?'you':'rasi')+'"><span class="chat-who">'+(m.who==='you'?'You':esc(name))+'</span><div class="chat-text">'+esc(m.text).replace(/\\n/g,'<br>')+'</div></div>';}).join('')+'</div>';
  const thread=box.querySelector('.chat-thread');
- if(thread)requestAnimationFrame(()=>{thread.scrollTop=thread.scrollHeight;});
+ const latest=document.getElementById('rasiScrollLatest');
+ if(thread){
+   const goLatest=()=>{thread.scrollTop=thread.scrollHeight;};
+   thread.addEventListener('scroll',()=>{
+     if(!latest)return;
+     const away=thread.scrollHeight-thread.scrollTop-thread.clientHeight;
+     latest.classList.toggle('show',away>140);
+   },{passive:true});
+   requestAnimationFrame(()=>{goLatest();if(latest)latest.classList.remove('show');});
+ }
 }
 
 function addMinutes(start,dur){let m=minutes(start)+dur,h=Math.floor(m/60)%24,mi=m%60,ap=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(mi).padStart(2,'0')} ${ap}`}
