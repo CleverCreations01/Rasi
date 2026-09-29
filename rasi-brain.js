@@ -9,7 +9,11 @@
   const CONFIG = window.RASI_CONFIG || {};
   function endpoint(){ return CONFIG.aiEndpoint || localStorage.getItem("rasiAiEndpoint") || ""; }
 
-  function stateRef(){ return window.state || null; }
+  function stateRef(){
+    // index.html keeps `state` as a lexical variable, not window.state.
+    // Use the runtime bridge so chat writes reach the real app state.
+    return window.RASI_RUNTIME?.getState?.() || window.state || null;
+  }
   function safeState(){ return stateRef() || {}; }
   function norm(v){ return String(v ?? "").trim(); }
 
