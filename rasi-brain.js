@@ -7,7 +7,7 @@
 
   const VERSION = "brain-v7.0-ai-first";
   const CONFIG = window.RASI_CONFIG || {};
-  const ENDPOINT = CONFIG.aiEndpoint || localStorage.getItem("rasiAiEndpoint") || "";
+  function endpoint(){ return CONFIG.aiEndpoint || localStorage.getItem("rasiAiEndpoint") || ""; }
 
   function stateRef(){ return window.state || null; }
   function safeState(){ return stateRef() || {}; }
@@ -95,7 +95,8 @@
   }
 
   async function askAI(){
-    if(!ENDPOINT) throw new Error("RĀSI AI is not connected yet. Add the secure AI endpoint in RASI settings.");
+    const ENDPOINT = endpoint();
+    if(!ENDPOINT) throw new Error("RĀSI AI is not connected yet. Add the secure AI endpoint in RĀSI settings.");
 
     const payload={
       messages:last15(),
