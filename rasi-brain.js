@@ -259,7 +259,7 @@
     if(!Array.isArray(s.chat))s.chat=[];
     s.chat.push({who:"you",text:raw});
     persist();
-    if(typeof renderChat==="function")renderChat();
+    if(typeof renderChat==="function")renderChat(true);
     setTyping(true);
 
     try{
@@ -273,7 +273,7 @@
       setTyping(false);
       s.chat.push({who:"rasi",text:norm(result.reply)+(actionNote ? "\n\n✓ "+actionNote : "")});
       persist();
-      if(typeof renderChat==="function")renderChat();
+      if(typeof renderChat==="function")renderChat(true);
       requestAnimationFrame(()=>{
         const t=document.querySelector(".chat-thread");
         if(t)t.scrollTop=t.scrollHeight;
