@@ -1,35 +1,5 @@
-const CACHE_NAME="rasi-v18-ai-chat";
+const CACHE_NAME="rasi-v18";
 const CORE=["./","./index.html","./manifest.json","./rasi-brain.js?v=7.0"];
-
-self.addEventListener("install",event=>{
-  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
-});
-self.addEventListener("activate",event=>{
-  event.waitUntil(
-    caches.keys()
-      .then(keys=>Promise.all(keys.filter(k=>k.startsWith("rasi-")&&k!==CACHE_NAME).map(k=>caches.delete(k))))
-      .then(()=>self.clients.claim())
-  );
-});
-self.addEventListener("fetch",event=>{
-  if(event.request.method!=="GET")return;
-  if(event.request.mode==="navigate"){
-    event.respondWith(
-      fetch(event.request,{cache:"no-store"})
-        .then(response=>{
-          caches.open(CACHE_NAME).then(cache=>cache.put("./index.html",response.clone())).catch(()=>{});
-          return response;
-        })
-        .catch(()=>caches.match("./index.html"))
-    );
-    return;
-  }
-  event.respondWith(
-    fetch(event.request,{cache:"no-store"})
-      .then(response=>{
-        if(response.ok)caches.open(CACHE_NAME).then(cache=>cache.put(event.request,response.clone())).catch(()=>{});
-        return response;
-      })
-      .catch(()=>caches.match(event.request))
-  );
-});
+self.addEventListener("install",event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE_NAME);try{await cache.addAll(CORE);}catch(e){console.error("RASI SW install",e);}await self.skipWaiting();})());});
+self.addEventListener("activate",event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith("rasi-")&&k!==CACHE_NAME).map(k=>caches.delete(k)));await self.clients.claim();})());});
+self.addEventListener("fetch",event=>{const req=event.request;if(req.method!=="GET")return;if(req.mode==="navigate"){event.respondWith((async()=>{try{const fresh=await fetch(req,{cache:"no-store"});const cache=await caches.open(CACHE_NAME);cache.put("./index.html",fresh.clone()).catch(()=>{});return fresh;}catch(e){return (await caches.match("./index.html"))||Response.error();}})());return;}event.respondWith((async()=>{try{const fresh=await fetch(req);const url=new URL(req.url);if(url.origin===location.origin){const cache=await caches.open(CACHE_NAME);cache.put(req,fresh.clone()).catch(()=>{});}return fresh;}catch(e){return (await caches.match(req))||Response.error();}})());});
