@@ -251,6 +251,14 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,
 .bottom-icon{font-size:17px;line-height:1;flex:0 0 auto}.bottom button span:last-child{font-size:10px;overflow:hidden;text-overflow:ellipsis}
 .app{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
 #celebrationLayer,#confetti{pointer-events:none!important}
+</style><style id="rasi-final-layout-v18">
+.bottom{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.bottom-inner{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:100%;max-width:720px}
+.bottom button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 6px}
+.rasi-chat-panel{position:relative;z-index:1}
+.rasi-composer{pointer-events:auto!important;position:relative!important}
+.rasi-composer button,.rasi-composer textarea{pointer-events:auto!important;position:relative;z-index:3}
+@media(max-width:600px){.app{padding-bottom:calc(100px + env(safe-area-inset-bottom))}.bottom-inner{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.bottom button{font-size:10px;padding:10px 4px}}
 </style></style><style id="rasi-presentation-v1">
 /* Presentation pass: visual-only. Planner/data logic is intentionally untouched. */
 .rasi-mark{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;padding:0;background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.16)}
@@ -710,6 +718,7 @@ function render(){
  const appNameEl=document.getElementById('appNameLabel');if(appNameEl)appNameEl.textContent=appName;const buddyTitleEl=document.getElementById('buddyTitle');if(buddyTitleEl)buddyTitleEl.textContent=appName+' planner';const coreBadgeEl=document.getElementById('coreBadge');if(coreBadgeEl)coreBadgeEl.textContent=appName+' CORE';
  try{
   const clockEl=document.getElementById('clock');if(clockEl)clockEl.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
+ const greetingEl=document.querySelector('.greeting');if(greetingEl){const h=now.getHours();greetingEl.textContent=h<5?'Still awake?':h<12?'Good morning.':h<17?'Good afternoon.':h<21?'Good evening.':'Good night.';}
   const dateEl=document.getElementById('date');if(dateEl)dateEl.textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
  }catch(err){console.error('RĀSI clock error',err);}
  const selected=window.__selectedDate||new Date(), isToday=selected.toDateString()===new Date().toDateString();
