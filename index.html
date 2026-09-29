@@ -191,7 +191,16 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 @keyframes petalFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot))}}
 @keyframes flowerFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(0) scale(.92)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--dx),var(--dy),0) rotate(var(--rot)) scale(1.02)}}
 @media(max-width:600px){.chat-closed{padding:13px}.chat-open-btn{padding:9px 10px}.chat-thread{max-height:360px}.buddy-msg{font-size:14px;line-height:1.48}.style-row button{font-size:12px;padding:9px 11px}}
-<style id="rasi-ai-chat-v7">
+<style id="rasi-chat-scroll-v7">
+.rasi-chat-panel{position:relative}
+.rasi-chat-panel #chat{position:relative}
+.rasi-scroll-latest{display:none;position:absolute;right:18px;bottom:78px;z-index:8;padding:8px 11px;border-radius:999px;background:var(--accent);color:var(--bg);font-size:11px;font-weight:900;border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.rasi-scroll-latest.show{display:block}
+.rasi-chat-panel .chat-thread{touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+.rasi-composer{pointer-events:auto!important}
+.rasi-composer *{pointer-events:auto!important}
+.composer-send{touch-action:manipulation;pointer-events:auto!important;position:relative;z-index:10}
+</style><style id="rasi-ai-chat-v7">
 /* AI-first chat: the conversation is its own viewport; composer stays pinned. */
 .rasi-chat-panel{height:calc(100dvh - 150px);min-height:500px;display:flex!important;flex-direction:column;overflow:hidden}
 .rasi-chat-panel #chat{display:flex;flex:1;min-height:0;flex-direction:column}
@@ -419,6 +428,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
     <div style="display:flex;gap:6px"><button class="rasi-history-btn" onclick="showRasiHistory()">☰ History</button><button class="rasi-more" aria-label="RĀSI settings" onclick="openRasiSettings()">⋯</button></div>
    </div>
    <div id="chat"></div>
+   <button id="rasiScrollLatest" class="rasi-scroll-latest" type="button" onclick="scrollRasiToLatest()">↓ Latest</button>
    <div class="rasi-composer">
     <button class="composer-plus" aria-label="RĀSI options" onclick="openRasiSettings()">＋</button>
     <textarea id="buddyInput" rows="1" autocomplete="off" spellcheck="true" placeholder="Say whatever. RĀSI's listening."></textarea>
@@ -869,6 +879,10 @@ function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=n
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
 function openRasiSettings(){try{showView('settings');}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
+function scrollRasiToLatest(){
+ const t=document.querySelector('#chat .chat-thread');
+ if(t){t.scrollTop=t.scrollHeight;t.dispatchEvent(new Event('scroll'));}
+}
 function saveRasiAiEndpoint(){
  const input=document.getElementById('rasiAiEndpoint');
  const value=(input?.value||'').trim();
@@ -898,6 +912,6 @@ render();
 setInterval(()=>{try{updateLiveClock();}catch(err){console.error('RĀSI clock tick error',err);}},1000);
 setInterval(()=>{try{render();}catch(err){console.error('RĀSI periodic render error',err);}},30000);
 </script>
-<script src="./rasi-brain.js?v=7.1"></script>
+<script src="./rasi-brain.js?v=7.0"></script>
 </body>
 </html>
