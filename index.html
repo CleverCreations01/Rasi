@@ -200,6 +200,13 @@ textarea,input,select{width:100%;background:#0c1222;border:1px solid #2a3450;col
 .rasi-composer{pointer-events:auto!important}
 .rasi-composer *{pointer-events:auto!important}
 .composer-send{touch-action:manipulation;pointer-events:auto!important;position:relative;z-index:10}
+</style><style id="rasi-tap-safety-v1">
+button,a,input,textarea,select{pointer-events:auto!important;touch-action:manipulation}
+.bottom{pointer-events:auto!important}
+.bottom-inner{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;flex-wrap:nowrap!important}
+.bottom button{min-width:0!important;white-space:nowrap!important}
+.app{padding-bottom:calc(118px + env(safe-area-inset-bottom))!important}
+@media(max-width:600px){.bottom{padding-left:8px!important;padding-right:8px!important}.bottom-inner{gap:6px!important}.bottom button{padding:10px 5px!important;font-size:10px!important}.app{padding-bottom:calc(112px + env(safe-area-inset-bottom))!important}}
 </style><style id="rasi-ai-chat-v7">
 /* AI-first chat: the conversation is its own viewport; composer stays pinned. */
 .rasi-chat-panel{height:calc(100dvh - 150px);min-height:500px;display:flex!important;flex-direction:column;overflow:hidden}
@@ -667,8 +674,22 @@ function ensureState(){
  });
  save();applySkin();
 }
-function applySkin(){document.documentElement.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-minimal');if(state.skin&&state.skin!=='midnight')document.documentElement.classList.add('skin-'+state.skin);}
-function setSkin(s){state.skin=s;save();applySkin();showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵', 'anime-ds':'Anime mode: DS ⚔️', 'anime-op':'Anime mode: OP 🏴‍☠️',minimal:'Minimal mode ◻'}[s]||'Style changed');render();}
+function applySkin(){
+ try{
+  const root=document.documentElement;
+  root.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-minimal','skin-midnight');
+  root.classList.add('skin-'+(state.skin||'midnight'));
+ }catch(err){console.error('RĀSI theme error',err);}
+}
+function setSkin(s){
+ try{
+  state.skin=s||'midnight';
+  save();
+  applySkin();
+  showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵','anime-ds':'Anime mode: DS ⚔️','anime-op':'Anime mode: OP 🏴‍☠️',minimal:'Minimal mode ◻'}[state.skin]||'Style changed');
+  render();
+ }catch(err){console.error('RĀSI theme change error',err);showToast('Theme could not be changed.');}
+}
 
 function updateLiveClock(){
  try{
@@ -687,8 +708,10 @@ function render(){
   const now=new Date(), hr=now.getHours();
  const appName=state.appName||DEFAULT_APP_NAME;
  const appNameEl=document.getElementById('appNameLabel');if(appNameEl)appNameEl.textContent=appName;const buddyTitleEl=document.getElementById('buddyTitle');if(buddyTitleEl)buddyTitleEl.textContent=appName+' planner';const coreBadgeEl=document.getElementById('coreBadge');if(coreBadgeEl)coreBadgeEl.textContent=appName+' CORE';
- const clockEl=document.getElementById('clock');if(clockEl)clockEl.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
- const dateEl=document.getElementById('date');if(dateEl)dateEl.textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
+ try{
+  const clockEl=document.getElementById('clock');if(clockEl)clockEl.textContent=now.toLocaleTimeString([], {hour:'numeric',minute:'2-digit',hour12:true});
+  const dateEl=document.getElementById('date');if(dateEl)dateEl.textContent=now.toLocaleDateString([], {weekday:'short',day:'numeric',month:'short'});
+ }catch(err){console.error('RĀSI clock error',err);}
  const selected=window.__selectedDate||new Date(), isToday=selected.toDateString()===new Date().toDateString();
  const selectedWd=DAY_NAME(selected.getDay());
  document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
