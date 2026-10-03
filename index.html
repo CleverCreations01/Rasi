@@ -971,7 +971,7 @@ window.RASI_RUNTIME={
 let deferredInstall=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;document.getElementById('installBtn')?.classList.add('show')});
 async function installApp(){if(!deferredInstall){showToast('Use browser menu → Add to Home screen');return}deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;document.getElementById('installBtn')?.classList.remove('show')}
-if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v19.js?v=19').catch(()=>{}));
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw-v20.js?v=20').catch(()=>{}));
 try{ensureState();}catch(err){console.error('RĀSI startup error',err);}
 try{updateLiveClock();}catch(err){console.error('RĀSI clock startup error',err);}
 render();
