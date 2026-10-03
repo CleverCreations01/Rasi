@@ -6,22 +6,32 @@ const MODEL = process.env.RASI_MODEL || "gemini-3.5-flash";
 
 const schema = {
   type: "object",
-  additionalProperties: false,
   properties: {
     reply: { type: "string" },
     action: {
-      type: ["object","null"],
+      type: "object",
       properties: {
-            type: {
-              type: "string",
-              enum: ["add_task","delete_task","edit_task","move_task","reschedule_task","complete_task","reorder_task","toggle_college","set_college"]
-            },
-            details: {
-              type: "object",
-              additionalProperties: true
-            }
-          },
-          required: ["type","details"]
+        type: {
+          type: "string",
+          enum: ["none","add_task","delete_task","edit_task","move_task","reschedule_task","complete_task","reorder_task","toggle_college","set_college"]
+        },
+        details: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            taskName: { type: "string" },
+            taskId: { type: "string" },
+            start: { type: "string" },
+            end: { type: "string" },
+            category: { type: "string" },
+            info: { type: "string" },
+            date: { type: "string" },
+            direction: { type: "string" },
+            enabled: { type: "boolean" }
+          }
+        }
+      },
+      required: ["type","details"]
     }
   },
   required: ["reply","action"]
@@ -78,7 +88,7 @@ function systemPrompt() {
     "OUTPUT:",
     "- Return ONLY the JSON object matching the supplied schema.",
     "- The reply field contains the natural-language response.",
-    "- The action field is null unless an actual schedule/app change is requested."
+    "- The action field must be an object. Use type "none" and an empty details object when no schedule/app change is requested."
   ].join("\n");
 }
 
@@ -133,11 +143,12 @@ module.exports = async function handler(req, res) {
     try { result = JSON.parse(outputText); }
     catch (_) { return res.status(502).json({error:"AI returned invalid JSON"}); }
 
-    if (typeof result.reply !== "string" || !("action" in result)) {
+    if (typeof result.reply !== "string" || !result.action || typeof result.action !== "object" || typeof result.action.type !== "string") {
       return res.status(502).json({error:"AI response failed schema validation"});
     }
 
-    return res.status(200).json({reply:result.reply, action:result.action});
+    const action = result.action.type === "none" ? null : result.action;
+    return res.status(200).json({reply:result.reply, action});
   } catch (err) {
     console.error("RASI API error", err);
     return res.status(500).json({error:"RĀSI AI request failed"});
