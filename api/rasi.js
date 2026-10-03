@@ -88,7 +88,7 @@ function systemPrompt() {
     "OUTPUT:",
     "- Return ONLY the JSON object matching the supplied schema.",
     "- The reply field contains the natural-language response.",
-    "- The action field must be an object. Use type "none" and an empty details object when no schedule/app change is requested."
+    "- The action field must be an object. Use type `none` and an empty details object when no schedule/app change is requested."
   ].join("\n");
 }
 
