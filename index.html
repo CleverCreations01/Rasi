@@ -373,7 +373,37 @@ body:not([class*="skin-"]) .rasi-chat-panel,
  #view-buddy .rasi-chat-panel{border-radius:20px}
  #view-buddy .rasi-about{max-height:22vh}
 }
-</style></style></head>
+</style></style><style id="rasi-op-fan-v2">
+/* Muted OP fan skin: ink, parchment, rope, sea and antique-gold tones. */
+.skin-anime-op,.skin-anime-op-light{--bg:#eee3c8;--panel:#f8f0dc;--panel2:#e8d6ae;--text:#3e3428;--muted:#786b59;--line:#cdbb92;--accent:#8b4543;--accent2:#9b7d46;--gold:#a88951;--shadow:0 14px 34px rgba(65,49,27,.14)}
+.skin-anime-op-dark{--bg:#07101a;--panel:#0c1824;--panel2:#102131;--text:#eee4d1;--muted:#91a0aa;--line:#263c4a;--accent:#7e3d40;--accent2:#9b7d46;--gold:#b29359;--shadow:0 18px 45px rgba(0,0,0,.34)}
+.skin-anime-op body,.skin-anime-op-light body{background:radial-gradient(circle at 10% -5%,rgba(189,157,92,.22),transparent 27%),radial-gradient(circle at 90% 14%,rgba(75,118,126,.16),transparent 29%),linear-gradient(180deg,#f3ead7,#e7ddc4 58%,#d8dfdc)}
+.skin-anime-op-dark body{background:radial-gradient(circle at 12% -10%,rgba(126,61,64,.18),transparent 27%),radial-gradient(circle at 88% 5%,rgba(44,82,96,.20),transparent 30%),linear-gradient(180deg,#07111b,#091722 58%,#061018)}
+.skin-anime-op body:before,.skin-anime-op-light body:before,.skin-anime-op-dark body:before{content:"☠️   ⚓   🧭   🌊   🏴‍☠️   ⚓   ☠️";position:fixed;inset:0;pointer-events:none;z-index:39;font-size:19px;letter-spacing:10px;opacity:.11;white-space:pre-wrap;transform:rotate(-7deg) scale(1.15)}
+.skin-anime-op body:after,.skin-anime-op-light body:after,.skin-anime-op-dark body:after{content:"GRAND LINE  •  NEW WORLD  •  GRAND LINE";position:fixed;left:0;right:0;bottom:7%;pointer-events:none;z-index:39;text-align:center;font-size:9px;font-weight:900;letter-spacing:.28em;opacity:.14;color:var(--gold);transform:rotate(-6deg)}
+.skin-anime-op .hero,.skin-anime-op-light .hero{background:#f8efd8;border:1px solid #c9b17b;box-shadow:0 18px 42px rgba(72,54,30,.12)}
+.skin-anime-op-dark .hero{background:#0c1a27;border:1px solid #294352;box-shadow:0 20px 48px rgba(0,0,0,.32)}
+.skin-anime-op .panel,.skin-anime-op .task,.skin-anime-op .slot-card,.skin-anime-op .info-card,.skin-anime-op .exercise,.skin-anime-op .preview-item,.skin-anime-op-light .panel,.skin-anime-op-light .task,.skin-anime-op-light .slot-card,.skin-anime-op-light .info-card,.skin-anime-op-light .exercise,.skin-anime-op-light .preview-item{background:#f8f0dc;border-color:#d2c19a;box-shadow:0 9px 25px rgba(75,57,31,.07)}
+.skin-anime-op-dark .panel,.skin-anime-op-dark .task,.skin-anime-op-dark .slot-card,.skin-anime-op-dark .info-card,.skin-anime-op-dark .exercise,.skin-anime-op-dark .preview-item{background:#0c1824;border-color:#263c4a;box-shadow:0 10px 28px rgba(0,0,0,.18)}
+.skin-anime-op .nav,.skin-anime-op-light .nav{background:rgba(238,227,200,.94);border-bottom:1px solid #cdbb92}.skin-anime-op-dark .nav{background:rgba(7,16,26,.95);border-bottom:1px solid #263c4a}
+.skin-anime-op .nav button,.skin-anime-op .bottom button,.skin-anime-op .quick button,.skin-anime-op .quickbtn,.skin-anime-op .iconbtn,.skin-anime-op .modebar button,.skin-anime-op .college-toggle,.skin-anime-op-light .nav button,.skin-anime-op-light .bottom button,.skin-anime-op-light .quick button,.skin-anime-op-light .quickbtn,.skin-anime-op-light .iconbtn,.skin-anime-op-light .modebar button,.skin-anime-op-light .college-toggle{background:#f8f0dc;border-color:#cdbb92;color:#514536;box-shadow:none}
+.skin-anime-op-dark .nav button,.skin-anime-op-dark .bottom button,.skin-anime-op-dark .quick button,.skin-anime-op-dark .quickbtn,.skin-anime-op-dark .iconbtn,.skin-anime-op-dark .modebar button,.skin-anime-op-dark .college-toggle{background:#0d1b28;border-color:#294352;color:#e6dccb;box-shadow:none}
+.skin-anime-op .logo,.skin-anime-op-light .logo{background:#8b4543;color:#f8f0dc;box-shadow:0 6px 16px rgba(86,58,41,.16)}.skin-anime-op-dark .logo{background:#7e3d40;color:#f4ead7;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.skin-anime-op .primary,.skin-anime-op .nav button.active,.skin-anime-op .bottom button.primary,.skin-anime-op .modebar button.active,.skin-anime-op-light .primary,.skin-anime-op-light .nav button.active,.skin-anime-op-light .bottom button.primary,.skin-anime-op-light .modebar button.active{background:#8b4543;color:#fff5e5;border:1px solid #713737;box-shadow:none}
+.skin-anime-op-dark .primary,.skin-anime-op-dark .nav button.active,.skin-anime-op-dark .bottom button.primary,.skin-anime-op-dark .modebar button.active{background:#7e3d40;color:#f8ecdb;border:1px solid #9a5557;box-shadow:none}
+.skin-anime-op .bar,.skin-anime-op-light .bar,.skin-anime-op-dark .bar{background:#9b7d46}
+.skin-anime-op .check,.skin-anime-op-light .check{background:#eee2c7;border-color:#bba77b}.skin-anime-op-dark .check{background:#08131e;border-color:#36505f}
+.skin-anime-op .task.done,.skin-anime-op-light .task.done{opacity:.9;background:#eee5cf}.skin-anime-op-dark .task.done{opacity:.92;background:#0b1722}
+.skin-anime-op .task.done .check,.skin-anime-op-light .task.done .check{background:#9b7d46;color:#fff8e9}.skin-anime-op-dark .task.done .check{background:#9b7d46;color:#07101a}
+.skin-anime-op .pill,.skin-anime-op-light .pill{background:#e8dcc2;color:#625541}.skin-anime-op-dark .pill{background:#172a38;color:#c7d0d3}
+.skin-anime-op .pill.accent,.skin-anime-op-light .pill.accent{background:#ead7d0;color:#75433f}.skin-anime-op-dark .pill.accent{background:#352224;color:#dba09d}
+.skin-anime-op .pill.gold,.skin-anime-op-light .pill.gold{background:#eee2c7;color:#81652e}.skin-anime-op-dark .pill.gold{background:#30291d;color:#d9bd78}
+.op-custom-panel{margin:12px 0 18px;padding:15px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}
+.op-custom-title{font-size:12px;font-weight:950;letter-spacing:.09em;color:var(--gold);margin-bottom:4px}.op-custom-label{font-size:10px;font-weight:900;letter-spacing:.12em;color:var(--muted);margin-top:12px}.op-custom-panel .style-row{margin:7px 0 0}.op-custom-panel .style-row button{border-radius:13px;padding:9px 10px}
+.op-flavor-sunny .hero:before{content:"☀️  SUNNY";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-merry .hero:before{content:"🐑  GOING MERRY";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-grandline .hero:before{content:"🧭  GRAND LINE";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-newworld .hero:before{content:"🌊  NEW WORLD";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}
+.op-done-badge{display:inline-block;margin-left:5px;padding:3px 6px;border-radius:999px;background:#e7dcc1;color:#745f38;font-size:9px;font-weight:950;letter-spacing:.04em;text-decoration:none;vertical-align:middle}.skin-anime-op-dark .op-done-badge{background:#1b2d38;color:#c9b06f}.op-done-icon{text-decoration:none;margin-right:3px}
+</style>
+</head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -516,7 +546,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
    </div>
    <div class="section-title">Theme</div>
    <div class="style-row rasi-settings-styles">
-    <button type="button" onclick="setSkin('midnight')">🌌 Midnight</button><button type="button" onclick="setSkin('sakura')">🌸 Sakura</button><button type="button" onclick="setSkin('matcha')">🍵 Matcha</button><button type="button" onclick="setSkin('lavender')">🪻 Lavender</button><button type="button" onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button type="button" onclick="setSkin('anime-op-light')">🏴‍☠️ OP: Light</button><button type="button" onclick="setSkin('anime-op-dark')">🌑 OP: Dark</button><button type="button" onclick="setSkin('minimal')">◻ Minimal</button>
+    <button type="button" onclick="setSkin('midnight')">🌌 Midnight</button><button type="button" onclick="setSkin('sakura')">🌸 Sakura</button><button type="button" onclick="setSkin('matcha')">🍵 Matcha</button><button type="button" onclick="setSkin('lavender')">🪻 Lavender</button><button type="button" onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button type="button" onclick="setSkin('anime-op-light')">🏴‍☠️ OP: Light</button><button type="button" onclick="setSkin('anime-op-dark')">🌑 OP: Dark</button><div id="opCustomization" class="op-custom-panel"><div class="op-custom-title">☠️ ONE PIECE CUSTOMIZATION</div><div class="tiny">Choose the world RĀSI uses when you sail with the OP skin.</div><div class="op-custom-label">SHIP / VIBE</div><div class="style-row"><button type="button" onclick="setOpFlavor('sunny')">☀️ Sunny Voyage</button><button type="button" onclick="setOpFlavor('merry')">🐑 Going Merry</button><button type="button" onclick="setOpFlavor('grandline')">🧭 Grand Line</button><button type="button" onclick="setOpFlavor('newworld')">🌊 New World</button></div><div class="op-custom-label">COMPLETION CREW</div><div class="style-row"><button type="button" onclick="setOpCompletionStyle('crew')">🏴‍☠️ Crew</button><button type="button" onclick="setOpCompletionStyle('treasure')">💰 Treasure</button><button type="button" onclick="setOpCompletionStyle('sea')">🌊 Sea</button><button type="button" onclick="setOpCompletionStyle('random')">🎲 Random</button></div></div><button type="button" onclick="setSkin('minimal')">◻ Minimal</button>
    </div>
    <div class="section-title">Identity</div>
    <button type="button" class="quickbtn settings-wide" onclick="renameBuddy()">✦ Rename RĀSI</button>
@@ -662,7 +692,7 @@ function collegeTasks(d){return (timetable[d]||[]).map((s,i)=>({id:uid(),s:s[0],
 function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),order:i,done:false}));if(timetable[d]){const col=collegeTasks(d);return [...base.filter(t=>minutes(t.s)<8*60+45),...col,...base.filter(t=>minutes(t.s)>=16*60)].map((t,i)=>({...t,order:i}));}return base;}
 
 function defaultState(){
- return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
+ return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',opFlavor:'grandline',opCompletionStyle:'random',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
  ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],conversations:[],currentChatId:null,chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
@@ -713,7 +743,7 @@ function ensureState(){
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
- if(typeof state.collegeOn!=='boolean')state.collegeOn=true;if(!state.skin)state.skin='midnight';
+ if(typeof state.collegeOn!=='boolean')state.collegeOn=true;if(!state.skin)state.skin='midnight';if(!['sunny','merry','grandline','newworld'].includes(state.opFlavor))state.opFlavor='grandline';if(!['crew','treasure','sea','random'].includes(state.opCompletionStyle))state.opCompletionStyle='random';
  state.xpRules=state.xpRules||{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10};
  DAYS.forEach(d=>{
    if(oldSchema<5){
@@ -729,20 +759,29 @@ function ensureState(){
 function applySkin(){
  try{
   const root=document.documentElement;
-  root.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-anime-op-light','skin-anime-op-dark','skin-minimal','skin-midnight');
+  root.classList.remove('skin-cute','skin-cyber','skin-fun','skin-sakura','skin-lavender','skin-matcha','skin-anime-ds','skin-anime-op','skin-anime-op-light','skin-anime-op-dark','skin-minimal','skin-midnight','op-flavor-sunny','op-flavor-merry','op-flavor-grandline','op-flavor-newworld');
   root.classList.add('skin-'+(state.skin||'midnight'));
+  if((state.skin||'').startsWith('anime-op'))root.classList.add('op-flavor-'+(state.opFlavor||'grandline'));
+  const box=document.getElementById('opCustomization');if(box)box.style.display=((state.skin||'').startsWith('anime-op'))?'block':'none';
  }catch(err){console.error('RĀSI theme error',err);}
 }
 function setSkin(s){
  try{
-  state.skin=s||'midnight';
-  save();
-  applySkin();
-  showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵','anime-ds':'Anime mode: DS ⚔️','anime-op':'Anime mode: OP Light 🏴‍☠️','anime-op-light':'OP Light • Grand Line 🏴‍☠️','anime-op-dark':'OP Dark • New World 🌑🏴‍☠️',minimal:'Minimal mode ◻'}[state.skin]||'Style changed');
+  state.skin=s||'midnight';save();applySkin();
+  showToast({midnight:'Back to Midnight. 🌌',sakura:'Sakura garden unlocked 🌸',lavender:'Lavender cloud 🪻',matcha:'Matcha garden 🍵','anime-ds':'Anime mode: DS ⚔️','anime-op':'OP mode 🏴‍☠️','anime-op-light':'OP Light • Grand Line 🏴‍☠️','anime-op-dark':'OP Dark • New World 🌑🏴‍☠️',minimal:'Minimal mode ◻'}[state.skin]||'Style changed');
   render();
  }catch(err){console.error('RĀSI theme change error',err);showToast('Theme could not be changed.');}
 }
-
+function setOpFlavor(flavor){
+ if(!['sunny','merry','grandline','newworld'].includes(flavor))return;
+ state.opFlavor=flavor;save();applySkin();render();
+ showToast(({sunny:'Sunny Voyage ☀️',merry:'Going Merry 🐑',grandline:'Grand Line 🧭',newworld:'New World 🌊'})[flavor]+' loaded.');
+}
+function setOpCompletionStyle(style){
+ if(!['crew','treasure','sea','random'].includes(style))return;
+ state.opCompletionStyle=style;save();render();
+ showToast(({crew:'Crew completions 🏴‍☠️',treasure:'Treasure completions 💰',sea:'Sea completions 🌊',random:'Random crew completions 🎲'})[style]+' selected.');
+}
 function updateLiveClock(){
  try{
   const now=new Date(),hr=now.getHours();
