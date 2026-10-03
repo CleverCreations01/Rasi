@@ -944,7 +944,8 @@ function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=n
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-function syncRasiAiEndpointField(){const input=document.getElementById('rasiAiEndpoint');if(input)input.value=localStorage.getItem('rasiAiEndpoint')||'';}\nfunction openRasiSettings(){try{showView('settings');syncRasiAiEndpointField();}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
+function syncRasiAiEndpointField(){const input=document.getElementById('rasiAiEndpoint');if(input)input.value=localStorage.getItem('rasiAiEndpoint')||'';}
+function openRasiSettings(){try{showView('settings');syncRasiAiEndpointField();}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
 function scrollRasiToLatest(){
  const t=document.querySelector('#chat .chat-thread');
  if(t){t.scrollTop=t.scrollHeight;t.dispatchEvent(new Event('scroll'));}
