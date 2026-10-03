@@ -658,7 +658,9 @@ function dateKey(dt=new Date()){return `${dt.getFullYear()}-${String(dt.getMonth
 function tasksForDate(dt=new Date()){
  const key=dateKey(dt),wd=DAY_NAME(dt.getDay());
  state.dateTasks=state.dateTasks||{};
- if(!Array.isArray(state.dateTasks[key])){
+ const existing=state.dateTasks[key];
+ const needsWeekendRecovery=Array.isArray(existing)&&existing.length===0&&(['Sat','Sun'].includes(wd));
+ if(!Array.isArray(existing)||needsWeekendRecovery){
    const source=(state.tasks[wd]||buildDayTasks(wd)).map(t=>({...t,id:uid(),done:false,order:t.order}));
    state.dateTasks[key]=source;
    save();
