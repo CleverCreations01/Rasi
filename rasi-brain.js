@@ -41,6 +41,49 @@
     };
   }
 
+  function memoryContext(query){
+    // Local retrieval only: no extra API call and no change to app state.
+    // Search saved conversations on-device and return only the most relevant snippets.
+    const s=safeState();
+    const conversations=Array.isArray(s.conversations) ? s.conversations : [];
+    const qTokens=norm(query).toLowerCase().match(/[a-z0-9']{3,}/g)||[];
+    const stop=new Set(["the","and","for","that","this","with","you","are","was","but","have","what","how","can","from","about","just","not","your","they","them","then","than","into","want","need","like","really","when","where","why","who"]);
+    const q=new Set(qTokens.filter(t=>!stop.has(t)));
+    if(!q.size || !conversations.length) return "";
+    const hits=[];
+    for(const convo of conversations){
+      const msgs=Array.isArray(convo?.messages) ? convo.messages : [];
+      for(let i=0;i<msgs.length;i++){
+        const m=msgs[i];
+        if(m?.who!=="you") continue;
+        const text=norm(m.text);
+        const tokens=text.toLowerCase().match(/[a-z0-9']{3,}/g)||[];
+        const overlap=tokens.filter(t=>q.has(t)).length;
+        if(!overlap) continue;
+        const unique=new Set(tokens).size||1;
+        const score=(overlap/Math.sqrt(q.size*unique))*100 + (String(convo.updatedAt||"").localeCompare("1970")/1e20);
+        const before=msgs[i-1]?.who==="rasi" ? norm(msgs[i-1].text) : "";
+        const after=msgs[i+1]?.who==="rasi" ? norm(msgs[i+1].text) : "";
+        hits.push({score,text,before,after,date:convo.updatedAt||"",title:convo.title||"Previous chat"});
+      }
+    }
+    hits.sort((a,b)=>b.score-a.score);
+    const chosen=[];
+    const seen=new Set();
+    for(const h of hits){
+      const key=h.text.toLowerCase().slice(0,180);
+      if(seen.has(key)) continue;
+      seen.add(key);
+      chosen.push(h);
+      if(chosen.length>=6) break;
+    }
+    if(!chosen.length) return "";
+    return chosen.map((h,i)=>{
+      const date=h.date ? new Date(h.date).toLocaleDateString([], {day:"numeric",month:"short",year:"numeric"}) : "unknown date";
+      return "[Memory "+(i+1)+" | "+date+" | "+h.title+"]\\nUser: "+h.text+(h.before?"\\nRĀSI: "+h.before:"")+(h.after?"\\nRĀSI: "+h.after:"");
+    }).join("\\n\\n").slice(0,7000);
+  }
+
   function last15(){
     const chat = Array.isArray(safeState().chat) ? safeState().chat : [];
     return chat.slice(-15).map(m => ({
@@ -98,6 +141,11 @@
     throw new Error("AI returned no reply");
   }
 
+  function rawCurrentMessage(history){
+    const last=Array.isArray(history) ? history[history.length-1] : null;
+    return norm(last?.content || "");
+  }
+
   async function askAI(){
     const ENDPOINT = endpoint();
     if(!ENDPOINT) throw new Error("RĀSI AI is not connected yet. Add the secure AI endpoint in RĀSI settings.");
@@ -106,7 +154,8 @@
       messages:last15(),
       currentMessage:last15().at(-1)?.content || "",
       schedule:scheduleSnapshot(),
-      instruction:"Decide from the conversation itself whether the user is chatting or asking RĀSI to change the app. Do not use client-side keywords, modes, or hard-coded intent rules."
+      memory_context:memoryContext(rawCurrentMessage(last15())),
+      instruction:"Use memory_context only as relevant prior conversation evidence. Do not claim a memory is true if it is not supported by the supplied context. Decide from the conversation itself whether the user is chatting or asking RĀSI to change the app. Do not use client-side keywords, modes, or hard-coded intent rules."
     };
 
     const controller=new AbortController();
