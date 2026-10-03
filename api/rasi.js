@@ -1,8 +1,8 @@
 // Secure RĀSI AI endpoint.
-// Keep OPENAI_API_KEY on the server only. Never put it in the Android app or GitHub client code.
+// Keep GEMINI_API_KEY on the server only. Never put it in the Android app or GitHub client code.
 
 const ALLOWED_ORIGIN = process.env.RASI_ALLOWED_ORIGIN || "https://clevercreations01.github.io";
-const MODEL = process.env.RASI_MODEL || "gpt-5.6-luna";
+const MODEL = process.env.RASI_MODEL || "gemini-3.5-flash";
 
 const schema = {
   type: "object",
@@ -10,12 +10,8 @@ const schema = {
   properties: {
     reply: { type: "string" },
     action: {
-      anyOf: [
-        { type: "null" },
-        {
-          type: "object",
-          additionalProperties: false,
-          properties: {
+      type: ["object","null"],
+      properties: {
             type: {
               type: "string",
               enum: ["add_task","delete_task","edit_task","move_task","reschedule_task","complete_task","reorder_task","toggle_college","set_college"]
@@ -26,8 +22,6 @@ const schema = {
             }
           },
           required: ["type","details"]
-        }
-      ]
     }
   },
   required: ["reply","action"]
@@ -92,7 +86,7 @@ module.exports = async function handler(req, res) {
   cors(res);
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({error:"Method not allowed"});
-  if (!process.env.OPENAI_API_KEY) return res.status(503).json({error:"RĀSI AI server is not configured"});
+  if (!process.env.GEMINI_API_KEY) return res.status(503).json({error:"RĀSI AI server is not configured"});
 
   try {
     const body = req.body || {};
@@ -109,36 +103,30 @@ module.exports = async function handler(req, res) {
       current_message: currentMessage
     });
 
-    const r = await fetch("https://api.openai.com/v1/responses", {
+    const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(MODEL) + ":generateContent", {
       method: "POST",
       headers: {
-        "Authorization": "Bearer " + process.env.OPENAI_API_KEY,
+        "x-goog-api-key": process.env.GEMINI_API_KEY,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: MODEL,
-        store: false,
-        instructions: systemPrompt(),
-        input: userInput,
-        max_output_tokens: 900,
-        text: {
-          format: {
-            type: "json_schema",
-            name: "rasi_response",
-            strict: true,
-            schema
-          }
+        systemInstruction: { parts: [{ text: systemPrompt() }] },
+        contents: [{ role: "user", parts: [{ text: userInput }] }],
+        generationConfig: {
+          maxOutputTokens: 900,
+          responseMimeType: "application/json",
+          responseSchema: schema
         }
       })
     });
 
     const data = await r.json();
     if (!r.ok) {
-      console.error("OpenAI error", data);
+      console.error("Gemini error", data);
       return res.status(502).json({error:"AI provider request failed"});
     }
 
-    const outputText = data.output_text;
+    const outputText = data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("").trim();
     if (!outputText) return res.status(502).json({error:"AI returned no structured response"});
 
     let result;
