@@ -403,6 +403,183 @@ body:not([class*="skin-"]) .rasi-chat-panel,
 .op-flavor-sunny .hero:before{content:"☀️  SUNNY";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-merry .hero:before{content:"🐑  GOING MERRY";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-grandline .hero:before{content:"🧭  GRAND LINE";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}.op-flavor-newworld .hero:before{content:"🌊  NEW WORLD";display:block;font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:950;margin-bottom:8px}
 .op-done-badge{display:inline-block;margin-left:5px;padding:3px 6px;border-radius:999px;background:#e7dcc1;color:#745f38;font-size:9px;font-weight:950;letter-spacing:.04em;text-decoration:none;vertical-align:middle}.skin-anime-op-dark .op-done-badge{background:#1b2d38;color:#c9b06f}.op-done-icon{text-decoration:none;margin-right:3px}
 </style>
+
+<style id="rasi-op-dark-fan-v3">
+/* ONE PIECE DARK — matte New World / Android-theme inspired. No neon, no glossy gradients. */
+.skin-anime-op-dark{
+  --bg:#090a0c;--panel:#111315;--panel2:#17191c;--text:#eee6d6;--muted:#9c968c;
+  --line:#2a2927;--accent:#7f3035;--accent2:#b89a5b;--gold:#c3a76b;
+  --shadow:0 16px 38px rgba(0,0,0,.42);--r:20px;
+}
+.skin-anime-op-dark body{
+  background:
+    radial-gradient(circle at 84% 7%,rgba(46,75,91,.16),transparent 26%),
+    radial-gradient(circle at 8% 18%,rgba(119,42,47,.10),transparent 25%),
+    linear-gradient(180deg,#08090b 0%,#0c0e10 52%,#090a0c 100%);
+  color:#eee6d6;
+}
+.skin-anime-op-dark body:before{
+  content:"☠️   ⚓   🧭   🌊   🏴‍☠️   🍖   ⚓   ☠️";
+  position:fixed;inset:-8% -10%;pointer-events:none;z-index:39;
+  color:#c2a86f;font-size:18px;line-height:5.2;letter-spacing:17px;
+  opacity:.075;white-space:pre-wrap;transform:rotate(-8deg);overflow:hidden;
+}
+.skin-anime-op-dark body:after{
+  content:"WANTED  •  STRAW HAT CREW  •  NEW WORLD";
+  position:fixed;left:0;right:0;bottom:7%;pointer-events:none;z-index:39;
+  text-align:center;color:#c3a76b;font-size:9px;font-weight:950;
+  letter-spacing:.25em;opacity:.12;transform:rotate(-5deg);
+}
+.skin-anime-op-dark .topbar{position:relative}
+.skin-anime-op-dark .brand:after{
+  content:"🏴‍☠️  STRAW HAT CREW";
+  position:absolute;left:57px;top:47px;font-size:8px;letter-spacing:.16em;
+  color:#8f887c;font-weight:900;
+}
+.skin-anime-op-dark .logo{
+  background:#15171a;color:#e9ddc8;border:1px solid #3a3630;
+  box-shadow:0 8px 22px rgba(0,0,0,.32);
+  font-size:0;position:relative;
+}
+.skin-anime-op-dark .logo:after{content:"☠️";font-size:24px}
+.skin-anime-op-dark .hero{
+  background:#101214;border:1px solid #34312c;border-radius:24px;
+  box-shadow:0 20px 55px rgba(0,0,0,.38);
+  overflow:hidden;
+}
+.skin-anime-op-dark .hero:before{
+  content:"☠️  WANTED  •  DEAD OR ALIVE  •  ☠️";
+  display:block;margin:-20px -20px 15px;padding:9px 14px;
+  background:#171515;border-bottom:1px solid #3b3028;
+  color:#bfa36a;font-size:9px;font-weight:950;letter-spacing:.18em;
+}
+.skin-anime-op-dark .hero:after{
+  width:190px;height:190px;right:-70px;top:-70px;
+  background:rgba(127,48,53,.08);border:1px solid rgba(195,167,107,.07);
+}
+.skin-anime-op-dark .greeting{letter-spacing:-.02em}
+.skin-anime-op-dark .mission{color:#bdb5a7}
+.skin-anime-op-dark .stat{
+  background:#151719;border:1px solid #2d2d2b;color:#c9c0b0;
+}
+.skin-anime-op-dark .stat b{color:#eadfcf}
+.skin-anime-op-dark .progress{background:#1a1b1d;border:1px solid #292927}
+.skin-anime-op-dark .bar{background:#9b7d4c}
+.skin-anime-op-dark .nav{
+  background:rgba(9,10,12,.96);border-bottom:1px solid #252525;
+}
+.skin-anime-op-dark .nav button{
+  background:#111315;border:1px solid #292929;color:#a9a298;
+  box-shadow:none;position:relative;
+}
+.skin-anime-op-dark .nav button.active{
+  background:#1b1717;color:#eee4d3;border-color:#6e3538;
+  box-shadow:inset 0 -2px 0 #8a3c40;
+}
+.skin-anime-op-dark .nav button:nth-child(1)::before{content:"🏴‍☠️ "}
+.skin-anime-op-dark .nav button:nth-child(2)::before{content:"🏫 "}
+.skin-anime-op-dark .nav button:nth-child(3)::before{content:"🗺️ "}
+.skin-anime-op-dark .nav button:nth-child(4)::before{content:"💻 "}
+.skin-anime-op-dark .nav button:nth-child(5)::before{content:"🥋 "}
+.skin-anime-op-dark .nav button:nth-child(6)::before{content:"⚓ "}
+.skin-anime-op-dark .nav button:nth-child(7)::before{content:"💬 "}
+.skin-anime-op-dark .panel{
+  background:#111315;border:1px solid #292a29;box-shadow:0 12px 30px rgba(0,0,0,.24);
+}
+.skin-anime-op-dark .panel-head h2:before{
+  color:#b79b62;margin-right:7px;font-size:.82em;
+}
+.skin-anime-op-dark #view-today .panel:first-child .panel-head h2:before{content:"🏴‍☠️"}
+.skin-anime-op-dark #view-today aside .panel:nth-child(1) .panel-head h2:before{content:"🧭"}
+.skin-anime-op-dark #view-today aside .panel:nth-child(2) .panel-head h2:before{content:"⚓"}
+.skin-anime-op-dark #view-today aside .panel:nth-child(3) .panel-head h2:before{content:"🍖"}
+.skin-anime-op-dark #view-college .panel:nth-child(1) .panel-head h2:before{content:"🏫"}
+.skin-anime-op-dark #view-college .panel:nth-child(2) .panel-head h2:before{content:"📍"}
+.skin-anime-op-dark #view-week .panel .panel-head h2:before{content:"🗺️"}
+.skin-anime-op-dark #view-skills .panel:nth-child(1) .panel-head h2:before{content:"💻"}
+.skin-anime-op-dark #view-skills .panel:nth-child(2) .panel-head h2:before{content:"🧠"}
+.skin-anime-op-dark #view-body .panel .panel-head h2:before{content:"🥋"}
+.skin-anime-op-dark .task{
+  background:#141618;border:1px solid #2a2b2a;border-radius:17px;
+  box-shadow:none;
+}
+.skin-anime-op-dark .task:hover{border-color:#4a4032;background:#17191b}
+.skin-anime-op-dark .task-time{color:#a69e91}
+.skin-anime-op-dark .task-name{color:#eee7da}
+.skin-anime-op-dark .task-meta .pill{background:#1d2022;color:#bcb5aa;border-color:#2b2c2c}
+.skin-anime-op-dark .check{background:#0c0e10;border-color:#47423b}
+.skin-anime-op-dark .task.done .check{background:#9b7d4c;color:#0b0c0d}
+.skin-anime-op-dark .task.done{background:#121416;opacity:.96}
+.skin-anime-op-dark .task.done .task-name{text-decoration:none}
+.skin-anime-op-dark .college-toggle{
+  background:#141618;border:1px solid #30302e;color:#e1d8c9;
+}
+.skin-anime-op-dark .toggle{background:#292a2a}
+.skin-anime-op-dark .toggle.on{background:#71383b}
+.skin-anime-op-dark .primary,
+.skin-anime-op-dark .nav button.active,
+.skin-anime-op-dark .bottom button.primary,
+.skin-anime-op-dark .modebar button.active{
+  background:#73373b;color:#f3e8d7;border:1px solid #925054;
+  box-shadow:none;
+}
+.skin-anime-op-dark .quickbtn,.skin-anime-op-dark .quick button,
+.skin-anime-op-dark .iconbtn,.skin-anime-op-dark .modebar button,
+.skin-anime-op-dark .bottom button{
+  background:#141618;border:1px solid #2d2e2d;color:#c7c0b4;box-shadow:none;
+}
+.skin-anime-op-dark .quickbtn:hover,.skin-anime-op-dark .quick button:hover,
+.skin-anime-op-dark .iconbtn:hover{background:#1b1d1f;border-color:#4a4338}
+.skin-anime-op-dark .badge{
+  background:#1d1b17;color:#cdb274;border:1px solid #3d372c;
+}
+.skin-anime-op-dark .tip{
+  background:#171717;border:1px solid #38332c;color:#d0c7b8;
+}
+.skin-anime-op-dark .reminder{
+  border-left-color:#9b7d4c;background:#151718;
+}
+.skin-anime-op-dark .info-card,.skin-anime-op-dark .exercise,
+.skin-anime-op-dark .slot-card,.skin-anime-op-dark .preview-item{
+  background:#141618;border-color:#2b2c2b;
+}
+.skin-anime-op-dark .num{
+  background:#1c1a17;color:#c9ad70;border:1px solid #393329;
+}
+.skin-anime-op-dark .op-custom-panel{
+  background:#101214;border:1px solid #35312b;
+}
+.skin-anime-op-dark .op-custom-title{color:#c4a76b}
+.skin-anime-op-dark .op-custom-label{color:#827b70}
+.skin-anime-op-dark .op-custom-panel .style-row button{background:#151719;border-color:#302f2d}
+.skin-anime-op-dark .op-custom-panel .style-row button:hover{border-color:#725b37}
+.skin-anime-op-dark .op-done-icon,.skin-anime-op-dark .op-task-icon{
+  display:inline-grid;place-items:center;width:26px;height:26px;margin-right:5px;
+  border-radius:8px;background:#1d1a16;border:1px solid #39332a;
+  vertical-align:-7px;font-size:16px;
+}
+.skin-anime-op-dark .op-done-badge{
+  display:inline-block;margin-left:5px;padding:3px 6px;border-radius:6px;
+  background:#211e18;color:#c4a76b;border:1px solid #40382b;
+  font-size:9px;font-weight:950;letter-spacing:.08em;vertical-align:2px;
+}
+.skin-anime-op-dark .op-flavor-sunny .hero:after{background:rgba(190,155,71,.06)}
+.skin-anime-op-dark .op-flavor-merry .hero:after{background:rgba(132,154,143,.06)}
+.skin-anime-op-dark .op-flavor-grandline .hero:after{background:rgba(58,100,115,.07)}
+.skin-anime-op-dark .op-flavor-newworld .hero:after{background:rgba(48,92,110,.09)}
+.skin-anime-op-dark .bottom{
+  background:rgba(9,10,12,.97);border-top:1px solid #292929;
+}
+.skin-anime-op-dark .bottom-icon{font-size:16px;display:block;margin-bottom:2px}
+.skin-anime-op-dark .modal-back{background:rgba(0,0,0,.78)}
+.skin-anime-op-dark .modal{background:#111315;border-color:#35332e}
+.skin-anime-op-dark input,.skin-anime-op-dark textarea,.skin-anime-op-dark select{
+  background:#0c0e10;border-color:#30312f;color:#eee6d6;
+}
+.skin-anime-op-dark .toast{
+  background:#e7ddcc;color:#171512;border:1px solid #b89b61;
+}
+</style>
 </head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
@@ -546,7 +723,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
    </div>
    <div class="section-title">Theme</div>
    <div class="style-row rasi-settings-styles">
-    <button type="button" onclick="setSkin('midnight')">🌌 Midnight</button><button type="button" onclick="setSkin('sakura')">🌸 Sakura</button><button type="button" onclick="setSkin('matcha')">🍵 Matcha</button><button type="button" onclick="setSkin('lavender')">🪻 Lavender</button><button type="button" onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button type="button" onclick="setSkin('anime-op-light')">🏴‍☠️ OP: Light</button><button type="button" onclick="setSkin('anime-op-dark')">🌑 OP: Dark</button><div id="opCustomization" class="op-custom-panel"><div class="op-custom-title">☠️ ONE PIECE CUSTOMIZATION</div><div class="tiny">Choose the world RĀSI uses when you sail with the OP skin.</div><div class="op-custom-label">SHIP / VIBE</div><div class="style-row"><button type="button" onclick="setOpFlavor('sunny')">☀️ Sunny Voyage</button><button type="button" onclick="setOpFlavor('merry')">🐑 Going Merry</button><button type="button" onclick="setOpFlavor('grandline')">🧭 Grand Line</button><button type="button" onclick="setOpFlavor('newworld')">🌊 New World</button></div><div class="op-custom-label">COMPLETION CREW</div><div class="style-row"><button type="button" onclick="setOpCompletionStyle('crew')">🏴‍☠️ Crew</button><button type="button" onclick="setOpCompletionStyle('treasure')">💰 Treasure</button><button type="button" onclick="setOpCompletionStyle('sea')">🌊 Sea</button><button type="button" onclick="setOpCompletionStyle('random')">🎲 Random</button></div></div><button type="button" onclick="setSkin('minimal')">◻ Minimal</button>
+    <button type="button" onclick="setSkin('midnight')">🌌 Midnight</button><button type="button" onclick="setSkin('sakura')">🌸 Sakura</button><button type="button" onclick="setSkin('matcha')">🍵 Matcha</button><button type="button" onclick="setSkin('lavender')">🪻 Lavender</button><button type="button" onclick="setSkin('anime-ds')">⚔️ Anime: DS</button><button type="button" onclick="setSkin('anime-op-light')">🏴‍☠️ OP: Light</button><button type="button" onclick="setSkin('anime-op-dark')">🌑 OP: Dark</button><div id="opCustomization" class="op-custom-panel"><div class="op-custom-title">☠️ ONE PIECE CUSTOMIZATION</div><div class="tiny">Choose the world RĀSI uses when you sail with the OP skin.</div><div class="op-custom-label">SHIP / VIBE</div><div class="style-row"><button type="button" onclick="setOpFlavor('sunny')">☀️ Sunny Voyage</button><button type="button" onclick="setOpFlavor('merry')">🐑 Going Merry</button><button type="button" onclick="setOpFlavor('grandline')">🧭 Grand Line</button><button type="button" onclick="setOpFlavor('newworld')">🌊 New World</button></div><div class="op-custom-label">COMPLETION CREW</div><div class="style-row"><button type="button" onclick="setOpCompletionStyle('crew')">🏴‍☠️ Crew</button><button type="button" onclick="setOpCompletionStyle('treasure')">💰 Treasure</button><button type="button" onclick="setOpCompletionStyle('sea')">🌊 Sea</button><button type="button" onclick="setOpCompletionStyle('random')">🎲 Random</button></div><div class="op-custom-label">IN-APP ICON SET</div><div class="style-row"><button type="button" onclick="setOpIconSet('strawhats')">👒 Straw Hats</button><button type="button" onclick="setOpIconSet('ships')">⛵ Ships & Sea</button><button type="button" onclick="setOpIconSet('symbols')">☠️ Pirate Symbols</button></div></div><button type="button" onclick="setSkin('minimal')">◻ Minimal</button>
    </div>
    <div class="section-title">Identity</div>
    <button type="button" class="quickbtn settings-wide" onclick="renameBuddy()">✦ Rename RĀSI</button>
@@ -692,7 +869,7 @@ function collegeTasks(d){return (timetable[d]||[]).map((s,i)=>({id:uid(),s:s[0],
 function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),order:i,done:false}));if(timetable[d]){const col=collegeTasks(d);return [...base.filter(t=>minutes(t.s)<8*60+45),...col,...base.filter(t=>minutes(t.s)>=16*60)].map((t,i)=>({...t,order:i}));}return base;}
 
 function defaultState(){
- return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',opFlavor:'grandline',opCompletionStyle:'random',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
+ return {schema:5,appName:DEFAULT_APP_NAME,xp:0,streak:0,completed:{},collegeOn:true,bodyDay:1,bodyMode:'normal',skin:'midnight',opFlavor:'grandline',opCompletionStyle:'random',opIconSet:'strawhats',xpRules:{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10},reminders:[
   {id:1,title:'Add your first assignment/deadline',when:'Whenever it is announced',note:'Keep deadlines here, not in the main task list.'}
  ],tasks:{},dateTasks:{},flex:{},chatOpen:false,rasiMemory:[],conversations:[],currentChatId:null,chat:[{who:'nova',text:'I’m RĀSI. Tell me what changed in your life and I’ll reshape the plan around it — without making you babysit the schedule.'}]};
 }
@@ -743,7 +920,7 @@ function ensureState(){
  if(!state.appName||typeof state.appName!=='string')state.appName=DEFAULT_APP_NAME;
  if(typeof state.xp!=='number')state.xp=0;if(typeof state.streak!=='number')state.streak=0;
  if(typeof state.bodyDay!=='number'||state.bodyDay<1||state.bodyDay>10)state.bodyDay=1;if(!state.bodyMode)state.bodyMode='normal';
- if(typeof state.collegeOn!=='boolean')state.collegeOn=true;if(!state.skin)state.skin='midnight';if(!['sunny','merry','grandline','newworld'].includes(state.opFlavor))state.opFlavor='grandline';if(!['crew','treasure','sea','random'].includes(state.opCompletionStyle))state.opCompletionStyle='random';
+ if(typeof state.collegeOn!=='boolean')state.collegeOn=true;if(!state.skin)state.skin='midnight';if(!['sunny','merry','grandline','newworld'].includes(state.opFlavor))state.opFlavor='grandline';if(!['crew','treasure','sea','random'].includes(state.opCompletionStyle))state.opCompletionStyle='random';if(!['strawhats','ships','symbols'].includes(state.opIconSet))state.opIconSet='strawhats';
  state.xpRules=state.xpRules||{health:15,study:12,coding:20,pinterest:8,english:10,career:18,knowledge:8,life:5,buffer:2,college:10};
  DAYS.forEach(d=>{
    if(oldSchema<5){
@@ -781,6 +958,11 @@ function setOpCompletionStyle(style){
  if(!['crew','treasure','sea','random'].includes(style))return;
  state.opCompletionStyle=style;save();render();
  showToast(({crew:'Crew completions 🏴‍☠️',treasure:'Treasure completions 💰',sea:'Sea completions 🌊',random:'Random crew completions 🎲'})[style]+' selected.');
+}
+function setOpIconSet(set){
+ if(!['strawhats','ships','symbols'].includes(set))return;
+ state.opIconSet=set;save();render();
+ showToast(({strawhats:'Straw Hat icon set 👒',ships:'Ships & Sea icon set ⛵',symbols:'Pirate symbol set ☠️'})[set]+' selected.');
 }
 function updateLiveClock(){
  try{
@@ -828,6 +1010,14 @@ function renderTasks(arr){
  const next=arr.find(t=>!t.done && t.cat!=='college');
  document.getElementById('upcomingStrip').innerHTML=next?`<div class="tip"><b>Next up:</b> ${esc(next.n)} • ${esc(next.s)}–${esc(next.e)}. ${next.cat==='health'?'RĀSI says: tiny workout, big main-character energy.':''}</div>`:'<div class="tip"><b>Today is clear.</b> Go enjoy your life. RĀSI is not your warden. 😈</div>';
 }
+function opTaskIcon(t){
+ if(!(state.skin||'').startsWith('anime-op'))return '';
+ const straw={college:'🏫',study:'📜',coding:'💻',health:'🩺',pinterest:'🍊',english:'🗣️',career:'💰',knowledge:'🔎',life:'🍖',buffer:'⏳'};
+ const ships={college:'⚓',study:'🧭',coding:'🗺️',health:'🌊',pinterest:'🍊',english:'📜',career:'💰',knowledge:'🔭',life:'🍖',buffer:'⏳'};
+ const symbols={college:'🏴‍☠️',study:'📜',coding:'⚙️',health:'❤️‍🔥',pinterest:'📌',english:'💬',career:'💰',knowledge:'🔎',life:'☀️',buffer:'⌛'};
+ const set=state.opIconSet==='ships'?ships:state.opIconSet==='symbols'?symbols:straw;
+ return set[t.cat]||'☠️';
+}
 function opDoneInfo(t){
  if(!(state.skin||'').startsWith('anime-op')||!t.done)return null;
  const icons=['☠️','🍖','⚓','🧭','🌊','⛵','🏴‍☠️','💰','🍊','🗡️','🌞','🐑','📜','🪙','🌴'];
@@ -839,8 +1029,9 @@ function opDoneInfo(t){
 }
 function taskEl(t,i,arr){
  const d=document.createElement('div');d.className='task '+(t.done?'done ':'')+(t.locked?' locked ':'')+(t.cat==='college'?' college-task':'');
- const doneInfo=opDoneInfo(t);
- d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${doneInfo?'<span class="op-done-icon">'+doneInfo.icon+'</span>'+esc(t.n)+' <span class="op-done-badge">'+doneInfo.label+'</span>':(t.locked?'🔒 ':'')+(t.cat==='college'?'🏫 ':'')+esc(t.n)}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>`:''}</div></div><div class="task-actions">${t.cat!=='college'?`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>`:`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>`}</div>`;
+ const doneInfo=opDoneInfo(t), taskIcon=opTaskIcon(t);
+ const visibleName=(t.locked?'🔒 ':'')+(t.cat==='college'?'🏫 ':'')+esc(t.n);
+ d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${taskIcon?'<span class="op-task-icon">'+taskIcon+'</span>':''}${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${doneInfo?'<span class="op-done-icon">'+doneInfo.icon+'</span>'+visibleName+' <span class="op-done-badge">'+doneInfo.label+'</span>':visibleName}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?\`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>\`:''}</div></div><div class="task-actions">${t.cat!=='college'?\`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>\`:\`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>\`}</div>`;
  return d;
 }
 function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render();if(t.done)requestAnimationFrame(()=>celebrate());}const WIN_LINES=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded. Respectfully.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.','Bro actually did the task. 😭','The checklist got humbled.','We love to see it.','Okay productivity arc??','Certified W moment.','That was kinda iconic.','Future-you just said thanks.','Zero excuses, one W.','Character development detected.','That checkbox never stood a chance.','Lowkey ate that.','Mission cleared. 🎮','Main quest complete.'];
