@@ -499,7 +499,7 @@ body:not([class*="skin-"]) .rasi-chat-panel,
    <div class="section-title">AI connection</div>
    <div class="info-card">
     <p style="color:var(--muted);font-size:12px;line-height:1.45;margin-bottom:9px">RĀSI sends the last 15 chat messages and the current schedule to the secure AI endpoint. Your API key never belongs in this app.</p>
-    <input id="rasiAiEndpoint" placeholder="https://your-backend.example/api/rasi" value="${esc(localStorage.getItem("rasiAiEndpoint")||"")}">
+    <input id="rasiAiEndpoint" placeholder="https://your-backend.example/api/rasi" value="">
     <button type="button" class="primary" style="width:100%;margin-top:8px" onclick="saveRasiAiEndpoint()">Save AI endpoint</button>
    </div>
    <div class="section-title">Your data</div>
@@ -942,7 +942,7 @@ function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=n
 
 function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
-function openRasiSettings(){try{showView('settings');}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
+function syncRasiAiEndpointField(){const input=document.getElementById('rasiAiEndpoint');if(input)input.value=localStorage.getItem('rasiAiEndpoint')||'';}\nfunction openRasiSettings(){try{showView('settings');syncRasiAiEndpointField();}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
 function scrollRasiToLatest(){
  const t=document.querySelector('#chat .chat-thread');
  if(t){t.scrollTop=t.scrollHeight;t.dispatchEvent(new Event('scroll'));}
