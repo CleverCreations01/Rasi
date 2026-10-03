@@ -976,6 +976,7 @@ render();
 setInterval(()=>{try{updateLiveClock();}catch(err){console.error('RĀSI clock tick error',err);}},1000);
 setInterval(()=>{try{render();}catch(err){console.error('RĀSI periodic render error',err);}},30000);
 </script>
+<script>window.RASI_CONFIG={aiEndpoint:"https://rasi-ai-backend.vercel.app/api/rasi"};</script>
 <script src="./rasi-brain.js?v=7.0"></script>
 </body>
 </html>
