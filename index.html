@@ -828,16 +828,32 @@ function renderTasks(arr){
  const next=arr.find(t=>!t.done && t.cat!=='college');
  document.getElementById('upcomingStrip').innerHTML=next?`<div class="tip"><b>Next up:</b> ${esc(next.n)} • ${esc(next.s)}–${esc(next.e)}. ${next.cat==='health'?'RĀSI says: tiny workout, big main-character energy.':''}</div>`:'<div class="tip"><b>Today is clear.</b> Go enjoy your life. RĀSI is not your warden. 😈</div>';
 }
+function opDoneInfo(t){
+ if(!(state.skin||'').startsWith('anime-op')||!t.done)return null;
+ const icons=['☠️','🍖','⚓','🧭','🌊','⛵','🏴‍☠️','💰','🍊','🗡️','🌞','🐑','📜','🪙','🌴'];
+ const labels=['CLEARED','SET SAIL','NAILED IT','GRAND LINE CLEAR','NEW WORLD CLEAR','ALL ABOARD','CREW W','TREASURE SECURED','NAVIGATOR W','BLADE SHARP','SUNNY DAY','MERRY WIN','LOG POSE COMPLETE','BOUNTY EARNED','ISLAND CLEARED'];
+ let n=0;String(t.id||'').split('').forEach(ch=>n+=ch.charCodeAt(0));
+ const pools={crew:[0,2,5,6,8,9,11],treasure:[1,7,13],sea:[3,4,5,10,14],random:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]};
+ const pool=pools[state.opCompletionStyle||'random']||pools.random;const idx=pool[n%pool.length];
+ return {icon:icons[idx],label:labels[idx]};
+}
 function taskEl(t,i,arr){
  const d=document.createElement('div');d.className='task '+(t.done?'done ':'')+(t.locked?' locked ':'')+(t.cat==='college'?' college-task':'');
- d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${t.locked?'🔒 ':''}${t.cat==='college'?'🏫 ':''}${esc(t.n)}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>`:''}</div></div><div class="task-actions">${t.cat!=='college'?`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>`:`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>`}</div>`;
+ const doneInfo=opDoneInfo(t);
+ d.innerHTML=`<button class="check" onclick="completeTask('${t.id}')">${t.done?'✓':''}</button><div class="task-main" onclick="openTask('${t.id}')"><div class="task-time">${esc(t.s)} – ${esc(t.e)} <span class="pill">${esc(t.cat)}</span></div><div class="task-name">${doneInfo?'<span class="op-done-icon">'+doneInfo.icon+'</span>'+esc(t.n)+' <span class="op-done-badge">'+doneInfo.label+'</span>':(t.locked?'🔒 ':'')+(t.cat==='college'?'🏫 ':'')+esc(t.n)}</div><div class="task-meta"><span class="pill">${Math.max(1,minutes(t.e)-minutes(t.s))} min</span>${t.cat==='college'?`<span class="pill accent">${esc(t.collegeData?.[3]||'Div 12')}</span><span class="pill green">${esc(t.collegeData?.[4]||'')}</span>`:''}</div></div><div class="task-actions">${t.cat!=='college'?`<button class="iconbtn" onclick="openTask('${t.id}')">✎</button>`:`<button class="iconbtn" onclick='openLecture(${JSON.stringify(t.collegeData||[])})'>›</button>`}</div>`;
  return d;
 }
 function completeTask(id){const arr=todayTasks(),t=arr.find(x=>x.id===id);if(!t)return;if(t.locked&&!t.done){showToast('RĀSI is holding this level until you earn it. 😈');return}t.done=!t.done;const gain=Number((state.xpRules||{})[t.cat]??10);state.xp=Math.max(0,state.xp+(t.done?gain:-gain));if(t.done){if(t.exercise===true&&!t.learning)state.bodyDay=Math.min(10,(state.bodyDay||1)+1);if(t.learning==='pushups'){const next=Object.values(state.dateTasks||{}).flat().find(q=>q.learning==='pushups'&&q.learningStep===t.learningStep+1);if(next)next.locked=false;}state.streak=Math.max(1,state.streak)}else if(t.exercise===true&&!t.learning)state.bodyDay=Math.max(1,(state.bodyDay||1)-1);save();render();if(t.done)requestAnimationFrame(()=>celebrate());}const WIN_LINES=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded. Respectfully.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was suspiciously productive.','Respectfully: slay.','One less thing haunting you. 👻','Proof > promises.','You cooked. 🍳','XP acquired. Brain cells safe.','Plot armour +1. ✨','Clean work. We move.','Bro actually did the task. 😭','The checklist got humbled.','We love to see it.','Okay productivity arc??','Certified W moment.','That was kinda iconic.','Future-you just said thanks.','Zero excuses, one W.','Character development detected.','That checkbox never stood a chance.','Lowkey ate that.','Mission cleared. 🎮','Main quest complete.'];
 let lastWin=-1;
 function celebrate(){
  const layer=document.getElementById('celebrationLayer'),toast=document.getElementById('completeToast'),skin=state.skin||'midnight';
- const lines=['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was kinda iconic.','Future-you says thanks.','Certified W moment.','Mission cleared. 🎮','Lowkey ate that.','Character development detected.','One less thing haunting you. 👻','Clean work. We move.'];
+ const opLines={
+crew:['🏴‍☠️ Crew member delivered.','🍖 Feast earned after the grind.','⚓ Another block anchored.','🧭 The crew moves forward.','🗡️ Blade sharp, task gone.','🌊 One more wave cleared.','🐑 Merry would be proud.'],
+treasure:['💰 Bounty collected.','🪙 Treasure secured.','🏆 Another prize claimed.'],
+sea:['🌊 The current is moving.','⛵ Smooth sailing.','🧭 Log pose complete.','☀️ Sunny side of the day.','🏝️ Island cleared.'],
+random:['☠️ QUEST CLEARED.','🍖 You earned the feast.','⚓ Locked in.','🧭 Next island.','🌊 Wave cleared.','⛵ All aboard.','🏴‍☠️ Crew W.','💰 Bounty earned.','🍊 Navigator approves.','🗡️ Clean slash.','🌞 Sun is out.','🐑 Merry moment.','📜 Log updated.','🪙 Treasure found.','🌴 Island cleared.']
+};
+const lines=(state.skin||'').startsWith('anime-op')?(opLines[state.opCompletionStyle||'random']||opLines.random):['Main character behavior. ✨','Okayyy, look at you. 😭👏','Task got folded.','No thoughts, just W. 🫡','Tiny win. Huge aura.','RĀSI witnessed that. 👀','Academic weapon unlocked.','That was kinda iconic.','Future-you says thanks.','Certified W moment.','Mission cleared. 🎮','Lowkey ate that.','Character development detected.','One less thing haunting you. 👻','Clean work. We move.'];
  let idx=Math.floor(Math.random()*lines.length);if(idx===window.__lastWin)idx=(idx+1)%lines.length;window.__lastWin=idx;
  const approval=skin==='sakura'?'sakura approval 🌸':skin==='matcha'?'matcha energy 🍵':skin==='anime-ds'?'wisteria arc ⚔️':(skin==='anime-op'||skin==='anime-op-light')?'grand line 🏴‍☠️':skin==='anime-op-dark'?'new world 🌑🏴‍☠️':skin==='lavender'?'soft productivity 🪻':'RĀSI saw that 👀';
  toast.innerHTML='<b>✓ '+lines[idx]+'</b><small>+XP • '+approval+'</small>';
