@@ -342,6 +342,27 @@ body:not([class*="skin-"]) .rasi-chat-panel,
 .skin-midnight .rasi-chat-panel .rasi-composer{background:#11182a!important;color:#f6f7fb!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.rasi{background:#19152a!important;border-color:#3b3157!important}
 .skin-midnight .rasi-chat-panel .buddy-msg.you{background:#112820!important;border-color:#29493e!important}
+<style id="rasi-mobile-performance-v2">
+@media (max-width: 800px){
+  /* Keep the visual design; remove the GPU-heavy effects that hurt phones. */
+  .nav,.bottom{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .panel,.hero,.task,.slot-card,.info-card,.exercise,.preview-item,.modal,.toast,.logo{box-shadow:none}
+  .nav,.bottom{background:rgba(8,11,22,.98)}
+  .hero:after{display:none}
+  .skin-sakura body:before,
+  .skin-lavender body:after,
+  .skin-matcha body:after,
+  .skin-anime-ds body:before,
+  .skin-anime-op body:before,
+  .skin-anime-op-light body:before,
+  .skin-anime-op-dark body:before,
+  .skin-anime-op body:after,
+  .skin-anime-op-light body:after,
+  .skin-anime-op-dark body:after{display:none}
+  .task,.check,.iconbtn,.nav button,.bottom button,.quick button,.quickbtn,.modebar button,
+  .college-toggle,.primary,.style-row button{transition:none!important}
+}
+</style>
 <style id="rasi-chatgpt-v1">#view-buddy{min-height:calc(100vh - 210px)}#view-buddy .rasi-chat-page{max-width:860px;margin:0 auto}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 230px);display:flex!important;flex-direction:column}#view-buddy .rasi-chat-top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 4px}#view-buddy #chat{flex:1;min-height:0}#view-buddy .chat-thread{max-height:none!important;min-height:calc(100vh - 390px);padding:14px 4px 120px;overflow-y:auto}#view-buddy .rasi-composer{position:sticky;bottom:0;z-index:6;margin-top:auto;background:var(--panel2);box-shadow:0 -10px 30px rgba(0,0,0,.14)}.rasi-history-btn{padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);font-weight:850}@media(max-width:600px){#view-buddy{min-height:calc(100vh - 150px)}#view-buddy .rasi-chat-panel{min-height:calc(100vh - 170px);border-radius:20px}#view-buddy .chat-thread{min-height:calc(100vh - 350px);padding-bottom:110px}}</style><style id="rasi-chat-history-v2">.rasi-chat-row{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;padding:14px;margin:0 0 7px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--text)}.rasi-chat-row small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.rasi-chat-row:hover{filter:brightness(.98)}.chat-head{display:flex!important;align-items:center;justify-content:space-between;gap:8px}.chat-thread{scroll-behavior:auto!important}</style></style><style id="rasi-polish-v18">
 :root,.skin-sakura,.skin-lavender,.skin-matcha,.skin-anime-ds,.skin-anime-op,.skin-minimal{--accent2:var(--accent)}
 .panel,.hero,.task,.slot-card,.info-card,.exercise,.preview-item,.rasi-chat-panel{
@@ -1034,7 +1055,6 @@ function updateLiveClock(){
  }catch(err){console.error('RĀSI clock error',err);}
 }
 function render(){
- updateLiveClock();
  try{
   const now=new Date(), hr=now.getHours();
  const appName=state.appName||DEFAULT_APP_NAME;
@@ -1049,16 +1069,16 @@ function render(){
  document.getElementById('dayLabel').textContent=(isToday?'TODAY':selectedWd.toUpperCase())+' • '+(selectedWd==='Fri'?'WEEK CLOSE':selectedWd==='Sat'||selectedWd==='Sun'?'WEEKEND':'COMMAND CENTER');
  document.getElementById('scheduleTitle').textContent=isToday?"Today's plan":selected.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'})+' plan';
  document.getElementById('greeting').textContent=(hr<12?'Good morning':hr<17?'Good afternoon':'Good evening')+', Rasika.';
- const vibeDone=Object.values(state.dateTasks||{}).flat().filter(t=>t.done).length;
-const vibeLines=vibeDone>=5?'Okay academic weapon, calm down. 😭🔥':vibeDone>=2?'Two W’s already. Keep it cute, not chaotic. ✨':hr<10?'Soft launch the day. No doomscroll DLC. 🌤️':hr<17?'College survived. Now pick one useful thing. 🎒':'Night mode: tiny wins, then disappear into your blanket. 🌙';
-document.getElementById('mission').textContent=vibeLines;
- const all=todayTasks();
- const visible=todayTasks(), done=visible.filter(t=>t.done).length, total=visible.length, pct=total?Math.round(done/total*100):0;
+ const active=window.__activeView||'today';
+ const visible=todayTasks();
+ const done=visible.filter(t=>t.done).length, total=visible.length, pct=total?Math.round(done/total*100):0;
+ const vibeDone=done;
+ const vibeLines=vibeDone>=5?'Okay academic weapon, calm down. 😭🔥':vibeDone>=2?'Two W’s already. Keep it cute, not chaotic. ✨':hr<10?'Soft launch the day. No doomscroll DLC. 🌤️':hr<17?'College survived. Now pick one useful thing. 🎒':'Night mode: tiny wins, then disappear into your blanket. 🌙';
+ document.getElementById('mission').textContent=vibeLines;
  document.getElementById('doneCount').textContent=done; document.getElementById('xp').textContent=state.xp;
  document.getElementById('streak').textContent=state.streak; document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';
  const collegeOn=collegeEnabledForDate(selected);
  document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
- const active=window.__activeView||'today';
  if(active==='today'){renderTasks(visible);renderBrief();renderReminders();}
  else if(active==='week'){renderWeek();}
  else if(active==='skills'){renderSkills();}
