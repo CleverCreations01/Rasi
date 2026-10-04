@@ -580,7 +580,55 @@ body:not([class*="skin-"]) .rasi-chat-panel,
   background:#e7ddcc;color:#171512;border:1px solid #b89b61;
 }
 </style>
-</head>
+<style id="rasi-op-matte-black-v4">
+/* OP DARK V4: matte black/charcoal. Flat surfaces only; no neon, no glossy red, no gradients. */
+html.skin-anime-op-dark,
+html.skin-anime-op-dark body{background:#090a0b!important;color:#eee9df!important}
+html.skin-anime-op-dark body{background-color:#090a0b!important}
+html.skin-anime-op-dark body:before,
+html.skin-anime-op-dark body:after{opacity:.045!important}
+html.skin-anime-op-dark .hero,
+html.skin-anime-op-dark .panel,
+html.skin-anime-op-dark .task,
+html.skin-anime-op-dark .stat,
+html.skin-anime-op-dark .college-toggle,
+html.skin-anime-op-dark .quickbtn,
+html.skin-anime-op-dark .quick button,
+html.skin-anime-op-dark .iconbtn,
+html.skin-anime-op-dark .modebar button,
+html.skin-anime-op-dark .bottom button,
+html.skin-anime-op-dark .op-custom-panel,
+html.skin-anime-op-dark .info-card,
+html.skin-anime-op-dark .exercise,
+html.skin-anime-op-dark .slot-card,
+html.skin-anime-op-dark .preview-item{
+ background:#121416!important;
+ background-image:none!important;
+ box-shadow:none!important;
+ border-color:#292b2d!important;
+}
+html.skin-anime-op-dark .hero{background:#0f1113!important;border-color:#303236!important}
+html.skin-anime-op-dark .hero:before{background:#111214!important;background-image:none!important;color:#b9aa8d!important;border-color:#2c2924!important}
+html.skin-anime-op-dark .nav,
+html.skin-anime-op-dark .bottom{background:#0b0c0d!important;background-image:none!important}
+html.skin-anime-op-dark .nav button,
+html.skin-anime-op-dark .bottom button{background:#101214!important;background-image:none!important;color:#aaa79f!important}
+html.skin-anime-op-dark .nav button.active{background:#1a1c1f!important;background-image:none!important;color:#f0e9dc!important;border-color:#46484b!important;box-shadow:inset 0 -2px #8c7a55!important}
+html.skin-anime-op-dark .primary,
+html.skin-anime-op-dark .bottom button.primary,
+html.skin-anime-op-dark .modebar button.active{
+ background:#292b2e!important;background-image:none!important;color:#f3eee5!important;border-color:#55575a!important;box-shadow:none!important
+}
+html.skin-anime-op-dark .toggle.on{background:#4a4140!important}
+html.skin-anime-op-dark .bar{background:#82704f!important}
+html.skin-anime-op-dark .badge{background:#1b1b1a!important;color:#c4b58e!important;border-color:#38362f!important}
+html.skin-anime-op-dark .check{background:#0c0d0e!important;border-color:#48494a!important}
+html.skin-anime-op-dark .task.done .check{background:#8a7852!important}
+html.skin-anime-op-dark .toast{background:#ded7ca!important;color:#111!important;border-color:#81745c!important}
+html.skin-anime-op-dark .op-done-badge,
+html.skin-anime-op-dark .op-done-icon,
+html.skin-anime-op-dark .op-task-icon{background:#1a1b1d!important;border-color:#393a3b!important;color:#d1bf93!important}
+</style></head>
 <body>
 <div id="toast" class="toast"></div><div id="completeToast" class="complete-toast"></div><div id="celebrationLayer" class="petals-layer"></div><div id="confetti" class="confetti"></div>
 <div class="app">
@@ -847,23 +895,15 @@ const fixedTemplate=[
 ];
 
 const weekendTemplate=[
- {s:'5:30 AM',e:'5:45 AM',n:'Body progression',cat:'health',exercise:true,info:'RĀSI chooses today’s progression from your current level.'},
- {s:'5:45 AM',e:'6:15 AM',n:'Wash + breakfast setup',cat:'life',info:'Easy start. No college rush.'},
- {s:'6:15 AM',e:'7:00 AM',n:'Deep study / backlog',cat:'study',info:'Use the weekend to close one real college gap.'},
- {s:'7:00 AM',e:'7:40 AM',n:'C coding practice',cat:'coding',info:'Small, focused coding block.'},
- {s:'7:40 AM',e:'8:10 AM',n:'Pinterest maintenance',cat:'pinterest',info:'One quality pin or prepare the next one.'},
- {s:'8:10 AM',e:'8:30 AM',n:'English speaking lab',cat:'english',info:'Short speaking practice.'},
- {s:'8:30 AM',e:'9:30 AM',n:'Free / friends / breakfast',cat:'life',info:'Weekend is allowed to feel like a weekend.'},
- {s:'9:30 AM',e:'10:15 AM',n:'CreatorCollabsIndia / career',cat:'career',info:'One concrete pipeline action.'},
- {s:'10:15 AM',e:'11:00 AM',n:'Curiosity / reading',cat:'knowledge',info:'Read, explore, connect ideas.'},
- {s:'11:00 AM',e:'1:00 PM',n:'Open weekend block',cat:'buffer',info:'Functions, errands, friends, college work, or rest.'},
- {s:'1:00 PM',e:'2:00 PM',n:'Lunch + rest',cat:'life',info:'Actually take the break.'},
- {s:'2:00 PM',e:'4:00 PM',n:'Free / college life / hobbies',cat:'life',info:'Unstructured time is part of the plan.'},
- {s:'4:00 PM',e:'5:00 PM',n:'Weekly reset / planning',cat:'study',info:'Check deadlines, next week and pending work.'},
- {s:'5:00 PM',e:'8:00 PM',n:'Friends / outing / hobby',cat:'life',info:'Go live your life. RĀSI is not your warden.'},
- {s:'8:00 PM',e:'8:30 PM',n:'Tomorrow setup',cat:'study',info:'Bag, clothes, deadlines and top 3.'},
- {s:'8:30 PM',e:'10:00 PM',n:'Relax + shutdown',cat:'health',info:'Wind down without turning the night into another productivity contest.'}
-];
+ {s:'6:00 AM',e:'6:20 AM',n:'Body progression',cat:'health',exercise:true,info:'Short movement session. Weekend does not need a military timetable.'},
+ {s:'6:20 AM',e:'7:00 AM',n:'Get ready + breakfast',cat:'life',info:'Wake up properly. No productivity guilt.'},
+ {s:'7:00 AM',e:'8:30 AM',n:'Main quest — study / backlog',cat:'study',info:'One meaningful academic block. Pick the highest-value gap.'},
+ {s:'8:30 AM',e:'9:15 AM',n:'C coding practice',cat:'coding',info:'One focused college-aligned coding session.'},
+ {s:'9:15 AM',e:'9:40 AM',n:'Pinterest / creator quick win',cat:'pinterest',info:'One quality pin, idea, or creator pipeline action.'},
+ {s:'9:40 AM',e:'1:00 PM',n:'FREE WORLD 🌊',cat:'buffer',info:'Friends, outing, errands, hobbies, functions or absolutely nothing.'},
+ {s:'4:00 PM',e:'4:30 PM',n:'Weekly reset',cat:'study',info:'Check deadlines and choose next week’s important moves.'},
+ {s:'8:30 PM',e:'9:00 PM',n:'Tomorrow setup + shutdown',cat:'health',info:'Bag, clothes, Important Vault, top 3, then stop optimizing.'}
+]
 function dayTemplate(d){return ['Sat','Sun'].includes(d)?weekendTemplate:fixedTemplate}
 function collegeTasks(d){return (timetable[d]||[]).map((s,i)=>({id:uid(),s:s[0],e:s[1],n:s[2],cat:'college',info:`${s[3]?s[3]+' • ':''}${s[4]}`,college:true,collegeData:s,done:false,order:i+100}));}
 function buildDayTasks(d){const base=dayTemplate(d).map((x,i)=>({...x,id:uid(),order:i,done:false}));if(timetable[d]){const col=collegeTasks(d);return [...base.filter(t=>minutes(t.s)<8*60+45),...col,...base.filter(t=>minutes(t.s)>=16*60)].map((t,i)=>({...t,order:i}));}return base;}
@@ -878,6 +918,7 @@ let currentDay=new Date().getDay(); // 0 Sun
 let day=DAY_NAME(currentDay);
 if(!DAYS.includes(day)) day='Mon';
 window.__selectedDate=new Date();
+window.__activeView='today';
 
 function DAY_NAME(n){return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][n]}
 function key(){return new Date().toISOString().slice(0,10)+'-'+day}
@@ -909,6 +950,22 @@ function todayTasks(){
 }
 function selectedDateLabel(){const dt=window.__selectedDate||new Date();return dt.toLocaleDateString([], {weekday:'long',day:'numeric',month:'short'});}
 function selectedWeekday(){return DAY_NAME((window.__selectedDate||new Date()).getDay());}
+const LEGACY_WEEKEND_NAMES=['Body progression','Wash + breakfast setup','Deep study / backlog','C coding practice','Pinterest maintenance','English speaking lab','Free / friends / breakfast','CreatorCollabsIndia / career','Curiosity / reading','Open weekend block','Lunch + rest','Free / college life / hobbies','Weekly reset / planning','Friends / outing / hobby','Tomorrow setup','Relax + shutdown'];
+function compactLegacyWeekend(){
+ const legacy=new Set(LEGACY_WEEKEND_NAMES);
+ const looksLegacy=arr=>Array.isArray(arr)&&arr.length>0&&arr.every(t=>legacy.has(t.n));
+ ['Sat','Sun'].forEach(d=>{
+   if(looksLegacy(state.tasks?.[d])) state.tasks[d]=buildDayTasks(d);
+ });
+ Object.keys(state.dateTasks||{}).forEach(k=>{
+   const arr=state.dateTasks[k];
+   if(looksLegacy(arr)){
+     const sample=arr[0];
+     const dt=new Date(k+'T12:00:00');
+     if(['Sat','Sun'].includes(DAY_NAME(dt.getDay()))) state.dateTasks[k]=buildDayTasks(DAY_NAME(dt.getDay())).map(t=>({...t,id:uid(),done:false}));
+   }
+ });
+}
 function ensureState(){
  if(!state||typeof state!=='object')state=defaultState();
  const oldSchema=Number(state.schema||0);
@@ -931,6 +988,7 @@ function ensureState(){
    state.tasks[d].forEach((t,i)=>{if(!t.id)t.id=uid();if(typeof t.order!=='number')t.order=i;if(typeof t.done!=='boolean')t.done=false;if(t.n==='Beginner yoga + mobility'||t.n==='Body progression')t.exercise=true});
    state.tasks[d].sort((a,b)=>minutes(a.s)-minutes(b.s)).forEach((t,i)=>t.order=i);
  });
+ compactLegacyWeekend();
  save();applySkin();
 }
 function applySkin(){
@@ -1212,7 +1270,7 @@ function quickWin(name){state.xp+=5;save();celebrate();showToast(name+' +5 XP')}
 function backupData(){const payload={app:'RĀSI',version:6,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rasi-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
 function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const payload=JSON.parse(r.result);if(!payload.state)throw new Error('Invalid backup');state=payload.state;ensureState();render();showToast('Backup restored. Welcome back. ✦')}catch(err){showToast('That backup file is not valid.')}};r.readAsText(file);e.target.value=''}
 
-function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
+function showView(v){window.__activeView=v;document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
 function syncRasiAiEndpointField(){const input=document.getElementById('rasiAiEndpoint');if(input)input.value=localStorage.getItem('rasiAiEndpoint')||'';}
 function openRasiSettings(){try{showView('settings');syncRasiAiEndpointField();}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
@@ -1247,7 +1305,7 @@ try{ensureState();}catch(err){console.error('RĀSI startup error',err);}
 try{updateLiveClock();}catch(err){console.error('RĀSI clock startup error',err);}
 render();
 setInterval(()=>{try{updateLiveClock();}catch(err){console.error('RĀSI clock tick error',err);}},1000);
-setInterval(()=>{try{render();}catch(err){console.error('RĀSI periodic render error',err);}},30000);
+// No periodic full render. User actions already call render(); the live clock is updated separately.
 </script>
 <script>window.RASI_CONFIG={aiEndpoint:"https://rasi-ai-backend.vercel.app/api/rasi"};</script>
 <script src="./rasi-brain.js?v=7.0"></script>
