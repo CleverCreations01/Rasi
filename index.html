@@ -1058,7 +1058,14 @@ document.getElementById('mission').textContent=vibeLines;
  document.getElementById('streak').textContent=state.streak; document.getElementById('progressText').textContent=pct+'%';document.getElementById('progressBar').style.width=pct+'%';
  const collegeOn=collegeEnabledForDate(selected);
  document.getElementById('collegeToggle').classList.toggle('on',collegeOn);document.getElementById('collegeToggleText').textContent=collegeOn?'ON':'OFF';
- renderTasks(visible);renderBrief();renderReminders();renderWeek();renderSkills();renderBody();renderChat();const bufferEl=document.getElementById('buffer');if(bufferEl)bufferEl.textContent=calcBuffer(visible);
+ const active=window.__activeView||'today';
+ if(active==='today'){renderTasks(visible);renderBrief();renderReminders();}
+ else if(active==='week'){renderWeek();}
+ else if(active==='skills'){renderSkills();}
+ else if(active==='body'){renderBody();}
+ else if(active==='important'){renderReminders();}
+ else if(active==='buddy'){renderChat();}
+ const bufferEl=document.getElementById('buffer');if(bufferEl)bufferEl.textContent=calcBuffer(visible);
 }catch(err){console.error('RĀSI render error',err);}
 }
 function calcBuffer(arr){let total=0;arr.forEach(t=>{if(t.cat==='buffer')total+=Math.max(0,minutes(t.e)-minutes(t.s));});return total>=60?`${Math.floor(total/60)}h ${total%60?total%60+'m':''}`.trim():total+'m';}
@@ -1270,7 +1277,7 @@ function quickWin(name){state.xp+=5;save();celebrate();showToast(name+' +5 XP')}
 function backupData(){const payload={app:'RĀSI',version:6,exportedAt:new Date().toISOString(),state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rasi-backup-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('Backup saved. Your data is yours. 🛡️')}
 function restoreData(e){const file=e.target.files?.[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const payload=JSON.parse(r.result);if(!payload.state)throw new Error('Invalid backup');state=payload.state;ensureState();render();showToast('Backup restored. Welcome back. ✦')}catch(err){showToast('That backup file is not valid.')}};r.readAsText(file);e.target.value=''}
 
-function showView(v){window.__activeView=v;document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();renderChat();}window.scrollTo({top:0,behavior:'auto'})}
+function showView(v){window.__activeView=v;document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById('view-'+v).classList.add('active');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='buddy'){state.chatOpen=true;save();}render();window.scrollTo({top:0,behavior:'auto'})}
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
 function syncRasiAiEndpointField(){const input=document.getElementById('rasiAiEndpoint');if(input)input.value=localStorage.getItem('rasiAiEndpoint')||'';}
 function openRasiSettings(){try{showView('settings');syncRasiAiEndpointField();}catch(err){console.error('RĀSI settings error',err);showToast('Settings could not open.');}}
